@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MutqinLab — Cognitive Quran Retention & Precision Murojaah Ecosystem</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Amiri Quran, Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        quran: ['Amiri', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#052e16',
+                            950: '#022c22',
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .arabic-text {
+            direction: rtl;
+            font-family: 'Amiri', serif;
+            line-height: 2.3;
+        }
+        .blur-text {
+            filter: blur(6px);
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+        .blur-text:hover {
+            filter: blur(0px);
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-brand-500 selection:text-white">
+
+    <!-- Global Top Navigation Bar -->
+    <header class="border-b border-slate-800/80 sticky top-0 z-50 glass-panel">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex justify-between items-center">
+            <!-- Brand Logo & Badge -->
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-500 via-emerald-400 to-teal-300 flex items-center justify-center shadow-lg shadow-brand-500/20 text-slate-950 font-extrabold text-lg">
+                    ML
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-lg font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">MUTQINLAB</span>
+                        <span class="bg-brand-500/10 text-brand-400 border border-brand-500/20 text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider">v1.0 Global</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navigation Actions -->
+            <div class="flex items-center space-x-4">
+                <nav class="hidden md:flex items-center space-x-6 text-xs font-medium text-slate-400">
+                    <a href="#dashboard" class="text-white transition">Dashboard</a>
+                    <a href="#memorize" class="hover:text-white transition">Smart Chunking</a>
+                    <a href="#srs" class="hover:text-white transition">SRS Review Engine</a>
+                </nav>
+
+                <div id="userAuthContainer">
+                    <button id="btnLogin" onclick="toggleAuthModal()" class="bg-gradient-to-r from-brand-500 to-emerald-600 hover:from-brand-600 hover:to-emerald-700 text-slate-950 font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all duration-200 shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40">
+                        Launch Cloud Sync
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Workspace -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex-grow w-full space-y-8">
+
+        <!-- Hero & Real-time Analytics Dashboard -->
+        <section class="relative rounded-3xl p-6 sm:p-10 border border-slate-800 bg-gradient-to-b from-slate-900 via-slate-900/90 to-slate-950 overflow-hidden shadow-2xl">
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="relative z-10 space-y-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-brand-400 mb-2 block">Cognitive Quran Memory Lab</span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Precision Murojaah Dashboard</h2>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="inline-flex items-center gap-1.5 bg-slate-800/80 border border-slate-700/60 px-3 py-1.5 rounded-xl text-xs font-medium text-slate-300">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            Mutqin SRS Engine: Active
+                        </span>
+                    </div>
+                </div>
+
+                <!-- KPI Metric Cards -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+                    <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+                        <span class="text-xs font-medium text-slate-400 block mb-1">Total Verses Retained</span>
+                        <div class="flex items-baseline justify-between">
+                            <span id="statHafalan" class="text-2xl sm:text-3xl font-extrabold text-white">1,240</span>
+                            <span class="text-xs font-semibold text-brand-400">+12 today</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+                        <span class="text-xs font-medium text-slate-400 block mb-1">Mutqin Precision Index</span>
+                        <div class="flex items-baseline justify-between">
+                            <span id="statMutqin" class="text-2xl sm:text-3xl font-extrabold text-emerald-400">94.2%</span>
+                            <span class="text-xs font-semibold text-emerald-500">Optimal</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+                        <span class="text-xs font-medium text-slate-400 block mb-1">SRS Review Queue</span>
+                        <div class="flex items-baseline justify-between">
+                            <span id="statMurojaah" class="text-2xl sm:text-3xl font-extrabold text-amber-400">5 Verses</span>
+                            <span class="text-xs font-semibold text-amber-500">Due Now</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+                        <span class="text-xs font-medium text-slate-400 block mb-1">Consistency Streak</span>
+                        <div class="flex items-baseline justify-between">
+                            <span id="statStreak" class="text-2xl sm:text-3xl font-extrabold text-gold-400">🔥 14 Days</span>
+                            <span class="text-xs font-semibold text-gold-500">Top 5% Global</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Surah Selector & Focus Engine Controls -->
+        <section class="bg-slate-900/60 border border-slate-800/80 p-5 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="w-full md:w-auto flex flex-col sm:flex-row items-center gap-3">
+                <label class="text-xs font-bold uppercase tracking-wider text-slate-400">Target Surah:</label>
+                <select id="surahSelect" onchange="loadSurahData()" class="w-full sm:w-auto bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm font-semibold text-white focus:ring-2 focus:ring-brand-500 outline-none">
+                    <option value="67">67. Al-Mulk (الـملك)</option>
+                    <option value="78">78. An-Naba' (النبأ)</option>
+                    <option value="112">112. Al-Ikhlas (الإخلاص)</option>
+                </select>
+            </div>
+
+            <div class="w-full md:w-auto flex items-center justify-end gap-3">
+                <button id="toggleFocusModeBtn" onclick="toggleFocusMode()" class="w-full md:w-auto bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
+                    <span>👁️</span> Tikrar Focus Mode (Blur)
+                </button>
+            </div>
+        </section>
+
+        <!-- Smart Chunking & Memorization Workspace -->
+        <section class="bg-slate-900/40 border border-slate-800/80 p-6 sm:p-8 rounded-3xl space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-800/80 pb-5 gap-4">
+                <div>
+                    <h3 id="currentSurahTitle" class="font-bold text-xl text-white">Surah Al-Mulk</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Smart Chunking & Recitation Loop</p>
+                </div>
+                <div class="flex items-center space-x-3 bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-xl">
+                    <span class="text-xs text-slate-400 font-medium">Loop Audio:</span>
+                    <select id="loopAudioSelect" class="bg-transparent text-xs font-bold text-brand-400 outline-none">
+                        <option value="1" class="bg-slate-900 text-white">1x Repetition</option>
+                        <option value="3" selected class="bg-slate-900 text-white">3x Repetition</option>
+                        <option value="5" class="bg-slate-900 text-white">5x Repetition</option>
+                        <option value="10" class="bg-slate-900 text-white">10x Repetition</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Dynamic Verse Container -->
+            <div id="ayatContainer" class="space-y-6">
+                <!-- Injected via JavaScript -->
+            </div>
+        </section>
+
+        <!-- Spaced Repetition (SRS) Review Engine -->
+        <section class="bg-slate-900/40 border border-slate-800/80 p-6 sm:p-8 rounded-3xl space-y-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="font-bold text-xl text-white">Spaced Repetition Review Queue</h3>
+                    <p class="text-xs text-slate-400">Algorithmic schedule optimized for long-term retention</p>
+                </div>
+                <span class="bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs px-3 py-1 rounded-full font-semibold">Mutqin Algorithm</span>
+            </div>
+
+            <div id="murojaahList" class="space-y-3 pt-2">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center p-5 bg-slate-950 border border-slate-800/80 rounded-2xl gap-4">
+                    <div>
+                        <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider block mb-1">Due for Review Today</span>
+                        <h4 class="font-bold text-white text-base">Surah Al-Mulk (Verses 1 - 5)</h4>
+                        <p class="text-xs text-slate-400">Last reviewed 3 days ago</p>
+                    </div>
+                    <div class="flex items-center gap-2 w-full lg:w-auto">
+                        <button onclick="reviewHafalan('lupa')" class="flex-1 lg:flex-none bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 text-xs px-4 py-2.5 rounded-xl font-bold transition">Hard (1 Day)</button>
+                        <button onclick="reviewHafalan('ragu')" class="flex-1 lg:flex-none bg-amber-500/10 border border-amber-500/30 text-amber-400 hover:bg-amber-500/20 text-xs px-4 py-2.5 rounded-xl font-bold transition">Good (3 Days)</button>
+                        <button onclick="reviewHafalan('mutqin')" class="flex-1 lg:flex-none bg-brand-500/20 border border-brand-500/40 text-brand-400 hover:bg-brand-500/30 text-xs px-4 py-2.5 rounded-xl font-bold transition">Mutqin (7 Days)</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="border-t border-slate-800/80 py-8 text-center text-xs text-slate-500 mt-12 bg-slate-950">
+        <p class="font-bold text-slate-300">MutqinLab Global Open Source Initiative</p>
+        <p class="mt-1">Empowering Quran Memorizers Worldwide with Cognitive Science — 100% Free</p>
+    </footer>
+
+    <!-- Auth Modal Container -->
+    <div id="authModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden">
+        <div class="bg-slate-900 rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl border border-slate-800 relative">
+            <button onclick="toggleAuthModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white">✕</button>
+            
+            <div class="text-center space-y-3 mb-8">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-500 via-emerald-400 to-teal-300 flex items-center justify-center text-slate-950 font-extrabold text-xl mx-auto shadow-lg shadow-brand-500/20">
+                    ML
+                </div>
+                <h3 class="text-2xl font-bold text-white">Cloud Sync with MutqinLab</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">Sync your Quran retention progress seamlessly across Web, iOS, and Android.</p>
+            </div>
+
+            <div class="space-y-3">
+                <button id="btnGoogleAuth" onclick="handleGoogleLogin()" class="w-full bg-slate-950 hover:bg-slate-800 border border-slate-800 text-white font-semibold py-3.5 px-4 rounded-xl flex items-center justify-center gap-3 transition shadow-sm text-sm">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+                    <span>Continue with Google</span>
+                </button>
+            </div>
+            
+            <p class="text-[10px] text-center text-slate-500 mt-6">
+                100% Free & Open Source for the Ummah.
+            </p>
+        </div>
+    </div>
+
+    <!-- App Logic Script -->
+    <script>
+        const surahData = {
+            67: {
+                name: "Al-Mulk",
+                verses: [
+                    { id: 1, text: "تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْكُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ", latin: "Tabārakallażī biyadihil-mulku wa huwa 'alā kulli syai'in qadīr", translation: "Blessed is He in whose hand is dominion, and He is over all things competent.", audio: "https://cdn.islamic.network/quran/audio/128/ar.alafasy/5242.mp3" },
+                    { id: 2, text: "الَّذِي خَلَقَ الْمَوْتَ وَالْحَيَاةَ لِيَبْلُوَكُمْ أَيُّكُمْ أَحْسَنُ عَمَلًا ۚ وَهُوَ الْعَزِيزُ الْغَفُورُ", latin: "Allażī khalaqal-mauta wal-ḥayāta liyabluwakum ayyukum aḥsanu 'amalā", translation: "He who created death and life to test you as to which of you is best in deed.", audio: "https://cdn.islamic.network/quran/audio/128/ar.alafasy/5243.mp3" },
+                    { id: 3, text: "الَّذِي خَلَقَ سَبْعَ سَمَاوَاتٍ طِبَاقًا ۖ مَّا تَرَىٰ فِي خَلْقِ الرَّحْمَٰنِ مِن تَفَاوُتٍ", latin: "Allażī khalaqa sab'a samāwātin ṭibāqā", translation: "Who created seven heavens in layers. You do not see in the creation of the Most Merciful any inconsistency.", audio: "https://cdn.islamic.network/quran/audio/128/ar.alafasy/5244.mp3" }
+                ]
+            }
+        };
+
+        let isFocusMode = false;
+
+        function toggleAuthModal() {
+            const modal = document.getElementById('authModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function toggleFocusMode() {
+            isFocusMode = !isFocusMode;
+            const btn = document.getElementById('toggleFocusModeBtn');
+            btn.classList.toggle('bg-brand-600');
+            btn.classList.toggle('text-white');
+            
+            const verseTexts = document.querySelectorAll('.arabic-verse');
+            verseTexts.forEach((el, index) => {
+                if (isFocusMode && index !== 0) {
+                    el.classList.add('blur-text');
+                } else {
+                    el.classList.remove('blur-text');
+                }
+            });
+        }
+
+        function loadSurahData() {
+            const selectedSurah = document.getElementById('surahSelect').value;
+            const data = surahData[selectedSurah] || surahData[67];
+            
+            document.getElementById('currentSurahTitle').innerText = "Surah " + data.name;
+            const container = document.getElementById('ayatContainer');
+            container.innerHTML = "";
+
+            data.verses.forEach((verse, idx) => {
+                const verseHTML = `
+                    <div class="p-6 bg-slate-950/80 rounded-2xl border border-slate-800/80 space-y-4 shadow-sm">
+                        <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-800/80 pb-3">
+                            <span class="font-bold text-brand-400">Verse ${verse.id}</span>
+                            <div class="flex gap-2">
+                                <button onclick="playVerseAudio('${verse.audio}')" class="bg-slate-900 border border-slate-700/80 text-slate-200 px-3.5 py-1.5 rounded-xl hover:bg-slate-800 transition font-semibold">🔊 Audio</button>
+                                <button onclick="markAsHafal(${verse.id})" class="bg-brand-500/20 border border-brand-500/40 text-brand-400 px-3.5 py-1.5 rounded-xl hover:bg-brand-500/30 transition font-semibold">✅ Mark Memorized</button>
+                            </div>
+                        </div>
+                        <p class="arabic-text arabic-verse text-3xl sm:text-4xl text-right text-white ${isFocusMode && idx !== 0 ? 'blur-text' : ''}">
+                            ${verse.text}
+                        </p>
+                        <p class="text-xs text-slate-400 italic">${verse.latin}</p>
+                        <p class="text-sm text-slate-300">"${verse.translation}"</p>
+                    </div>
+                `;
+                container.innerHTML += verseHTML;
+            });
+        }
+
+        let currentAudio = null;
+        function playVerseAudio(audioUrl) {
+            if (currentAudio) {
+                currentAudio.pause();
+            }
+            const loopCount = parseInt(document.getElementById('loopAudioSelect').value) || 1;
+            let playedTimes = 0;
+
+            currentAudio = new Audio(audioUrl);
+            currentAudio.play();
+
+            currentAudio.onended = () => {
+                playedTimes++;
+                if (playedTimes < loopCount) {
+                    currentAudio.play();
+                }
+            };
+        }
+
+        function markAsHafal(verseId) {
+            alert(`Alhamdulillah! Verse ${verseId} added to Mutqin SRS Cycle.`);
+        }
+
+        function reviewHafalan(status) {
+            if (status === 'lupa') {
+                alert('Scheduled for Hard Review (Tomorrow).');
+            } else if (status === 'ragu') {
+                alert('Scheduled for Moderate Review (3 Days).');
+            } else {
+                alert('Marked as Mutqin! Next review in 7 days.');
+            }
+        }
+
+        window.onload = () => {
+            loadSurahData();
+        };
+    </script>
+</body>
+</html>
