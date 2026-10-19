@@ -1,505 +1,222 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth" id="htmlTag">
+<html lang="id" id="H">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MutqinLab — Cognitive Quran Retention & Precision Murojaah Ecosystem</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Amiri Quran, Plus Jakarta Sans -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        quran: ['Amiri', 'serif'],
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            400: '#4ade80',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
-                            800: '#166534',
-                            900: '#052e16',
-                            950: '#022c22',
-                        },
-                        gold: {
-                            400: '#fbbf24',
-                            500: '#f59e0b',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        .arabic-text {
-            direction: rtl;
-            font-family: 'Amiri', serif;
-            line-height: 2.3;
-        }
-        .blur-text {
-            filter: blur(6px);
-            user-select: none;
-            transition: all 0.3s ease;
-        }
-        .blur-text:hover {
-            filter: blur(0px);
-        }
-        .glass-panel {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#022c22">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>MutqinLab — Hafalan & Murojaah Al-Qur'an</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','sans-serif']},colors:{brand:{400:'#4ade80',500:'#22c55e',600:'#16a34a'}}}}}</script>
+<style>
+.ar{direction:rtl;font-family:'Amiri',serif;line-height:2.3;transition:filter .3s}
+.focus .ar:not(.show){filter:blur(8px);cursor:pointer}
+.glass{background:rgba(15,23,42,.8);backdrop-filter:blur(16px)}
+.on{background:#22c55e;color:#022c22}
+.playing{border-color:#22c55e!important;box-shadow:0 0 0 1px #22c55e55}
+</style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-brand-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+<header class="border-b border-slate-800 sticky top-0 z-40 glass">
+ <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center gap-2">
+  <div class="flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-500 to-teal-300 grid place-items-center text-slate-950 font-extrabold">ML</div><span class="text-lg font-extrabold tracking-tight">MUTQINLAB</span></div>
+  <div class="flex items-center gap-2">
+   <select id="lang" onchange="setLang(this.value)" class="bg-slate-900 border border-slate-700 text-xs font-semibold text-brand-400 px-2 py-2 rounded-xl"><option value="id">🇮🇩 ID</option><option value="ar">🇸🇦 AR</option><option value="en">🇬🇧 EN</option></select>
+   <button id="authBtn" onclick="authClick()" class="bg-brand-500 text-slate-950 font-bold text-xs px-4 py-2.5 rounded-xl"></button>
+  </div>
+ </div>
+</header>
 
-    <!-- Global Top Navigation Bar -->
-    <header class="border-b border-slate-800/80 sticky top-0 z-50 glass-panel">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex justify-between items-center">
-            <!-- Brand Logo & Badge -->
-            <div class="flex items-center space-x-3 rtl:space-x-reverse">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-500 via-emerald-400 to-teal-300 flex items-center justify-center shadow-lg shadow-brand-500/20 text-slate-950 font-extrabold text-lg">
-                    ML
-                </div>
-                <div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-lg font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">MUTQINLAB</span>
-                        <span class="bg-brand-500/10 text-brand-400 border border-brand-500/20 text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider">v1.0 Global</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Navigation Actions & Language Selector -->
-            <div class="flex items-center space-x-3 sm:space-x-4 rtl:space-x-reverse">
-                <!-- Selector Bahasa -->
-                <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-slate-900 border border-slate-700/80 text-xs font-semibold text-brand-400 px-2.5 py-1.5 rounded-xl outline-none cursor-pointer">
-                    <option value="id">🇮🇩 Indonesia</option>
-                    <option value="ar">🇸🇦 العربية</option>
-                    <option value="en">🇬🇧 English</option>
-                </select>
+<main class="max-w-5xl mx-auto px-4 py-6 flex-grow w-full space-y-5">
+ <section class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+  <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl"><span data-i="s1" class="text-xs text-slate-400 block"></span><b id="st1" class="text-2xl font-extrabold">0</b></div>
+  <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl"><span data-i="s2" class="text-xs text-slate-400 block"></span><b id="st2" class="text-2xl font-extrabold text-emerald-400">0%</b></div>
+  <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl"><span data-i="s3" class="text-xs text-slate-400 block"></span><b id="st3" class="text-2xl font-extrabold text-amber-400">0</b></div>
+  <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl"><span data-i="s4" class="text-xs text-slate-400 block"></span><b id="st4" class="text-2xl font-extrabold text-yellow-400">🔥 0</b></div>
+ </section>
 
-                <div id="userAuthContainer">
-                    <button id="btnLogin" onclick="toggleAuthModal()" class="bg-gradient-to-r from-brand-500 to-emerald-600 hover:from-brand-600 hover:to-emerald-700 text-slate-950 font-bold text-xs sm:text-sm px-4 sm:px-5 py-2.5 rounded-xl transition-all duration-200 shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40">
-                        Masuk Cloud
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
+ <section class="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-3">
+  <div class="flex justify-between items-center text-xs"><b data-i="wk"></b><label class="text-slate-400 flex items-center gap-2"><span data-i="goal"></span>
+   <select id="goal" onchange="setGoal(this.value)" class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-brand-400 font-bold"><option>3</option><option>5</option><option>10</option><option>20</option></select></label></div>
+  <div class="h-2 bg-slate-800 rounded-full overflow-hidden"><div id="gbar" class="h-full bg-brand-500 transition-all" style="width:0"></div></div>
+  <div id="wkc" class="flex items-end gap-2 h-20"></div>
+ </section>
 
-    <!-- Main Content Workspace -->
-    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex-grow w-full space-y-8">
+ <nav class="flex gap-2 bg-slate-900 border border-slate-800 p-1.5 rounded-2xl">
+  <button id="tabL" onclick="tab('L')" data-i="tabL" class="flex-1 py-2.5 rounded-xl text-sm font-bold"></button>
+  <button id="tabM" onclick="tab('M')" class="flex-1 py-2.5 rounded-xl text-sm font-bold"><span data-i="tabM"></span> <span id="qn" class="ml-1 bg-amber-500 text-slate-950 text-xs px-2 py-0.5 rounded-full">0</span></button>
+  <button id="tabT" onclick="tab('T')" data-i="tabT" class="flex-1 py-2.5 rounded-xl text-sm font-bold"></button>
+ </nav>
 
-        <!-- Hero & Real-time Analytics Dashboard -->
-        <section class="relative rounded-3xl p-6 sm:p-10 border border-slate-800 bg-gradient-to-b from-slate-900 via-slate-900/90 to-slate-950 overflow-hidden shadow-2xl">
-            <div class="absolute -top-24 -right-24 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
-            
-            <div class="relative z-10 space-y-6">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                        <span id="txtSubtitle" class="text-xs font-bold uppercase tracking-widest text-brand-400 mb-2 block">Laboratorium Sains Memori Quran</span>
-                        <h2 id="txtHeroTitle" class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Dashboard Murojaah Presisi</h2>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <span class="inline-flex items-center gap-1.5 bg-slate-800/80 border border-slate-700/60 px-3 py-1.5 rounded-xl text-xs font-medium text-slate-300">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                            <span id="txtEngineStatus">Algoritma SRS: Aktif</span>
-                        </span>
-                    </div>
-                </div>
+ <section id="pL" class="space-y-4">
+  <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl flex flex-wrap items-center gap-3">
+   <select id="sel" onchange="loadSurah()" class="flex-1 min-w-[200px] bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm font-semibold"></select>
+   <label class="text-xs text-slate-400 flex items-center gap-2"><span data-i="loop"></span>
+    <select id="loops" class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1.5 text-brand-400 font-bold"><option>1</option><option selected>3</option><option>5</option><option>10</option></select>×</label>
+   <select id="qari" onchange="setQari(this.value)" class="bg-slate-950 border border-slate-800 rounded-xl px-2 py-2.5 text-xs font-semibold"><option value="ar.alafasy">Alafasy</option><option value="ar.husary">Al-Husary</option><option value="ar.minshawi">Minshawi</option><option value="ar.abdulbasitmurattal">Abdul Basit</option><option value="ar.abdurrahmaansudais">Sudais</option><option value="ar.saoodshuraym">Shuraym</option></select>
+   <button id="fbtn" onclick="focusMode()" data-i="focus" class="bg-slate-800 border border-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold"></button>
+   <button onclick="play(0,true)" data-i="all" class="bg-slate-800 border border-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold"></button>
+  </div>
+  <h3 id="title" class="font-bold text-lg px-1"></h3>
+  <div id="list" class="space-y-4"></div>
+ </section>
 
-                <!-- KPI Metric Cards -->
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
-                    <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
-                        <span id="txtStat1Label" class="text-xs font-medium text-slate-400 block mb-1">Total Ayat Dihafal</span>
-                        <div class="flex items-baseline justify-between">
-                            <span id="statHafalan" class="text-2xl sm:text-3xl font-extrabold text-white">1,240</span>
-                            <span id="txtStat1Badge" class="text-xs font-semibold text-brand-400">+12 hari ini</span>
-                        </div>
-                    </div>
-                    <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
-                        <span id="txtStat2Label" class="text-xs font-medium text-slate-400 block mb-1">Indeks Akurasi Mutqin</span>
-                        <div class="flex items-baseline justify-between">
-                            <span id="statMutqin" class="text-2xl sm:text-3xl font-extrabold text-emerald-400">94.2%</span>
-                            <span id="txtStat2Badge" class="text-xs font-semibold text-emerald-500">Optimal</span>
-                        </div>
-                    </div>
-                    <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
-                        <span id="txtStat3Label" class="text-xs font-medium text-slate-400 block mb-1">Antrean Murojaah SRS</span>
-                        <div class="flex items-baseline justify-between">
-                            <span id="statMurojaah" class="text-2xl sm:text-3xl font-extrabold text-amber-400">5 Ayat</span>
-                            <span id="txtStat3Badge" class="text-xs font-semibold text-amber-500">Waktunya Review</span>
-                        </div>
-                    </div>
-                    <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
-                        <span id="txtStat4Label" class="text-xs font-medium text-slate-400 block mb-1">Streak Konsistensi</span>
-                        <div class="flex items-baseline justify-between">
-                            <span id="statStreak" class="text-2xl sm:text-3xl font-extrabold text-gold-400">🔥 14 Hari</span>
-                            <span id="txtStat4Badge" class="text-xs font-semibold text-gold-500">Top 5% Global</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+ <section id="pM" class="hidden"><div id="mur"></div></section>
+ <section id="pT" class="hidden"><div id="tst"></div></section>
 
-        <!-- Surah Selector & Focus Engine Controls -->
-        <section class="bg-slate-900/60 border border-slate-800/80 p-5 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="w-full md:w-auto flex flex-col sm:flex-row items-center gap-3">
-                <label id="txtTargetLabel" class="text-xs font-bold uppercase tracking-wider text-slate-400">Target Surah:</label>
-                <select id="surahSelect" onchange="loadSurahData()" class="w-full sm:w-auto bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm font-semibold text-white focus:ring-2 focus:ring-brand-500 outline-none">
-                    <option value="67">67. Al-Mulk (الـملك)</option>
-                    <option value="78">78. An-Naba' (النبأ)</option>
-                    <option value="112">112. Al-Ikhlas (الإخلاص)</option>
-                </select>
-            </div>
+ <details class="bg-slate-900/40 border border-slate-800 rounded-2xl p-5">
+  <summary data-i="meth" class="font-bold cursor-pointer"></summary>
+  <ol class="list-decimal ps-5 mt-3 space-y-2 text-sm text-slate-300"><li data-i="m1"></li><li data-i="m2"></li><li data-i="m3"></li><li data-i="m4"></li></ol>
+ </details>
+</main>
 
-            <div class="w-full md:w-auto flex items-center justify-end gap-3">
-                <button id="toggleFocusModeBtn" onclick="toggleFocusMode()" class="w-full md:w-auto bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
-                    <span>👁️</span> <span id="txtFocusBtn">Mode Tikrar Fokus (Blur)</span>
-                </button>
-            </div>
-        </section>
+<footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+ <p class="font-bold text-slate-300">MutqinLab — Open Source</p><p data-i="foot" class="mt-1"></p>
+</footer>
 
-        <!-- Smart Chunking & Memorization Workspace -->
-        <section class="bg-slate-900/40 border border-slate-800/80 p-6 sm:p-8 rounded-3xl space-y-6">
-            <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-800/80 pb-5 gap-4">
-                <div>
-                    <h3 id="currentSurahTitle" class="font-bold text-xl text-white">Surah Al-Mulk</h3>
-                    <p id="txtChunkingSubtitle" class="text-xs text-slate-400 mt-0.5">Pengulangan Audio & Pemotongan Blok Hafalan</p>
-                </div>
-                <div class="flex items-center space-x-3 rtl:space-x-reverse bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-xl">
-                    <span id="txtLoopLabel" class="text-xs text-slate-400 font-medium">Pengulangan Audio:</span>
-                    <select id="loopAudioSelect" class="bg-transparent text-xs font-bold text-brand-400 outline-none">
-                        <option value="1" class="bg-slate-900 text-white">1x</option>
-                        <option value="3" selected class="bg-slate-900 text-white">3x</option>
-                        <option value="5" class="bg-slate-900 text-white">5x</option>
-                        <option value="10" class="bg-slate-900 text-white">10x</option>
-                    </select>
-                </div>
-            </div>
+<div id="modal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4">
+ <div class="bg-slate-900 border border-slate-800 rounded-3xl p-7 max-w-sm w-full text-center space-y-4 relative">
+  <button onclick="modal(0)" class="absolute top-4 right-5 text-slate-400">✕</button>
+  <h3 data-i="sync" class="text-xl font-bold"></h3>
+  <p id="cfgInfo" class="text-xs text-slate-400 leading-relaxed"></p>
+  <button onclick="login()" class="w-full bg-slate-950 border border-slate-700 hover:bg-slate-800 font-semibold py-3 rounded-xl text-sm" data-i="google"></button>
+ </div>
+</div>
+<div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-brand-500 text-slate-950 font-bold text-sm px-5 py-3 rounded-2xl shadow-xl hidden z-50 max-w-[90%] text-center"></div>
 
-            <!-- Dynamic Verse Container -->
-            <div id="ayatContainer" class="space-y-6">
-                <!-- Injected via JavaScript -->
-            </div>
-        </section>
+<script type="module">
+/* ===== 1. KONFIGURASI FIREBASE (isi dari Firebase Console → Project settings → Web app) =====
+   Kosongkan = mode offline (data tersimpan di perangkat). */
+const FB={apiKey:"",authDomain:"",projectId:"",appId:""};
 
-        <!-- Spaced Repetition (SRS) Review Engine -->
-        <section class="bg-slate-900/40 border border-slate-800/80 p-6 sm:p-8 rounded-3xl space-y-4">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 id="txtSrsTitle" class="font-bold text-xl text-white">Jadwal Murojaah Pintar (SRS)</h3>
-                    <p id="txtSrsSubtitle" class="text-xs text-slate-400">Jadwal otomatis berdasarkan daya ingat kognitif</p>
-                </div>
-                <span id="txtSrsAlgorithmBadge" class="bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs px-3 py-1 rounded-full font-semibold">Algoritma Mutqin</span>
-            </div>
+const $=id=>document.getElementById(id);
+const DAY=864e5,today=()=>Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/DAY);
+const I={
+id:{dir:'ltr',sub:'',s1:'Ayat Dihafal',s2:'Indeks Mutqin',s3:'Antrean Murojaah',s4:'Streak',tabL:'📖 Belajar',tabM:'🔁 Murojaah',loop:'Ulang audio',focus:'👁️ Mode Blur',all:'▶ Putar Semua',hafal:'✅ Tandai Hafal',hafald:'✓ Dalam SRS',audio:'🔊 Audio',empty:'Alhamdulillah, tidak ada murojaah hari ini 🎉 Tambah hafalan baru di tab Belajar.',cue:'Lanjutkan ayat setelah ini:',start:'(Awal surah)',show:'Tampilkan Jawaban',day:'hr',b0:'🔴 Lupa',b1:'🟡 Ragu',b2:'🟢 Mutqin',login:'Masuk Cloud',logout:'Keluar',sync:'Sinkronkan ke Cloud',google:'Lanjutkan dengan Google',nocfg:'Mode offline: isi konfigurasi Firebase di index.html untuk sinkronisasi antar perangkat.',cfg:'Progres tersimpan aman & tersinkron di semua perangkatmu.',toastH:'Alhamdulillah! Murojaah pertama besok (setelah tidur).',toastR:'Tercatat. Jadwal berikutnya: ',meth:'🧠 Metode Hafalan yang Terbukti',m1:'Talqin: dengarkan ayat dari qari 3–5× sambil melihat mushaf, lalu baca bersama.',m2:'Tikrar: ulangi audio 10–20× (atur "Ulang audio"), lalu aktifkan Mode Blur dan tes dirimu.',m3:'Sambung ayat: murojaah selalu dimulai dari ayat sebelumnya — persis seperti ujian setoran.',m4:'Ziyadah sedikit, murojaah banyak: tambah ≤5 ayat/hari, jaga antrean murojaah tetap bersih setiap hari.',foot:'Membantu penghafal Al-Qur\'an seluruh dunia — 100% gratis',err:'Gagal memuat. Periksa koneksi internet.'},
+en:{dir:'ltr',s1:'Verses Memorized',s2:'Mutqin Index',s3:'Review Queue',s4:'Streak',tabL:'📖 Learn',tabM:'🔁 Review',loop:'Audio loop',focus:'👁️ Blur Mode',all:'▶ Play All',hafal:'✅ Mark Memorized',hafald:'✓ In SRS',audio:'🔊 Audio',empty:'Alhamdulillah, nothing to review today 🎉 Add new verses in the Learn tab.',cue:'Continue the verse after this one:',start:'(Start of surah)',show:'Show Answer',day:'d',b0:'🔴 Forgot',b1:'🟡 Unsure',b2:'🟢 Mutqin',login:'Cloud Login',logout:'Sign out',sync:'Cloud Sync',google:'Continue with Google',nocfg:'Offline mode: add your Firebase config in index.html to sync across devices.',cfg:'Your progress is saved and synced across all your devices.',toastH:'Alhamdulillah! First review tomorrow (after sleep).',toastR:'Saved. Next review in: ',meth:'🧠 Proven Memorization Method',m1:'Talqin: listen to the verse 3–5× while reading, then recite along.',m2:'Tikrar: loop the audio 10–20× (set "Audio loop"), then enable Blur Mode and test yourself.',m3:'Verse linking: review always starts from the previous verse — just like a real recitation exam.',m4:'Little new, lots of review: add ≤5 verses/day and clear your review queue daily.',foot:'Empowering Quran memorizers worldwide — 100% free',err:'Failed to load. Check your connection.'},
+ar:{dir:'rtl',s1:'الآيات المحفوظة',s2:'مؤشر الإتقان',s3:'قائمة المراجعة',s4:'الاستمرارية',tabL:'📖 تعلّم',tabM:'🔁 مراجعة',loop:'تكرار الصوت',focus:'👁️ وضع التغطية',all:'▶ تشغيل الكل',hafal:'✅ تم الحفظ',hafald:'✓ في المراجعة',audio:'🔊 صوت',empty:'الحمد لله، لا مراجعة اليوم 🎉 أضف محفوظات جديدة من تبويب تعلّم.',cue:'أكمل الآية التي بعد هذه:',start:'(بداية السورة)',show:'أظهر الجواب',day:'ي',b0:'🔴 نسيت',b1:'🟡 متردد',b2:'🟢 متقن',login:'تسجيل الدخول',logout:'خروج',sync:'المزامنة السحابية',google:'المتابعة عبر Google',nocfg:'وضع بدون اتصال: أضف إعدادات Firebase للمزامنة بين الأجهزة.',cfg:'تقدمك محفوظ ومتزامن على كل أجهزتك.',toastH:'الحمد لله! أول مراجعة غداً (بعد النوم).',toastR:'تم. المراجعة القادمة بعد: ',meth:'🧠 منهج الحفظ المجرَّب',m1:'التلقين: استمع للآية ٣–٥ مرات مع النظر في المصحف ثم رددها.',m2:'التكرار: كرر الصوت ١٠–٢٠ مرة ثم فعّل وضع التغطية واختبر نفسك.',m3:'ربط الآيات: ابدأ المراجعة دائماً من الآية السابقة كما في العرض على الشيخ.',m4:'حفظ قليل ومراجعة كثيرة: ≤٥ آيات يومياً وأنجز قائمة المراجعة كل يوم.',foot:'نخدم حفظة القرآن حول العالم — مجاني ١٠٠٪',err:'تعذر التحميل. تحقق من الاتصال.'}};
+Object.assign(I.id,{tabT:'🎯 Tes',qari:'Qari',goal:'Target harian',wk:'Aktivitas 7 hari',unm:'Hapus ayat ini dari jadwal murojaah?',tdesc:'Tes sambung ayat: pilih ayat yang benar setelah ayat yang ditampilkan. Jawaban salah dijadwalkan murojaah hari ini.',tstart:'Mulai Tes',tq:'Ayat setelahnya adalah…',tnext:'Lanjut ▸',tscore:'Skor',tagain:'Ulangi Tes',noq:'Surah terlalu pendek untuk tes.',tgood:'MasyaAllah! Pertahankan.',tkeep:'Terus murojaah, in syaa Allah mutqin.'});
+Object.assign(I.en,{tabT:'🎯 Test',qari:'Reciter',goal:'Daily goal',wk:'Last 7 days',unm:'Remove this verse from your review schedule?',tdesc:'Verse-linking test: pick the correct verse that follows the one shown. Wrong answers are scheduled for review today.',tstart:'Start Test',tq:'The next verse is…',tnext:'Next ▸',tscore:'Score',tagain:'Retake Test',noq:'Surah too short for a test.',tgood:'MashaAllah! Keep it up.',tkeep:'Keep reviewing, in shaa Allah you will master it.'});
+Object.assign(I.ar,{tabT:'🎯 اختبار',qari:'القارئ',goal:'الهدف اليومي',wk:'آخر ٧ أيام',unm:'حذف هذه الآية من جدول المراجعة؟',tdesc:'اختبار ربط الآيات: اختر الآية الصحيحة التي تلي الآية المعروضة. الإجابة الخاطئة تُجدول للمراجعة اليوم.',tstart:'ابدأ الاختبار',tq:'الآية التالية هي…',tnext:'التالي ▸',tscore:'النتيجة',tagain:'أعد الاختبار',noq:'السورة قصيرة جداً للاختبار.',tgood:'ما شاء الله! استمر.',tkeep:'واصل المراجعة بإذن الله ستتقن.'});
+let lang=localStorage.ml_lang||'id';const T=k=>I[lang][k]??I.id[k]??'';
 
-            <div id="murojaahList" class="space-y-3 pt-2">
-                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center p-5 bg-slate-950 border border-slate-800/80 rounded-2xl gap-4">
-                    <div>
-                        <span id="txtReviewTag" class="text-[10px] font-bold text-amber-400 uppercase tracking-wider block mb-1">Perlu Murojaah Hari Ini</span>
-                        <h4 id="txtReviewSurah" class="font-bold text-white text-base">Surah Al-Mulk (Ayat 1 - 5)</h4>
-                        <p id="txtReviewLast" class="text-xs text-slate-400">Terakhir di-review 3 hari lalu</p>
-                    </div>
-                    <div class="flex items-center gap-2 w-full lg:w-auto">
-                        <button onclick="reviewHafalan('lupa')" id="btnHard" class="flex-1 lg:flex-none bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 text-xs px-4 py-2.5 rounded-xl font-bold transition">🔴 Lupa (1 Hari)</button>
-                        <button onclick="reviewHafalan('ragu')" id="btnGood" class="flex-1 lg:flex-none bg-amber-500/10 border border-amber-500/30 text-amber-400 hover:bg-amber-500/20 text-xs px-4 py-2.5 rounded-xl font-bold transition">🟡 Ragu (3 Hari)</button>
-                        <button onclick="reviewHafalan('mutqin')" id="btnMutqin" class="flex-1 lg:flex-none bg-brand-500/20 border border-brand-500/40 text-brand-400 hover:bg-brand-500/30 text-xs px-4 py-2.5 rounded-xl font-bold transition">🟢 Mutqin (7 Hari)</button>
-                    </div>
-                </div>
-            </div>
-        </section>
+/* ===== 2. STATE & SRS (SM-2 yang disederhanakan) ===== */
+let S={items:{},log:{}};try{S=JSON.parse(localStorage.ml_state)||S}catch{}
+let user=null,db=null,fs=null,timer;
+const live=k=>S.items[k]&&!S.items[k].x;
+let qari=localStorage.ml_qari||'ar.alafasy';
+const nx=(it,q)=>{const n={...it};
+ if(q==0){n.l++;n.r=0;n.i=1;n.e=Math.max(1.3,n.e-.2)}
+ else if(q==1){n.i=Math.max(1,Math.round(n.i*1.2));n.e=Math.max(1.3,n.e-.05);n.r++}
+ else{n.i=n.r==0?3:n.r==1?7:Math.round(n.i*n.e);n.e=Math.min(3,n.e+.05);n.r++}
+ n.d=today()+n.i;n.u=Date.now();return n};
+const streak=()=>{let d=today(),c=0;if(!S.log[d])d--;while(S.log[d]){c++;d--}return c};
+const act=()=>{S.log[today()]=(S.log[today()]||0)+1};
+function save(){localStorage.ml_state=JSON.stringify(S);stats();clearTimeout(timer);if(user)timer=setTimeout(push,1500)}
+function stats(){const a=Object.values(S.items).filter(i=>!i.x),due=a.filter(i=>i.d<=today()).length;
+ $('st1').textContent=a.length;$('st2').textContent=(a.length?Math.round(a.filter(i=>i.i>=7).length/a.length*100):0)+'%';
+ $('st3').textContent=due;$('qn').textContent=due;$('st4').textContent='🔥 '+streak();week()}
+function week(){const g=S.goal||5,t=S.log[today()]||0,L=[6,5,4,3,2,1,0].map(o=>S.log[today()-o]||0),mx=Math.max(g,...L);
+ $('gbar').style.width=Math.min(100,t/g*100)+'%';$('goal').value=g;
+ $('wkc').innerHTML=L.map((c,x)=>`<div class="flex-1 h-full flex flex-col justify-end items-center gap-1" title="${c}"><div class="w-full rounded-t ${x==6?'bg-brand-500':'bg-brand-500/40'}" style="height:${c/mx*100}%;min-height:3px"></div><span class="text-[10px] text-slate-500">${new Date((today()-6+x)*DAY).toLocaleDateString(lang,{weekday:'narrow',timeZone:'UTC'})}</span></div>`).join('')}
+const setGoal=v=>{S.goal=+v;save()};
+const merge=r=>{for(const k in r.items||{}){const a=S.items[k],b=r.items[k];if(!a||b.u>a.u)S.items[k]=b}for(const d in r.log||{})S.log[d]=Math.max(S.log[d]||0,r.log[d]);if(r.goal&&!S.goal)S.goal=r.goal};
 
-    </main>
+/* ===== 3. DATA AL-QUR'AN (alquran.cloud — gratis, tanpa API key) ===== */
+async function api(p){const k='q_'+p;try{const c=localStorage.getItem(k);if(c)return JSON.parse(c)}catch{}
+ const j=await(await fetch('https://api.alquran.cloud/v1/'+p)).json();try{localStorage.setItem(k,JSON.stringify(j.data))}catch{}return j.data}
+const cache={};
+async function getS(n){const ck=n+qari;if(cache[ck])return cache[ck];
+ const[d,ad]=await Promise.all([api(`surah/${n}/editions/quran-uthmani,id.indonesian,en.sahih`),api(`surah/${n}/${qari}`)]);
+ const V=d[0].ayahs.map((a,i)=>({n:a.numberInSurah,t:(i==0&&n!=1&&n!=9)?a.text.split(' ').slice(4).join(' '):a.text,id:d[1].ayahs[i].text,en:d[2].ayahs[i].text,au:ad.ayahs[i].audio}));
+ return cache[ck]={name:d[0].name,en:d[0].englishName,V}}
+const tr=v=>lang=='id'?v.id:lang=='en'?v.en:'';
+const esc=s=>s.replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
 
-    <!-- Global Footer -->
-    <footer class="border-t border-slate-800/80 py-8 text-center text-xs text-slate-500 mt-12 bg-slate-950">
-        <p class="font-bold text-slate-300">MutqinLab Global Open Source Initiative</p>
-        <p id="txtFooterSubtitle" class="mt-1">Membantu Penghafal Al-Qur'an Seluruh Dunia dengan Sains Kognitif — 100% Gratis</p>
-    </footer>
+/* ===== 4. AUDIO: talqin & tikrar ===== */
+const au=new Audio();let run=0,V=[],CN=1,focus=false;
+function play(i,chain){if(!V[i])return;const my=++run;let n=0;hl(i);au.src=V[i].au;
+ au.onended=()=>{if(my!=run)return;if(++n<+$('loops').value)au.play();else if(chain&&V[i+1])play(i+1,true);else hl(-1)};
+ au.play().catch(()=>toast(T('err')))}
+function once(u){run++;au.onended=null;au.src=u;au.play()}
+function hl(i){document.querySelectorAll('#list>div').forEach((e,x)=>{e.classList.toggle('playing',x==i);if(x==i)e.scrollIntoView({block:'center',behavior:'smooth'})})}
 
-    <!-- Auth Modal Container -->
-    <div id="authModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden">
-        <div class="bg-slate-900 rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl border border-slate-800 relative">
-            <button onclick="toggleAuthModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white">✕</button>
-            
-            <div class="text-center space-y-3 mb-8">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-500 via-emerald-400 to-teal-300 flex items-center justify-center text-slate-950 font-extrabold text-xl mx-auto shadow-lg shadow-brand-500/20">
-                    ML
-                </div>
-                <h3 id="txtModalTitle" class="text-2xl font-bold text-white">Sinkronkan ke Cloud</h3>
-                <p id="txtModalDesc" class="text-xs text-slate-400 leading-relaxed">Simpan progres hafalan secara aman dan dapat diakses dari Web, iOS, serta Android.</p>
-            </div>
+/* ===== 5. UI: BELAJAR ===== */
+async function loadSurah(){CN=+$('sel').value;localStorage.ml_surah=CN;Q=null;run++;au.pause();$('list').innerHTML='<p class="text-center text-slate-500 py-10">…</p>';
+ try{const s=await getS(CN);V=s.V;$('title').textContent=`${CN}. ${s.en} — ${s.name}`;draw()}catch{$('list').innerHTML=`<p class="text-center text-red-400 py-10">${T('err')}</p>`}}
+function draw(){$('list').className=(focus?'focus ':'')+'space-y-4';
+ $('list').innerHTML=V.map((v,i)=>{const has=live(CN+':'+v.n);return`<div class="p-5 bg-slate-900/60 rounded-2xl border border-slate-800 space-y-3">
+ <div class="flex justify-between items-center text-xs border-b border-slate-800 pb-3"><b class="text-brand-400">${v.n}</b><div class="flex gap-2">
+ <button onclick="play(${i})" class="bg-slate-800 px-3 py-1.5 rounded-xl font-semibold">${T('audio')}</button>
+ <button onclick="mark(${i})" class="${has?'bg-slate-800 text-slate-400':'bg-brand-500/20 border border-brand-500/40 text-brand-400'} px-3 py-1.5 rounded-xl font-semibold">${has?T('hafald'):T('hafal')}</button></div></div>
+ <p class="ar text-3xl sm:text-4xl text-right" onclick="this.classList.toggle('show')">${v.t}</p>
+ ${tr(v)?`<p class="text-sm text-slate-300">${esc(tr(v))}</p>`:''}</div>`}).join('')}
+function mark(i){const k=CN+':'+V[i].n;if(live(k)){if(!confirm(T('unm')))return;S.items[k]={...S.items[k],x:1,u:Date.now()};save();draw();return}S.items[k]={s:CN,a:V[i].n,r:0,i:1,e:2.3,d:today()+1,l:0,u:Date.now()};act();save();draw();toast(T('toastH'))}
+function focusMode(){focus=!focus;$('fbtn').classList.toggle('on',focus);$('list').classList.toggle('focus',focus)}
 
-            <div class="space-y-3">
-                <button id="btnGoogleAuth" onclick="handleGoogleLogin()" class="w-full bg-slate-950 hover:bg-slate-800 border border-slate-800 text-white font-semibold py-3.5 px-4 rounded-xl flex items-center justify-center gap-3 transition shadow-sm text-sm">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-                    <span id="txtGoogleBtn">Lanjutkan dengan Google</span>
-                </button>
-            </div>
-            
-            <p class="text-[10px] text-center text-slate-500 mt-6">
-                100% Free & Open Source for the Ummah.
-            </p>
-        </div>
-    </div>
+/* ===== 6. UI: MUROJAAH (active recall, sambung ayat) ===== */
+async function drawMur(){const due=Object.entries(S.items).filter(([,i])=>!i.x&&i.d<=today()).sort((a,b)=>a[1].d-b[1].d),box=$('mur');
+ if(!due.length){box.innerHTML=`<p class="text-center py-16 text-slate-400">${T('empty')}</p>`;return}
+ const[k,it]=due[0];box.innerHTML='<p class="text-center py-16 text-slate-500">…</p>';
+ try{const s=await getS(it.s),v=s.V[it.a-1],p=s.V[it.a-2];
+ box.innerHTML=`<div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 space-y-5">
+ <div class="flex justify-between text-xs"><b class="text-amber-400">${it.s}. ${s.en} : ${it.a}</b><span class="text-slate-500">${due.length} ▸</span></div>
+ <p class="text-xs text-slate-400">${T('cue')}</p>
+ ${p?`<p class="ar text-3xl text-right">${p.t}</p>`:`<p class="text-slate-500 text-sm">${T('start')}</p>`}
+ <button id="rv" onclick="reveal()" class="w-full bg-brand-500 text-slate-950 font-bold py-3 rounded-xl">${T('show')}</button>
+ <div id="ans" class="hidden space-y-4"><p class="ar text-3xl sm:text-4xl text-right text-brand-400">${v.t}</p>
+ ${tr(v)?`<p class="text-sm text-slate-300">${esc(tr(v))}</p>`:''}
+ <button onclick="once('${v.au}')" class="bg-slate-800 px-4 py-2 rounded-xl text-xs font-semibold">${T('audio')}</button>
+ <div class="grid grid-cols-3 gap-2">${[0,1,2].map(q=>`<button onclick="rate('${k}',${q})" class="${['bg-red-500/10 border-red-500/30 text-red-400','bg-amber-500/10 border-amber-500/30 text-amber-400','bg-brand-500/20 border-brand-500/40 text-brand-400'][q]} border py-3 rounded-xl text-xs font-bold">${T('b'+q)}<br><span class="opacity-70">${nx(it,q).i} ${T('day')}</span></button>`).join('')}</div></div></div>`}
+ catch{box.innerHTML=`<p class="text-center text-red-400 py-10">${T('err')}</p>`}}
+window.reveal=()=>{$('rv').classList.add('hidden');$('ans').classList.remove('hidden')};
+function rate(k,q){const n=nx(S.items[k],q);S.items[k]=n;act();save();toast(T('toastR')+n.i+' '+T('day'));drawMur()}
 
-    <!-- App Logic Script & Dictionary Translation -->
-    <script>
-        const i18n = {
-            id: {
-                dir: 'ltr',
-                btnLogin: 'Masuk Cloud',
-                txtSubtitle: 'Laboratorium Sains Memori Quran',
-                txtHeroTitle: 'Dashboard Murojaah Presisi',
-                txtEngineStatus: 'Algoritma SRS: Aktif',
-                txtStat1Label: 'Total Ayat Dihafal',
-                txtStat1Badge: '+12 hari ini',
-                txtStat2Label: 'Indeks Akurasi Mutqin',
-                txtStat2Badge: 'Optimal',
-                txtStat3Label: 'Antrean Murojaah SRS',
-                txtStat3Badge: 'Waktunya Review',
-                txtStat4Label: 'Streak Konsistensi',
-                txtStat4Badge: 'Top 5% Global',
-                txtTargetLabel: 'Target Surah:',
-                txtFocusBtn: 'Mode Tikrar Fokus (Blur)',
-                txtChunkingSubtitle: 'Pengulangan Audio & Pemotongan Blok Hafalan',
-                txtLoopLabel: 'Pengulangan Audio:',
-                txtSrsTitle: 'Jadwal Murojaah Pintar (SRS)',
-                txtSrsSubtitle: 'Jadwal otomatis berdasarkan daya ingat kognitif',
-                txtSrsAlgorithmBadge: 'Algoritma Mutqin',
-                txtReviewTag: 'Perlu Murojaah Hari Ini',
-                txtReviewSurah: 'Surah Al-Mulk (Ayat 1 - 5)',
-                txtReviewLast: 'Terakhir di-review 3 hari lalu',
-                btnHard: '🔴 Lupa (1 Hari)',
-                btnGood: '🟡 Ragu (3 Hari)',
-                btnMutqin: '🟢 Mutqin (7 Hari)',
-                txtFooterSubtitle: "Membantu Penghafal Al-Qur'an Seluruh Dunia dengan Sains Kognitif — 100% Gratis",
-                txtModalTitle: 'Sinkronkan ke Cloud',
-                txtModalDesc: 'Simpan progres hafalan secara aman dan dapat diakses dari Web, iOS, serta Android.',
-                txtGoogleBtn: 'Lanjutkan dengan Google',
-                verseLabel: 'Ayat',
-                btnAudio: '🔊 Audio',
-                btnMarkHafal: '✅ Tandai Hafal',
-                msgHafal: 'Alhamdulillah! Ayat ini berhasil masuk ke dalam siklus Murojaah Mutqin.',
-                msgHard: 'Dicatat! Sesi Murojaah dijadwalkan ulang besok.',
-                msgGood: 'Dicatat! Sesi Murojaah dijadwalkan 3 hari lagi.',
-                msgMutqin: 'MasyaAllah Mutqin! Sesi Murojaah dijadwalkan 7 hari lagi.'
-            },
-            ar: {
-                dir: 'rtl',
-                btnLogin: 'تسجيل الدخول',
-                txtSubtitle: 'مختبر علوم ذاكرة القرآن الكريم',
-                txtHeroTitle: 'لوحة تحكم المراجعة الدقيقة',
-                txtEngineStatus: 'خوارزمية التكرار: نشطة',
-                txtStat1Label: 'إجمالي الآيات المحفوظة',
-                txtStat1Badge: '+١٢ اليوم',
-                txtStat2Label: 'مؤشر الإتقان والدقة',
-                txtStat2Badge: 'ممتاز',
-                txtStat3Label: 'قائمة المراجعة اليومية',
-                txtStat3Badge: 'حان وقت المراجعة',
-                txtStat4Label: 'سلسلة الاستمرارية',
-                txtStat4Badge: 'أفضل ٥٪ عالمياً',
-                txtTargetLabel: 'السورة المستهدفة:',
-                txtFocusBtn: 'وضع التكرار والتركيز (إخفاء)',
-                txtChunkingSubtitle: 'تكرار الصوت وتقسيم الحفظ إلى أجزاء',
-                txtLoopLabel: 'تكرار الصوت:',
-                txtSrsTitle: 'جدول المراجعة الذكي (SRS)',
-                txtSrsSubtitle: 'جدولة تلقائية قائمة على علوم الذاكرة المعرفية',
-                txtSrsAlgorithmBadge: 'خوارزمية الإتقان',
-                txtReviewTag: 'مطلوب المراجعة اليوم',
-                txtReviewSurah: 'سورة الملك (الآيات ١ - ٥)',
-                txtReviewLast: 'آخر مراجعة منذ ٣ أيام',
-                btnHard: '🔴 صعبة (يوم واحد)',
-                btnGood: '🟡 متوسطة (٣ أيام)',
-                btnMutqin: '🟢 متقن (٧ أيام)',
-                txtFooterSubtitle: 'تمكين حفاظ القرآن الكريم عالمياً باستخدام العلوم المعرفية — مجاني ١٠٠٪',
-                txtModalTitle: 'الربط بالسحابة',
-                txtModalDesc: 'احفظ تقدمك في الحفظ بأمان عبر الويب، iOS، وأندرويد.',
-                txtGoogleBtn: 'المتابعة باستخدام Google',
-                verseLabel: 'الآية',
-                btnAudio: '🔊 استماع',
-                btnMarkHafal: '✅ تم الحفظ',
-                msgHafal: 'الحمد لله! تم إدراج الآية في دورة المراجعة والإتقان.',
-                msgHard: 'تم التسجيل! تم تحديد موعد المراجعة غداً.',
-                msgGood: 'تم التسجيل! تم تحديد موعد المراجعة بعد ٣ أيام.',
-                msgMutqin: 'ما شاء الله متقن! تم تحديد موعد المراجعة بعد ٧ أيام.'
-            },
-            en: {
-                dir: 'ltr',
-                btnLogin: 'Launch Cloud Sync',
-                txtSubtitle: 'Cognitive Quran Memory Lab',
-                txtHeroTitle: 'Precision Murojaah Dashboard',
-                txtEngineStatus: 'Mutqin SRS Engine: Active',
-                txtStat1Label: 'Total Verses Retained',
-                txtStat1Badge: '+12 today',
-                txtStat2Label: 'Mutqin Precision Index',
-                txtStat2Badge: 'Optimal',
-                txtStat3Label: 'SRS Review Queue',
-                txtStat3Badge: 'Due Now',
-                txtStat4Label: 'Consistency Streak',
-                txtStat4Badge: 'Top 5% Global',
-                txtTargetLabel: 'Target Surah:',
-                txtFocusBtn: 'Tikrar Focus Mode (Blur)',
-                txtChunkingSubtitle: 'Smart Chunking & Recitation Loop',
-                txtLoopLabel: 'Loop Audio:',
-                txtSrsTitle: 'Spaced Repetition Review Queue',
-                txtSrsSubtitle: 'Algorithmic schedule optimized for long-term retention',
-                txtSrsAlgorithmBadge: 'Mutqin Algorithm',
-                txtReviewTag: 'Due for Review Today',
-                txtReviewSurah: 'Surah Al-Mulk (Verses 1 - 5)',
-                txtReviewLast: 'Last reviewed 3 days ago',
-                btnHard: 'Hard (1 Day)',
-                btnGood: 'Good (3 Days)',
-                btnMutqin: 'Mutqin (7 Days)',
-                txtFooterSubtitle: 'Empowering Quran Memorizers Worldwide with Cognitive Science — 100% Free',
-                txtModalTitle: 'Cloud Sync with MutqinLab',
-                txtModalDesc: 'Sync your Quran retention progress seamlessly across Web, iOS, and Android.',
-                txtGoogleBtn: 'Continue with Google',
-                verseLabel: 'Verse',
-                btnAudio: '🔊 Audio',
-                btnMarkHafal: '✅ Mark Memorized',
-                msgHafal: 'Alhamdulillah! Verse added to Mutqin SRS Cycle.',
-                msgHard: 'Scheduled for Hard Review (Tomorrow).',
-                msgGood: 'Scheduled for Moderate Review (3 Days).',
-                msgMutqin: 'Marked as Mutqin! Next review in 7 days.'
-            }
-        };
+/* ===== 7. FIREBASE: Google login + Firestore sync ===== */
+async function initFB(){if(!FB.apiKey)return;const v='10.14.1',g=m=>import(`https://www.gstatic.com/firebasejs/${v}/firebase-${m}.js`);
+ const[{initializeApp},A,F]=await Promise.all([g('app'),g('auth'),g('firestore')]);const app=initializeApp(FB),auth=A.getAuth(app);db=F.getFirestore(app);fs=F;window._A={A,auth};
+ A.onAuthStateChanged(auth,async u=>{user=u;ui();if(u){try{const r=await F.getDoc(F.doc(db,'users',u.uid));if(r.exists())merge(r.data());save();await push();if(!$('pL').classList.contains('hidden'))draw()}catch(e){console.error(e)}}})}
+async function push(){if(user)try{await fs.setDoc(fs.doc(db,'users',user.uid),{items:S.items,log:S.log,goal:S.goal||5,u:Date.now()})}catch(e){console.error(e)}}
+window.login=async()=>{if(!FB.apiKey)return toast(T('nocfg'));try{await _A.A.signInWithPopup(_A.auth,new _A.A.GoogleAuthProvider());modal(0)}catch(e){toast(e.code||'Error')}};
+window.authClick=()=>user?_A.A.signOut(_A.auth):modal(1);
+window.modal=o=>{$('modal').classList.toggle('hidden',!o);$('modal').classList.toggle('flex',!!o);$('cfgInfo').textContent=FB.apiKey?T('cfg'):T('nocfg')};
+function ui(){$('authBtn').textContent=user?T('logout')+' ('+(user.displayName||'').split(' ')[0]+')':T('login')}
 
-        const surahData = {
-            67: {
-                name: "Al-Mulk",
-                verses: [
-                    { id: 1, text: "تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْكُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ", latin: "Tabārakallażī biyadihil-mulku wa huwa 'alā kulli syai'in qadīr", translation_id: "Maha Suci Allah yang menguasai (segala) kerajaan, dan Dia Maha Kuasa atas segala sesuatu.", translation_en: "Blessed is He in whose hand is dominion, and He is over all things competent.", audio: "https://cdn.islamic.network/quran/audio/128/ar.alafasy/5242.mp3" },
-                    { id: 2, text: "الَّذِي خَلَقَ الْمَوْتَ وَالْحَيَاةَ لِيَبْلُوَكُمْ أَيُّكُمْ أَحْسَنُ عَمَلًا ۚ وَهُوَ الْعَزِيزُ الْغَفُورُ", latin: "Allażī khalaqal-mauta wal-ḥayāta liyabluwakum ayyukum aḥsanu 'amalā", translation_id: "Yang menciptakan mati dan hidup, untuk menguji kamu, siapa di antara kamu yang lebih baik amalnya.", translation_en: "He who created death and life to test you as to which of you is best in deed.", audio: "https://cdn.islamic.network/quran/audio/128/ar.alafasy/5243.mp3" },
-                    { id: 3, text: "الَّذِي خَلَقَ سَبْعَ سَمَاوَاتٍ طِبَاقًا ۖ مَّا تَرَىٰ فِي خَلْقِ الرَّحْمَٰنِ مِن تَفَاوُتٍ", latin: "Allażī khalaqa sab'a samāwātin ṭibāqā", translation_id: "Yang menciptakan tujuh langit berlapis-lapis. Kamu tidak melihat pada ciptaan Tuhan Yang Maha Pengasih sesuatu yang tidak seimbang.", translation_en: "Who created seven heavens in layers. You do not see in the creation of the Most Merciful any inconsistency.", audio: "https://cdn.islamic.network/quran/audio/128/ar.alafasy/5244.mp3" }
-                ]
-            }
-        };
+/* ===== 7b. TES SAMBUNG AYAT ===== */
+let Q=null;const shuf=a=>[...a].sort(()=>Math.random()-.5);
+function startTest(){if(V.length<2)return toast(T('noq'));
+ const idx=V.map((_,i)=>i).slice(0,-1),mine=idx.filter(i=>live(CN+':'+V[i+1].n));
+ Q={i:0,sc:0,a:null,q:shuf(mine.length>=3?mine:idx).slice(0,10).map(i=>({i,ok:i+1,o:shuf([i+1,...shuf(V.map((_,x)=>x).filter(x=>x!=i&&x!=i+1)).slice(0,3)])}))};drawTest()}
+function ans(x){if(Q.a!==null)return;Q.a=x;const q=Q.q[Q.i];
+ if(x==q.ok)Q.sc++;else{const k=CN+':'+V[q.ok].n;if(live(k)){S.items[k]={...S.items[k],r:0,d:today(),l:S.items[k].l+1,u:Date.now()};save()}}drawTest()}
+function nextQ(){Q.i++;Q.a=null;if(Q.i>=Q.q.length){act();save()}drawTest()}
+function drawTest(){const b=$('tst'),c='bg-slate-900/60 border border-slate-800 rounded-3xl p-6 space-y-4';
+ if(!Q){b.innerHTML=`<div class="${c} text-center"><p class="text-sm text-slate-300">${T('tdesc')}</p><p class="font-bold">${esc($('title').textContent)}</p><button onclick="startTest()" class="bg-brand-500 text-slate-950 font-bold px-6 py-3 rounded-xl">${T('tstart')}</button></div>`;return}
+ if(Q.i>=Q.q.length){const n=Q.q.length;b.innerHTML=`<div class="${c} text-center"><p class="text-5xl font-extrabold text-brand-400">${Q.sc}/${n}</p><p class="text-slate-300">${T('tscore')} — ${Q.sc>=n*.8?T('tgood'):T('tkeep')}</p><button onclick="startTest()" class="bg-brand-500 text-slate-950 font-bold px-6 py-3 rounded-xl">${T('tagain')}</button></div>`;return}
+ const q=Q.q[Q.i],done=Q.a!==null;
+ b.innerHTML=`<div class="${c}"><div class="flex justify-between text-xs text-slate-400"><b class="text-amber-400">${q.i+1}</b><span>${Q.i+1}/${Q.q.length}</span></div>
+ <p class="ar text-3xl text-right">${V[q.i].t}</p><p class="text-xs text-slate-400">${T('tq')}</p>
+ ${q.o.map(x=>`<button onclick="ans(${x})" class="w-full ar text-2xl text-right p-3 rounded-xl border ${done?(x==q.ok?'border-brand-500 bg-brand-500/20':x==Q.a?'border-red-500 bg-red-500/20':'border-slate-800'):'border-slate-700 hover:bg-slate-800'}">${V[x].t}</button>`).join('')}
+ ${done?`<button onclick="nextQ()" class="w-full bg-brand-500 text-slate-950 font-bold py-3 rounded-xl">${T('tnext')}</button>`:''}</div>`}
+const setQari=v=>{qari=v;localStorage.ml_qari=v;loadSurah()};
 
-        let currentLang = 'id';
-        let isFocusMode = false;
+/* ===== 8. UTIL ===== */
+function toast(m){const t=$('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.add('hidden'),2600)}
+function tab(x){['L','M','T'].forEach(k=>{$('p'+k).classList.toggle('hidden',k!=x);$('tab'+k).className='flex-1 py-2.5 rounded-xl text-sm font-bold '+(k==x?'on':'text-slate-400')});if(x=='M')drawMur();if(x=='T')drawTest()}
+function setLang(l){lang=l;localStorage.ml_lang=l;$('lang').value=l;$('H').lang=l;$('H').dir=I[l].dir;
+ document.querySelectorAll('[data-i]').forEach(e=>e.textContent=T(e.dataset.i));ui();if(V.length&&!$('pL').classList.contains('hidden'))draw();if(!$('pM').classList.contains('hidden'))drawMur();if(!$('pT').classList.contains('hidden'))drawTest()}
+Object.assign(window,{setQari,setGoal,startTest,ans,nextQ,drawTest,play,once,mark,rate,focusMode,loadSurah,tab,setLang});
 
-        function changeLanguage(langKey) {
-            currentLang = langKey;
-            const dict = i18n[langKey];
-            const htmlTag = document.getElementById('htmlTag');
-            
-            // Set arah teks (RTL untuk Arab, LTR untuk ID/EN)
-            htmlTag.setAttribute('dir', dict.dir);
-            
-            // Update teks elemen statis
-            Object.keys(dict).forEach(key => {
-                const el = document.getElementById(key);
-                if (el) {
-                    el.innerText = dict[key];
-                }
-            });
-
-            // Reload data surah untuk mengupdate terjemahan & label ayat
-            loadSurahData();
-        }
-
-        function toggleAuthModal() {
-            const modal = document.getElementById('authModal');
-            modal.classList.toggle('hidden');
-        }
-
-        function toggleFocusMode() {
-            isFocusMode = !isFocusMode;
-            const btn = document.getElementById('toggleFocusModeBtn');
-            btn.classList.toggle('bg-brand-600');
-            btn.classList.toggle('text-white');
-            
-            const verseTexts = document.querySelectorAll('.arabic-verse');
-            verseTexts.forEach((el, index) => {
-                if (isFocusMode && index !== 0) {
-                    el.classList.add('blur-text');
-                } else {
-                    el.classList.remove('blur-text');
-                }
-            });
-        }
-
-        function loadSurahData() {
-            const selectedSurah = document.getElementById('surahSelect').value;
-            const data = surahData[selectedSurah] || surahData[67];
-            const dict = i18n[currentLang];
-            
-            document.getElementById('currentSurahTitle').innerText = "Surah " + data.name;
-            const container = document.getElementById('ayatContainer');
-            container.innerHTML = "";
-
-            data.verses.forEach((verse, idx) => {
-                const translationText = currentLang === 'en' ? verse.translation_en : (currentLang === 'id' ? verse.translation_id : "");
-                
-                const verseHTML = `
-                    <div class="p-6 bg-slate-950/80 rounded-2xl border border-slate-800/80 space-y-4 shadow-sm">
-                        <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-800/80 pb-3">
-                            <span class="font-bold text-brand-400">${dict.verseLabel} ${verse.id}</span>
-                            <div class="flex gap-2">
-                                <button onclick="playVerseAudio('${verse.audio}')" class="bg-slate-900 border border-slate-700/80 text-slate-200 px-3.5 py-1.5 rounded-xl hover:bg-slate-800 transition font-semibold">${dict.btnAudio}</button>
-                                <button onclick="markAsHafal(${verse.id})" class="bg-brand-500/20 border border-brand-500/40 text-brand-400 px-3.5 py-1.5 rounded-xl hover:bg-brand-500/30 transition font-semibold">${dict.btnMarkHafal}</button>
-                            </div>
-                        </div>
-                        <p class="arabic-text arabic-verse text-3xl sm:text-4xl text-right text-white ${isFocusMode && idx !== 0 ? 'blur-text' : ''}">
-                            ${verse.text}
-                        </p>
-                        ${currentLang !== 'ar' ? `<p class="text-xs text-slate-400 italic">${verse.latin}</p>` : ''}
-                        ${translationText ? `<p class="text-sm text-slate-300">"${translationText}"</p>` : ''}
-                    </div>
-                `;
-                container.innerHTML += verseHTML;
-            });
-        }
-
-        let currentAudio = null;
-        function playVerseAudio(audioUrl) {
-            if (currentAudio) {
-                currentAudio.pause();
-            }
-            const loopCount = parseInt(document.getElementById('loopAudioSelect').value) || 1;
-            let playedTimes = 0;
-
-            currentAudio = new Audio(audioUrl);
-            currentAudio.play();
-
-            currentAudio.onended = () => {
-                playedTimes++;
-                if (playedTimes < loopCount) {
-                    currentAudio.play();
-                }
-            };
-        }
-
-        function markAsHafal(verseId) {
-            alert(i18n[currentLang].msgHafal);
-        }
-
-        function reviewHafalan(status) {
-            if (status === 'lupa') {
-                alert(i18n[currentLang].msgHard);
-            } else if (status === 'ragu') {
-                alert(i18n[currentLang].msgGood);
-            } else {
-                alert(i18n[currentLang].msgMutqin);
-            }
-        }
-
-        window.onload = () => {
-            loadSurahData();
-        };
-    </script>
+(async()=>{setLang(lang);tab('L');stats();
+ let list=[];try{list=await api('surah')}catch{}
+ if(!list.length)list=[{number:1,englishName:'Al-Faatiha',name:'الفاتحة'},{number:67,englishName:'Al-Mulk',name:'الملك'},{number:78,englishName:"An-Naba'",name:'النبأ'},{number:112,englishName:'Al-Ikhlaas',name:'الإخلاص'}];
+ $('sel').innerHTML=list.map(s=>`<option value="${s.number}">${s.number}. ${s.englishName} (${s.name})</option>`).join('');
+ $('sel').value=localStorage.ml_surah||(list.some(s=>s.number==67)?67:list[0].number);
+ $('qari').value=qari;if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+ loadSurah();initFB()})();
+</script>
 </body>
 </html>
