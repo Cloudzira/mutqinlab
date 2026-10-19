@@ -29,6 +29,7 @@
   </div>
  </div>
 </header>
+<div class="border-b border-slate-800 bg-slate-900/70"><div class="max-w-5xl mx-auto px-4 py-2 flex justify-between items-center gap-3 text-xs"><div><b id="clk" class="text-base font-extrabold tabular-nums"></b><span id="hij" class="text-slate-400 ms-2"></span></div><div id="cdn" class="text-right font-semibold tabular-nums"></div></div></div>
 
 <main class="max-w-5xl mx-auto px-4 py-6 flex-grow w-full space-y-5">
  <section class="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -46,25 +47,29 @@
  </section>
 
  <nav class="flex gap-2 bg-slate-900 border border-slate-800 p-1.5 rounded-2xl">
+  <button id="tabG" onclick="tab('G')" data-i="tabG" class="flex-1 py-2.5 rounded-xl text-sm font-bold"></button>
   <button id="tabL" onclick="tab('L')" data-i="tabL" class="flex-1 py-2.5 rounded-xl text-sm font-bold"></button>
   <button id="tabM" onclick="tab('M')" class="flex-1 py-2.5 rounded-xl text-sm font-bold"><span data-i="tabM"></span> <span id="qn" class="ml-1 bg-amber-500 text-slate-950 text-xs px-2 py-0.5 rounded-full">0</span></button>
   <button id="tabT" onclick="tab('T')" data-i="tabT" class="flex-1 py-2.5 rounded-xl text-sm font-bold"></button>
  </nav>
 
+ <section id="pG"><div id="gur"></div></section>
+
  <section id="pL" class="space-y-4">
+  <div id="zg"></div>
   <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl flex flex-wrap items-center gap-3">
    <select id="sel" onchange="loadSurah()" class="flex-1 min-w-[200px] bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm font-semibold"></select>
    <label class="text-xs text-slate-400 flex items-center gap-2"><span data-i="loop"></span>
-    <select id="loops" class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1.5 text-brand-400 font-bold"><option>1</option><option selected>3</option><option>5</option><option>10</option></select>×</label>
+    <select id="loops" class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1.5 text-brand-400 font-bold"><option>1</option><option selected>3</option><option>5</option><option>10</option><option>20</option></select>×</label>
    <select id="qari" onchange="setQari(this.value)" class="bg-slate-950 border border-slate-800 rounded-xl px-2 py-2.5 text-xs font-semibold"><option value="ar.alafasy">Alafasy</option><option value="ar.husary">Al-Husary</option><option value="ar.minshawi">Minshawi</option><option value="ar.abdulbasitmurattal">Abdul Basit</option><option value="ar.abdurrahmaansudais">Sudais</option><option value="ar.saoodshuraym">Shuraym</option></select>
    <button id="fbtn" onclick="focusMode()" data-i="focus" class="bg-slate-800 border border-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold"></button>
-   <button onclick="play(0,true)" data-i="all" class="bg-slate-800 border border-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold"></button>
+   <button onclick="playAll()" data-i="all" class="bg-slate-800 border border-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold"></button>
   </div>
   <h3 id="title" class="font-bold text-lg px-1"></h3>
   <div id="list" class="space-y-4"></div>
  </section>
 
- <section id="pM" class="hidden"><div id="mur"></div></section>
+ <section id="pM" class="hidden space-y-4"><div id="mg"></div><div id="mur"></div></section>
  <section id="pT" class="hidden"><div id="tst"></div></section>
 
  <details class="bg-slate-900/40 border border-slate-800 rounded-2xl p-5">
@@ -95,12 +100,12 @@ const FB={apiKey:"",authDomain:"",projectId:"",appId:""};
 const $=id=>document.getElementById(id);
 const DAY=864e5,today=()=>Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/DAY);
 const I={
-id:{dir:'ltr',sub:'',s1:'Ayat Dihafal',s2:'Indeks Mutqin',s3:'Antrean Murojaah',s4:'Streak',tabL:'📖 Belajar',tabM:'🔁 Murojaah',loop:'Ulang audio',focus:'👁️ Mode Blur',all:'▶ Putar Semua',hafal:'✅ Tandai Hafal',hafald:'✓ Dalam SRS',audio:'🔊 Audio',empty:'Alhamdulillah, tidak ada murojaah hari ini 🎉 Tambah hafalan baru di tab Belajar.',cue:'Lanjutkan ayat setelah ini:',start:'(Awal surah)',show:'Tampilkan Jawaban',day:'hr',b0:'🔴 Lupa',b1:'🟡 Ragu',b2:'🟢 Mutqin',login:'Masuk Cloud',logout:'Keluar',sync:'Sinkronkan ke Cloud',google:'Lanjutkan dengan Google',nocfg:'Mode offline: isi konfigurasi Firebase di index.html untuk sinkronisasi antar perangkat.',cfg:'Progres tersimpan aman & tersinkron di semua perangkatmu.',toastH:'Alhamdulillah! Murojaah pertama besok (setelah tidur).',toastR:'Tercatat. Jadwal berikutnya: ',meth:'🧠 Metode Hafalan yang Terbukti',m1:'Talqin: dengarkan ayat dari qari 3–5× sambil melihat mushaf, lalu baca bersama.',m2:'Tikrar: ulangi audio 10–20× (atur "Ulang audio"), lalu aktifkan Mode Blur dan tes dirimu.',m3:'Sambung ayat: murojaah selalu dimulai dari ayat sebelumnya — persis seperti ujian setoran.',m4:'Ziyadah sedikit, murojaah banyak: tambah ≤5 ayat/hari, jaga antrean murojaah tetap bersih setiap hari.',foot:'Membantu penghafal Al-Qur\'an seluruh dunia — 100% gratis',err:'Gagal memuat. Periksa koneksi internet.'},
-en:{dir:'ltr',s1:'Verses Memorized',s2:'Mutqin Index',s3:'Review Queue',s4:'Streak',tabL:'📖 Learn',tabM:'🔁 Review',loop:'Audio loop',focus:'👁️ Blur Mode',all:'▶ Play All',hafal:'✅ Mark Memorized',hafald:'✓ In SRS',audio:'🔊 Audio',empty:'Alhamdulillah, nothing to review today 🎉 Add new verses in the Learn tab.',cue:'Continue the verse after this one:',start:'(Start of surah)',show:'Show Answer',day:'d',b0:'🔴 Forgot',b1:'🟡 Unsure',b2:'🟢 Mutqin',login:'Cloud Login',logout:'Sign out',sync:'Cloud Sync',google:'Continue with Google',nocfg:'Offline mode: add your Firebase config in index.html to sync across devices.',cfg:'Your progress is saved and synced across all your devices.',toastH:'Alhamdulillah! First review tomorrow (after sleep).',toastR:'Saved. Next review in: ',meth:'🧠 Proven Memorization Method',m1:'Talqin: listen to the verse 3–5× while reading, then recite along.',m2:'Tikrar: loop the audio 10–20× (set "Audio loop"), then enable Blur Mode and test yourself.',m3:'Verse linking: review always starts from the previous verse — just like a real recitation exam.',m4:'Little new, lots of review: add ≤5 verses/day and clear your review queue daily.',foot:'Empowering Quran memorizers worldwide — 100% free',err:'Failed to load. Check your connection.'},
-ar:{dir:'rtl',s1:'الآيات المحفوظة',s2:'مؤشر الإتقان',s3:'قائمة المراجعة',s4:'الاستمرارية',tabL:'📖 تعلّم',tabM:'🔁 مراجعة',loop:'تكرار الصوت',focus:'👁️ وضع التغطية',all:'▶ تشغيل الكل',hafal:'✅ تم الحفظ',hafald:'✓ في المراجعة',audio:'🔊 صوت',empty:'الحمد لله، لا مراجعة اليوم 🎉 أضف محفوظات جديدة من تبويب تعلّم.',cue:'أكمل الآية التي بعد هذه:',start:'(بداية السورة)',show:'أظهر الجواب',day:'ي',b0:'🔴 نسيت',b1:'🟡 متردد',b2:'🟢 متقن',login:'تسجيل الدخول',logout:'خروج',sync:'المزامنة السحابية',google:'المتابعة عبر Google',nocfg:'وضع بدون اتصال: أضف إعدادات Firebase للمزامنة بين الأجهزة.',cfg:'تقدمك محفوظ ومتزامن على كل أجهزتك.',toastH:'الحمد لله! أول مراجعة غداً (بعد النوم).',toastR:'تم. المراجعة القادمة بعد: ',meth:'🧠 منهج الحفظ المجرَّب',m1:'التلقين: استمع للآية ٣–٥ مرات مع النظر في المصحف ثم رددها.',m2:'التكرار: كرر الصوت ١٠–٢٠ مرة ثم فعّل وضع التغطية واختبر نفسك.',m3:'ربط الآيات: ابدأ المراجعة دائماً من الآية السابقة كما في العرض على الشيخ.',m4:'حفظ قليل ومراجعة كثيرة: ≤٥ آيات يومياً وأنجز قائمة المراجعة كل يوم.',foot:'نخدم حفظة القرآن حول العالم — مجاني ١٠٠٪',err:'تعذر التحميل. تحقق من الاتصال.'}};
-Object.assign(I.id,{tabT:'🎯 Tes',qari:'Qari',goal:'Target harian',wk:'Aktivitas 7 hari',unm:'Hapus ayat ini dari jadwal murojaah?',tdesc:'Tes sambung ayat: pilih ayat yang benar setelah ayat yang ditampilkan. Jawaban salah dijadwalkan murojaah hari ini.',tstart:'Mulai Tes',tq:'Ayat setelahnya adalah…',tnext:'Lanjut ▸',tscore:'Skor',tagain:'Ulangi Tes',noq:'Surah terlalu pendek untuk tes.',tgood:'MasyaAllah! Pertahankan.',tkeep:'Terus murojaah, in syaa Allah mutqin.'});
-Object.assign(I.en,{tabT:'🎯 Test',qari:'Reciter',goal:'Daily goal',wk:'Last 7 days',unm:'Remove this verse from your review schedule?',tdesc:'Verse-linking test: pick the correct verse that follows the one shown. Wrong answers are scheduled for review today.',tstart:'Start Test',tq:'The next verse is…',tnext:'Next ▸',tscore:'Score',tagain:'Retake Test',noq:'Surah too short for a test.',tgood:'MashaAllah! Keep it up.',tkeep:'Keep reviewing, in shaa Allah you will master it.'});
-Object.assign(I.ar,{tabT:'🎯 اختبار',qari:'القارئ',goal:'الهدف اليومي',wk:'آخر ٧ أيام',unm:'حذف هذه الآية من جدول المراجعة؟',tdesc:'اختبار ربط الآيات: اختر الآية الصحيحة التي تلي الآية المعروضة. الإجابة الخاطئة تُجدول للمراجعة اليوم.',tstart:'ابدأ الاختبار',tq:'الآية التالية هي…',tnext:'التالي ▸',tscore:'النتيجة',tagain:'أعد الاختبار',noq:'السورة قصيرة جداً للاختبار.',tgood:'ما شاء الله! استمر.',tkeep:'واصل المراجعة بإذن الله ستتقن.'});
+id:{dir:'ltr',sub:'',s1:'Ayat Dihafal',s2:'Indeks Mutqin',s3:'Antrean Murojaah',s4:'Streak',tabL:'📖 Ziyadah',tabM:'🔁 Murojaah',loop:'Ulang audio',focus:'👁️ Mode Blur',all:'▶ Putar Semua',hafal:'✅ Tandai Hafal',hafald:'✓ Dalam SRS',audio:'🔊 Audio',empty:'Alhamdulillah, tidak ada murojaah hari ini 🎉 Tambah hafalan baru di tab Belajar.',cue:'Lanjutkan ayat setelah ini:',start:'(Awal surah)',show:'Tampilkan Jawaban',day:'hr',b0:'🔴 Lupa',b1:'🟡 Ragu',b2:'🟢 Mutqin',login:'Masuk Cloud',logout:'Keluar',sync:'Sinkronkan ke Cloud',google:'Lanjutkan dengan Google',nocfg:'Mode offline: isi konfigurasi Firebase di index.html untuk sinkronisasi antar perangkat.',cfg:'Progres tersimpan aman & tersinkron di semua perangkatmu.',toastH:'Alhamdulillah! Murojaah pertama besok (setelah tidur).',toastR:'Tercatat. Jadwal berikutnya: ',meth:'🧠 Metode Hafalan yang Terbukti',m1:'Talqin: dengarkan ayat dari qari 3–5× sambil melihat mushaf, lalu baca bersama.',m2:'Tikrar: ulangi audio 10–20× (atur "Ulang audio"), lalu aktifkan Mode Blur dan tes dirimu.',m3:'Sambung ayat: murojaah selalu dimulai dari ayat sebelumnya — persis seperti ujian setoran.',m4:'Ziyadah sedikit, murojaah banyak: tambah ≤5 ayat/hari, jaga antrean murojaah tetap bersih setiap hari.',foot:'Membantu penghafal Al-Qur\'an seluruh dunia — 100% gratis',err:'Gagal memuat. Periksa koneksi internet.'},
+en:{dir:'ltr',s1:'Verses Memorized',s2:'Mutqin Index',s3:'Review Queue',s4:'Streak',tabL:'📖 Ziyadah',tabM:'🔁 Review',loop:'Audio loop',focus:'👁️ Blur Mode',all:'▶ Play All',hafal:'✅ Mark Memorized',hafald:'✓ In SRS',audio:'🔊 Audio',empty:'Alhamdulillah, nothing to review today 🎉 Add new verses in the Learn tab.',cue:'Continue the verse after this one:',start:'(Start of surah)',show:'Show Answer',day:'d',b0:'🔴 Forgot',b1:'🟡 Unsure',b2:'🟢 Mutqin',login:'Cloud Login',logout:'Sign out',sync:'Cloud Sync',google:'Continue with Google',nocfg:'Offline mode: add your Firebase config in index.html to sync across devices.',cfg:'Your progress is saved and synced across all your devices.',toastH:'Alhamdulillah! First review tomorrow (after sleep).',toastR:'Saved. Next review in: ',meth:'🧠 Proven Memorization Method',m1:'Talqin: listen to the verse 3–5× while reading, then recite along.',m2:'Tikrar: loop the audio 10–20× (set "Audio loop"), then enable Blur Mode and test yourself.',m3:'Verse linking: review always starts from the previous verse — just like a real recitation exam.',m4:'Little new, lots of review: add ≤5 verses/day and clear your review queue daily.',foot:'Empowering Quran memorizers worldwide — 100% free',err:'Failed to load. Check your connection.'},
+ar:{dir:'rtl',s1:'الآيات المحفوظة',s2:'مؤشر الإتقان',s3:'قائمة المراجعة',s4:'الاستمرارية',tabL:'📖 زيادة',tabM:'🔁 مراجعة',loop:'تكرار الصوت',focus:'👁️ وضع التغطية',all:'▶ تشغيل الكل',hafal:'✅ تم الحفظ',hafald:'✓ في المراجعة',audio:'🔊 صوت',empty:'الحمد لله، لا مراجعة اليوم 🎉 أضف محفوظات جديدة من تبويب تعلّم.',cue:'أكمل الآية التي بعد هذه:',start:'(بداية السورة)',show:'أظهر الجواب',day:'ي',b0:'🔴 نسيت',b1:'🟡 متردد',b2:'🟢 متقن',login:'تسجيل الدخول',logout:'خروج',sync:'المزامنة السحابية',google:'المتابعة عبر Google',nocfg:'وضع بدون اتصال: أضف إعدادات Firebase للمزامنة بين الأجهزة.',cfg:'تقدمك محفوظ ومتزامن على كل أجهزتك.',toastH:'الحمد لله! أول مراجعة غداً (بعد النوم).',toastR:'تم. المراجعة القادمة بعد: ',meth:'🧠 منهج الحفظ المجرَّب',m1:'التلقين: استمع للآية ٣–٥ مرات مع النظر في المصحف ثم رددها.',m2:'التكرار: كرر الصوت ١٠–٢٠ مرة ثم فعّل وضع التغطية واختبر نفسك.',m3:'ربط الآيات: ابدأ المراجعة دائماً من الآية السابقة كما في العرض على الشيخ.',m4:'حفظ قليل ومراجعة كثيرة: ≤٥ آيات يومياً وأنجز قائمة المراجعة كل يوم.',foot:'نخدم حفظة القرآن حول العالم — مجاني ١٠٠٪',err:'تعذر التحميل. تحقق من الاتصال.'}};
+Object.assign(I.id,{tabG:'🧭 Guru',tabT:'🎯 Tes',qari:'Qari',goal:'Target harian',wk:'Aktivitas 7 hari',unm:'Hapus ayat ini dari jadwal murojaah?',tdesc:'Tes sambung ayat: pilih ayat yang benar setelah ayat yang ditampilkan. Jawaban salah dijadwalkan murojaah hari ini.',tstart:'Mulai Tes',tq:'Ayat setelahnya adalah…',tnext:'Lanjut ▸',tscore:'Skor',tagain:'Ulangi Tes',noq:'Surah terlalu pendek untuk tes.',tgood:'MasyaAllah! Pertahankan.',tkeep:'Terus murojaah, in syaa Allah mutqin.'});
+Object.assign(I.en,{tabG:'🧭 Coach',tabT:'🎯 Test',qari:'Reciter',goal:'Daily goal',wk:'Last 7 days',unm:'Remove this verse from your review schedule?',tdesc:'Verse-linking test: pick the correct verse that follows the one shown. Wrong answers are scheduled for review today.',tstart:'Start Test',tq:'The next verse is…',tnext:'Next ▸',tscore:'Score',tagain:'Retake Test',noq:'Surah too short for a test.',tgood:'MashaAllah! Keep it up.',tkeep:'Keep reviewing, in shaa Allah you will master it.'});
+Object.assign(I.ar,{tabG:'🧭 المعلم',tabT:'🎯 اختبار',qari:'القارئ',goal:'الهدف اليومي',wk:'آخر ٧ أيام',unm:'حذف هذه الآية من جدول المراجعة؟',tdesc:'اختبار ربط الآيات: اختر الآية الصحيحة التي تلي الآية المعروضة. الإجابة الخاطئة تُجدول للمراجعة اليوم.',tstart:'ابدأ الاختبار',tq:'الآية التالية هي…',tnext:'التالي ▸',tscore:'النتيجة',tagain:'أعد الاختبار',noq:'السورة قصيرة جداً للاختبار.',tgood:'ما شاء الله! استمر.',tkeep:'واصل المراجعة بإذن الله ستتقن.'});
 let lang=localStorage.ml_lang||'id';const T=k=>I[lang][k]??I.id[k]??'';
 
 /* ===== 2. STATE & SRS (SM-2 yang disederhanakan) ===== */
@@ -123,7 +128,7 @@ function week(){const g=S.goal||5,t=S.log[today()]||0,L=[6,5,4,3,2,1,0].map(o=>S
  $('gbar').style.width=Math.min(100,t/g*100)+'%';$('goal').value=g;
  $('wkc').innerHTML=L.map((c,x)=>`<div class="flex-1 h-full flex flex-col justify-end items-center gap-1" title="${c}"><div class="w-full rounded-t ${x==6?'bg-brand-500':'bg-brand-500/40'}" style="height:${c/mx*100}%;min-height:3px"></div><span class="text-[10px] text-slate-500">${new Date((today()-6+x)*DAY).toLocaleDateString(lang,{weekday:'narrow',timeZone:'UTC'})}</span></div>`).join('')}
 const setGoal=v=>{S.goal=+v;save()};
-const merge=r=>{for(const k in r.items||{}){const a=S.items[k],b=r.items[k];if(!a||b.u>a.u)S.items[k]=b}for(const d in r.log||{})S.log[d]=Math.max(S.log[d]||0,r.log[d]);if(r.goal&&!S.goal)S.goal=r.goal};
+const merge=r=>{for(const k in r.items||{}){const a=S.items[k],b=r.items[k];if(!a||b.u>a.u)S.items[k]=b}for(const d in r.log||{})S.log[d]=Math.max(S.log[d]||0,r.log[d]);if(r.goal&&!S.goal)S.goal=r.goal;if(r.plan&&!S.plan)S.plan=r.plan};
 
 /* ===== 3. DATA AL-QUR'AN (alquran.cloud — gratis, tanpa API key) ===== */
 async function api(p){const k='q_'+p;try{const c=localStorage.getItem(k);if(c)return JSON.parse(c)}catch{}
@@ -139,17 +144,17 @@ const esc=s=>s.replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
 /* ===== 4. AUDIO: talqin & tikrar ===== */
 const au=new Audio();let run=0,V=[],CN=1,focus=false;
 function play(i,chain){if(!V[i])return;const my=++run;let n=0;hl(i);au.src=V[i].au;
- au.onended=()=>{if(my!=run)return;if(++n<+$('loops').value)au.play();else if(chain&&V[i+1])play(i+1,true);else hl(-1)};
+ au.onended=()=>{if(my!=run)return;if(++n<+$('loops').value)au.play();else if(chain&&V[i+1]&&(zEnd<0||i<zEnd))play(i+1,true);else hl(-1)};
  au.play().catch(()=>toast(T('err')))}
 function once(u){run++;au.onended=null;au.src=u;au.play()}
 function hl(i){document.querySelectorAll('#list>div').forEach((e,x)=>{e.classList.toggle('playing',x==i);if(x==i)e.scrollIntoView({block:'center',behavior:'smooth'})})}
 
 /* ===== 5. UI: BELAJAR ===== */
-async function loadSurah(){CN=+$('sel').value;localStorage.ml_surah=CN;Q=null;run++;au.pause();$('list').innerHTML='<p class="text-center text-slate-500 py-10">…</p>';
+async function loadSurah(){CN=+$('sel').value;localStorage.ml_surah=CN;Q=null;zs=-1;zStart=0;zEnd=-1;run++;au.pause();$('list').innerHTML='<p class="text-center text-slate-500 py-10">…</p>';
  try{const s=await getS(CN);V=s.V;$('title').textContent=`${CN}. ${s.en} — ${s.name}`;draw()}catch{$('list').innerHTML=`<p class="text-center text-red-400 py-10">${T('err')}</p>`}}
-function draw(){$('list').className=(focus?'focus ':'')+'space-y-4';
+function draw(){const tg=zTarget();zGuide();$('list').className=(focus?'focus ':'')+'space-y-4';
  $('list').innerHTML=V.map((v,i)=>{const has=live(CN+':'+v.n);return`<div class="p-5 bg-slate-900/60 rounded-2xl border border-slate-800 space-y-3">
- <div class="flex justify-between items-center text-xs border-b border-slate-800 pb-3"><b class="text-brand-400">${v.n}</b><div class="flex gap-2">
+ <div class="flex justify-between items-center text-xs border-b border-slate-800 pb-3"><b class="text-brand-400">${tg.includes(i)?'🎯 ':''}${v.n}</b><div class="flex gap-2">
  <button onclick="play(${i})" class="bg-slate-800 px-3 py-1.5 rounded-xl font-semibold">${T('audio')}</button>
  <button onclick="mark(${i})" class="${has?'bg-slate-800 text-slate-400':'bg-brand-500/20 border border-brand-500/40 text-brand-400'} px-3 py-1.5 rounded-xl font-semibold">${has?T('hafald'):T('hafal')}</button></div></div>
  <p class="ar text-3xl sm:text-4xl text-right" onclick="this.classList.toggle('show')">${v.t}</p>
@@ -158,7 +163,7 @@ function mark(i){const k=CN+':'+V[i].n;if(live(k)){if(!confirm(T('unm')))return;
 function focusMode(){focus=!focus;$('fbtn').classList.toggle('on',focus);$('list').classList.toggle('focus',focus)}
 
 /* ===== 6. UI: MUROJAAH (active recall, sambung ayat) ===== */
-async function drawMur(){const due=Object.entries(S.items).filter(([,i])=>!i.x&&i.d<=today()).sort((a,b)=>a[1].d-b[1].d),box=$('mur');
+async function drawMur(){mGuide();const due=Object.entries(S.items).filter(([,i])=>!i.x&&i.d<=today()).sort((a,b)=>a[1].d-b[1].d),box=$('mur');
  if(!due.length){box.innerHTML=`<p class="text-center py-16 text-slate-400">${T('empty')}</p>`;return}
  const[k,it]=due[0];box.innerHTML='<p class="text-center py-16 text-slate-500">…</p>';
  try{const s=await getS(it.s),v=s.V[it.a-1],p=s.V[it.a-2];
@@ -173,13 +178,13 @@ async function drawMur(){const due=Object.entries(S.items).filter(([,i])=>!i.x&&
  <div class="grid grid-cols-3 gap-2">${[0,1,2].map(q=>`<button onclick="rate('${k}',${q})" class="${['bg-red-500/10 border-red-500/30 text-red-400','bg-amber-500/10 border-amber-500/30 text-amber-400','bg-brand-500/20 border-brand-500/40 text-brand-400'][q]} border py-3 rounded-xl text-xs font-bold">${T('b'+q)}<br><span class="opacity-70">${nx(it,q).i} ${T('day')}</span></button>`).join('')}</div></div></div>`}
  catch{box.innerHTML=`<p class="text-center text-red-400 py-10">${T('err')}</p>`}}
 window.reveal=()=>{$('rv').classList.add('hidden');$('ans').classList.remove('hidden')};
-function rate(k,q){const n=nx(S.items[k],q);S.items[k]=n;act();save();toast(T('toastR')+n.i+' '+T('day'));drawMur()}
+function rate(k,q){const n=nx(S.items[k],q);S.items[k]=n;S.md=S.md||{};S.md[today()]=(S.md[today()]||0)+1;act();save();toast(T('toastR')+n.i+' '+T('day'));drawMur()}
 
 /* ===== 7. FIREBASE: Google login + Firestore sync ===== */
 async function initFB(){if(!FB.apiKey)return;const v='10.14.1',g=m=>import(`https://www.gstatic.com/firebasejs/${v}/firebase-${m}.js`);
  const[{initializeApp},A,F]=await Promise.all([g('app'),g('auth'),g('firestore')]);const app=initializeApp(FB),auth=A.getAuth(app);db=F.getFirestore(app);fs=F;window._A={A,auth};
  A.onAuthStateChanged(auth,async u=>{user=u;ui();if(u){try{const r=await F.getDoc(F.doc(db,'users',u.uid));if(r.exists())merge(r.data());save();await push();if(!$('pL').classList.contains('hidden'))draw()}catch(e){console.error(e)}}})}
-async function push(){if(user)try{await fs.setDoc(fs.doc(db,'users',user.uid),{items:S.items,log:S.log,goal:S.goal||5,u:Date.now()})}catch(e){console.error(e)}}
+async function push(){if(user)try{await fs.setDoc(fs.doc(db,'users',user.uid),{items:S.items,log:S.log,goal:S.goal||5,plan:S.plan||null,u:Date.now()})}catch(e){console.error(e)}}
 window.login=async()=>{if(!FB.apiKey)return toast(T('nocfg'));try{await _A.A.signInWithPopup(_A.auth,new _A.A.GoogleAuthProvider());modal(0)}catch(e){toast(e.code||'Error')}};
 window.authClick=()=>user?_A.A.signOut(_A.auth):modal(1);
 window.modal=o=>{$('modal').classList.toggle('hidden',!o);$('modal').classList.toggle('flex',!!o);$('cfgInfo').textContent=FB.apiKey?T('cfg'):T('nocfg')};
@@ -203,20 +208,115 @@ function drawTest(){const b=$('tst'),c='bg-slate-900/60 border border-slate-800 
  ${done?`<button onclick="nextQ()" class="w-full bg-brand-500 text-slate-950 font-bold py-3 rounded-xl">${T('tnext')}</button>`:''}</div>`}
 const setQari=v=>{qari=v;localStorage.ml_qari=v;loadSurah()};
 
+/* ===== 7c. GURU: perencana, pemandu & evaluator ===== */
+let LST=[],editing=false;
+const nm=s=>(LST.find(x=>x.number==s)||{}).englishName||'Surah '+s,lab=u=>nm(u.s)+' '+u.a;
+const LV={1:1.6,2:1,3:.75},DN=d=>new Date(d*DAY).toLocaleDateString('id',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});
+const units=P=>{const r=[],o=[];for(let s=P.f;s<=P.t;s++)r.push(s);if(P.o=='b')r.reverse();
+ r.forEach(s=>{const n=(LST.find(x=>x.number==s)||{}).numberOfAyahs||0;for(let a=1;a<=n;a++)o.push({s,a})});return o};
+const scope=P=>Object.values(S.items).filter(i=>!i.x&&i.s>=P.f&&i.s<=P.t);
+function calc(P,done){const U=units(P),total=U.length,rem=Math.max(0,total-done),act=Math.floor(Math.max(0,P.dl-today())*(7-P.off)/7),
+ m=Math.min(act,Math.max(5,Math.round(act*.15))),z=Math.max(1,act-m),mpa=3.5*LV[P.lv]*(P.gu?.9:1)*(P.ti?1:1.15),
+ mx=Math.max(1,Math.min(30,Math.floor(P.mins*.6/mpa))),pd=Math.max(1,Math.ceil(rem/z)),
+ need=Math.min(480,Math.ceil(pd*mpa/.6)),fin=today()+Math.ceil((Math.ceil(rem/mx)+m)*7/(7-P.off));
+ return{U,total,rem,act,m,z,mpa,mx,pd,ok:pd<=mx,need,fin}}
+const SC='w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-100',
+ fl=(l,h)=>`<label class="block text-xs text-slate-400 space-y-1"><span>${l}</span>${h}</label>`,
+ sl=(id,o,v)=>`<select id="${id}" class="${SC}">${o.map(([k,t])=>`<option value="${k}"${k==v?' selected':''}>${t}</option>`).join('')}</select>`,
+ ck=(id,t,v)=>`<label class="flex items-center gap-2 text-sm text-slate-300"><input type="checkbox" id="${id}"${v?' checked':''} class="w-4 h-4"> ${t}</label>`,
+ card='bg-slate-900/60 border border-slate-800 rounded-3xl p-5 space-y-3',
+ bar=(l,n,tot,c)=>`<div><div class="flex justify-between text-xs text-slate-400"><span>${l}</span><span>${n}/${tot}</span></div><div class="h-2 bg-slate-800 rounded-full overflow-hidden"><div class="h-full ${c}" style="width:${tot?Math.min(100,n/tot*100):0}%"></div></div></div>`;
+function form(P){P=P||{f:78,t:114,o:'b',dl:today()+90,mins:30,lv:2,off:1,tm:'s',gu:0,te:0,ti:1};const so=LST.map(x=>[x.number,x.number+'. '+x.englishName]);
+ return`<div class="${card} space-y-4"><h3 class="font-bold text-lg">🧭 Atur Targetmu — Guru akan menyusun rencananya</h3>
+ <div class="grid sm:grid-cols-3 gap-3">${fl('Dari surah',sl('pf',so,P.f))}${fl('Sampai surah',sl('pt',so,P.t))}${fl('Urutan hafal',sl('po',[['b','Mundur (An-Nas ke atas)'],['f','Maju (sesuai mushaf)']],P.o))}</div>
+ <div class="grid sm:grid-cols-3 gap-3">${fl('Batas waktu (deadline)',`<input id="pd" type="date" value="${new Date(P.dl*DAY).toISOString().slice(0,10)}" class="${SC}">`)}${fl('Waktu per hari',sl('pm',[15,30,45,60,90,120,180].map(x=>[x,x+' menit']),P.mins))}${fl('Hari libur per pekan',sl('pr',[0,1,2].map(x=>[x,x]),P.off))}</div>
+ <div class="grid sm:grid-cols-2 gap-3">${fl('Kemampuan saat ini',sl('pl',[[1,'Belum lancar membaca (butuh tahsin)'],[2,'Lancar membaca, belum punya hafalan'],[3,'Berpengalaman menghafal']],P.lv))}${fl('Waktu terbaik menghafal',sl('pw',[['s','Setelah Subuh'],['p','Pagi / siang'],['m','Malam hari']],P.tm))}</div>
+ <div class="space-y-2">${ck('pg','Punya guru / setoran rutin',P.gu)}${ck('pk','Punya teman / komunitas hafalan',P.te)}${ck('pz','Tidur cukup (≥7 jam)',P.ti)}</div>
+ <div class="flex gap-2"><button onclick="savePlan()" class="flex-1 bg-brand-500 text-slate-950 font-bold py-3 rounded-xl">Susun Rencana</button>${S.plan?'<button onclick="edit(0)" class="px-4 bg-slate-800 rounded-xl text-sm">Batal</button>':''}</div></div>`}
+function savePlan(){const g=i=>$(i).value,P={f:+g('pf'),t:+g('pt'),o:g('po'),dl:Math.floor(Date.parse(g('pd'))/DAY),mins:+g('pm'),lv:+g('pl'),off:+g('pr'),tm:g('pw'),gu:+$('pg').checked,te:+$('pk').checked,ti:+$('pz').checked};
+ if(P.f>P.t||!(P.dl>today()))return toast('Cek urutan surah & tanggal deadline');
+ const d=scope(P).length,c=calc(P,d);P.st=today();P.base=d;P.pd=c.ok?c.pd:c.mx;S.plan=P;editing=false;save();drawGuru()}
+function replan(){const P=S.plan,d=scope(P).length,c=calc(P,d);P.st=today();P.base=d;P.pd=c.ok?c.pd:c.mx;save();drawGuru();toast('✓')}
+function opt(k){const P=S.plan,c=calc(P,scope(P).length);if(k=='d')P.dl=c.fin;else P.mins=c.need;replan()}
+const edit=v=>{editing=!!v;drawGuru()},goLearn=(s,a)=>{$('sel').value=s;tab('L');loadSurah().then(()=>document.querySelectorAll('#list>div')[a-1]?.scrollIntoView({block:'center'}))};
+function chk(i){const t=today();S.cl=S.cl||{};const a=S.cl[t]||[];a[i]=!a[i];S.cl[t]=a;save();drawGuru()}
+function drawGuru(){const b=$('gur'),P=S.plan;if(!P||editing){b.innerHTML=mCard()+form(P);return}
+ const t=today(),sc=scope(P),done=sc.length,c=calc(P,done),el=Math.floor(Math.max(0,t-P.st)*(7-P.off)/7),exp=Math.min(c.total,P.base+el*P.pd),
+ due=Object.values(S.items).filter(i=>!i.x&&i.d<=t).length,mt=sc.filter(i=>i.i>=7).length,UL=c.U.filter(u=>!live(u.s+':'+u.a)),td=UL.slice(0,P.pd),
+ gap=exp-done,st=gap<=0?0:gap/Math.max(1,exp)<=.2?1:2,l7=[0,1,2,3,4,5,6].filter(o=>S.log[t-o]).length,Z=Math.round(P.mins*.6),R=P.mins-Z,cl=(S.cl||{})[t]||[],
+ tm={s:'Setelah Subuh',p:'Pagi/siang',m:'Malam'}[P.tm],w=Math.max(1,P.pd*(7-P.off)),D=[];
+ if(st){if(l7<7-P.off-1)D.push(`Konsistensi turun (${l7} dari ${7-P.off} hari aktif pekan ini). Psikologi kebiasaan: tetapkan "kapan-di mana-apa" (implementation intention), tempel pada rutinitas tetap seperti ${tm.toLowerCase()}, dan pakai aturan 5 menit minimal agar rantai tidak putus.`);
+  if(due>10&&due>done*.2)D.push(`Murojaah menumpuk (${due} ayat). Hentikan ziyadah baru sampai antrean < 10: ingatan yang tidak diulang meluruh menurut kurva lupa.`);
+  if(P.pd>=c.mx*.9)D.push(`Beban ziyadah (${P.pd} ayat/hari) mendekati batas kapasitasmu (${c.mx}). Beban kognitif berlebih memicu lupa dan jenuh.`);
+  if(done>10&&mt/done<.4)D.push(`Baru ${Math.round(mt/done*100)}% ayat yang stabil (interval ≥7 hari). Perbanyak tes tanpa melihat (retrieval practice) dan jaga tidur ≥7 jam: memori mengendap saat tidur.`);
+  if(!P.te)D.push('Cari teman setoran: akuntabilitas sosial menaikkan konsistensi.');if(!P.gu)D.push('Setorkan hafalan ke guru yang berilmu agar tajwid & makhraj terkoreksi — kesalahan hafalan sulit diperbaiki belakangan.')}
+ const it=[`${tm}: niat ikhlas, wudhu, doa memohon kemudahan; baca target hari ini 3× dari mushaf yang sama (talqin) — ±${Math.round(Z*.25)} mnt`,
+  td.length?`Ziyadah ${td.length} ayat (${lab(td[0])} → ${lab(td[td.length-1])}): pahami artinya, dengar, tikrar ${P.lv==1?10:20}×, lalu Mode Blur — ±${Math.round(Z*.75)} mnt`:`Fase Mutqin: sambung antar-ayat & antar-surah tanpa melihat, lalu kerjakan Tes — ±${Z} mnt`,
+  `Murojaah antrean SRS: ${due} ayat — ±${R} mnt`,'🌙 Sebelum tidur: ulang ayat baru 3× tanpa melihat'],wk=[];
+ for(let k=0;k<6&&k*w<UL.length;k++)wk.push(`Pekan ${k+1}: ${lab(UL[k*w])} → ${lab(UL[Math.min((k+1)*w,UL.length)-1])}`);
+ b.innerHTML=`<div class="space-y-4">${mCard()}
+ <div class="${card}"><div class="flex justify-between items-center"><h3 class="font-bold text-lg">${done>=c.total&&c.total?'🏆 Semua ayat sudah masuk — fokus Mutqin':['✅ Sesuai rencana','🟡 Sedikit tertinggal','🔴 Tertinggal'][st]}</h3><button onclick="edit(1)" class="text-xs bg-slate-800 px-3 py-1.5 rounded-lg">Ubah rencana</button></div>
+  ${bar('Hafalan',done,c.total,'bg-brand-500')}${bar('Seharusnya hari ini',exp,c.total,'bg-amber-500')}${bar('Mutqin (interval ≥7 hari)',mt,c.total,'bg-emerald-300')}
+  <p class="text-xs text-slate-400 leading-relaxed">📐 ${c.total} ayat − ${done} hafal = ${c.rem} sisa · ${c.act} hari aktif sampai ${DN(P.dl)} → ${c.z} hari ziyadah + ${c.m} hari Mutqin · ${c.mpa.toFixed(1)} mnt/ayat · kapasitas ${c.mx} ayat/hari (60% waktu ziyadah, 40% murojaah) → <b class="text-white">target ${P.pd} ayat/hari</b></p></div>
+ ${!c.ok?`<div class="${card} border-amber-500/40"><p class="text-sm text-amber-300">⚠️ Butuh ${c.pd} ayat/hari, kapasitasmu ±${c.mx}. Rencana ini belum realistis. Pilih salah satu:</p><div class="flex flex-wrap gap-2"><button onclick="opt('d')" class="bg-slate-800 px-3 py-2 rounded-xl text-xs font-bold">📅 Perpanjang deadline ke ${DN(c.fin)}</button><button onclick="opt('m')" class="bg-slate-800 px-3 py-2 rounded-xl text-xs font-bold">⏱ Naikkan jadi ${c.need} mnt/hari</button></div><p class="text-xs text-slate-400">Atau kecilkan cakupan surah lewat "Ubah rencana".</p></div>`:''}
+ <div class="${card}"><h3 class="font-bold">📋 Panduan Hari Ini</h3>${it.map((x,i)=>`<button onclick="chk(${i})" class="w-full text-left flex gap-3 items-start text-sm ${cl[i]?'text-slate-500 line-through':'text-slate-200'}"><span>${cl[i]?'☑':'☐'}</span><span>${x}</span></button>`).join('')}
+  <div class="flex gap-2 pt-1">${td.length?`<button onclick="goLearn(${td[0].s},${td[0].a})" class="flex-1 bg-brand-500 text-slate-950 font-bold py-2.5 rounded-xl text-sm">Mulai Ziyadah</button>`:''}<button onclick="tab('M')" class="flex-1 bg-slate-800 font-bold py-2.5 rounded-xl text-sm">Murojaah (${due})</button></div></div>
+ ${st?`<div class="${card}"><h3 class="font-bold">🔎 Evaluasi: terlambat ${gap} ayat</h3>${D.map(x=>`<p class="text-sm text-slate-300">• ${x}</p>`).join('')}<button onclick="replan()" class="bg-amber-500 text-slate-950 font-bold px-4 py-2.5 rounded-xl text-sm">🔄 Susun ulang dari hari ini</button></div>`:''}
+ <div class="${card}"><h3 class="font-bold">🗺️ Peta Jalan</h3>${wk.map(x=>`<p class="text-sm text-slate-300">${x}</p>`).join('')}${UL.length>6*w?`<p class="text-xs text-slate-500">… ±${Math.ceil(UL.length/w)} pekan ziyadah</p>`:''}
+  <p class="text-sm text-emerald-300">🏁 Fase Mutqin (±${c.m} hari terakhir): tanpa ayat baru — sambung surah, tes, dan murojaah. Mutqin = semua ayat interval ≥7 hari dan skor tes ≥90%.</p></div>
+ <details class="${card}"><summary class="font-bold cursor-pointer">🧠 Ilmu di balik rencana ini</summary><ul class="text-sm text-slate-300 space-y-2 list-disc ps-5 mt-2"><li><b>Syar'i:</b> niat ikhlas, wudhu, doa, satu mushaf tetap, tajwid benar, setoran ke guru.</li><li><b>Kognitif:</b> spaced repetition, retrieval practice, chunking per ayat, memahami arti, tidur untuk konsolidasi.</li><li><b>Psikologi:</b> target kecil harian, implementation intention, streak, akuntabilitas teman.</li><li><b>Teknologi:</b> jadwal SRS, audio berulang, pengukuran kemajuan, penyusunan ulang rencana otomatis.</li></ul></details></div>`}
+
+/* ===== 7d. ZIYADAH & MUROJAAH TERPANDU, MOTIVASI, JAM ===== */
+let zs=-1,zStart=0,zEnd=-1,zMin=20,mi=today();
+const ZS=[['Talqin','Dengarkan ayat target 3× sambil melihat mushaf yang sama, ikuti dengan suara pelan.','▶ Putar 3×'],['Pahami','Baca terjemah & tangkap kata kunci — makna menjadi jangkar ingatan.','📖 Tampilkan terjemah'],['Tikrar','Ulangi tiap ayat 20× lewat audio sampai lancar tanpa melihat. Kualitas lebih penting dari kecepatan.','🔁 Putar 20×'],['Uji','Aktifkan Blur dan lantunkan dari ingatan. Ketuk ayat untuk mengecek yang salah, lalu ulangi bagian itu.','🙈 Aktifkan Blur'],['Sambung','Lantunkan ayat sebelumnya + ayat target berurutan tanpa melihat. Jika lancar, tandai hafal — murojaah pertama besok.','✅ Tandai Hafal']];
+function zTarget(){const P=S.plan;if(P){const c=calc(P,scope(P).length),td=c.U.filter(u=>!live(u.s+':'+u.a)).slice(0,P.pd).filter(u=>u.s==CN);if(td.length)return td.map(u=>u.a-1)}
+ return V.map((v,i)=>i).filter(i=>!live(CN+':'+V[i].n)).slice(0,5)}
+function zGuide(){const g=$('zg');if(!V.length){g.innerHTML='';return}
+ const tg=zTarget(),P=S.plan;zMin=P?Math.round(P.mins*.6):20;let go='';
+ if(P){const td=calc(P,scope(P).length).U.filter(u=>!live(u.s+':'+u.a)).slice(0,P.pd);if(td.length&&td[0].s!=CN)go=`<button onclick="goLearn(${td[0].s},${td[0].a})" class="text-xs bg-amber-500 text-slate-950 font-bold px-3 py-2 rounded-xl">🎯 Ke target hari ini: ${lab(td[0])}</button>`}
+ g.innerHTML=`<div class="${card}"><div class="flex justify-between items-center gap-2"><h3 class="font-bold">🎓 Sesi Ziyadah <span id="zt" class="text-xs font-normal text-slate-400 ms-2"></span></h3>${go}</div>
+ ${tg.length?`<p class="text-xs text-slate-400">Target sesi: ayat <b class="text-brand-400">${tg[0]+1}–${tg[tg.length-1]+1}</b> (${tg.length} ayat), kartu bertanda 🎯</p>
+ <div class="flex gap-1">${ZS.map((x,i)=>`<span class="flex-1 text-center text-[11px] py-1.5 rounded-lg ${i==zs?'on font-bold':i<zs?'bg-slate-700 text-slate-300':'bg-slate-800 text-slate-500'}">${i+1}. ${x[0]}</span>`).join('')}</div>
+ ${zs<0?'<button onclick="zStep(1)" class="w-full bg-brand-500 text-slate-950 font-bold py-3 rounded-xl">▶ Mulai Sesi Ziyadah</button>':`<p class="text-sm text-slate-200">${ZS[zs][1]}</p><div class="flex gap-2"><button onclick="zStep(-1)" class="px-4 bg-slate-800 rounded-xl text-sm">◀</button><button onclick="zAct()" class="flex-1 bg-brand-500 text-slate-950 font-bold py-2.5 rounded-xl text-sm">${ZS[zs][2]}</button><button onclick="zStep(1)" class="px-4 bg-slate-800 rounded-xl text-sm">▶</button></div>`}`:'<p class="text-sm text-emerald-300">Surah ini sudah masuk SRS semua ✓ Pilih surah lain atau fokus murojaah.</p>'}</div>`}
+function zStep(d){zs=Math.max(0,Math.min(4,zs+d));if(!zStart)zStart=Date.now();zGuide()}
+function playAll(){zEnd=-1;play(0,true)}
+function zAct(){const tg=zTarget();if(!tg.length)return;zEnd=tg[tg.length-1];
+ if(zs==0){$('loops').value=3;play(tg[0],true)}
+ else if(zs==1){if(focus)focusMode();toast('Baca terjemah, lalu lanjut ▶')}
+ else if(zs==2){$('loops').value=20;play(tg[0],true)}
+ else if(zs==3){if(!focus)focusMode()}
+ else{tg.forEach(i=>{const k=CN+':'+V[i].n;if(!live(k))S.items[k]={s:CN,a:V[i].n,r:0,i:1,e:2.3,d:today()+1,l:0,u:Date.now()}});act();save();zs=-1;zStart=0;zEnd=-1;draw();toast(T('toastH'));return}
+ zGuide()}
+function mGuide(){const t=today(),due=Object.values(S.items).filter(i=>!i.x&&i.d<=t).length,dn=(S.md||{})[t]||0;
+ $('mg').innerHTML=`<div class="${card}"><div class="flex justify-between items-center"><h3 class="font-bold">🔁 Sesi Murojaah</h3><span class="text-xs text-slate-400">sisa ${due} ayat · ±${Math.ceil(due*.4)} mnt</span></div>${bar('Selesai hari ini',dn,due+dn,'bg-brand-500')}
+ <ol class="list-decimal ps-5 space-y-1 text-sm text-slate-300"><li><b>Murojaah dulu</b>, baru ziyadah: otak segar dan antrean tidak menumpuk.</li><li><b>Lantunkan dulu</b> lanjutan ayat dari ingatan dengan suara, baru ketuk "Tampilkan".</li><li><b>Nilai jujur:</b> 🟢 hanya jika lancar tanpa ragu, 🟡 jika sempat tersendat, 🔴 jika lupa — baca ayatnya, ulang 3×, lalu nilai.</li><li>Antrean di atas 20? Cicil ±20 ayat per sesi dan tunda ziyadah.</li></ol></div>`}
+const MO=[["Dan sungguh, telah Kami mudahkan Al-Qur'an untuk peringatan, maka adakah orang yang mau mengambil pelajaran?","QS. Al-Qamar: 17"],["Maka sesungguhnya bersama kesulitan ada kemudahan.","QS. Al-Insyirah: 5"],["Sebaik-baik kalian adalah yang belajar Al-Qur'an dan mengajarkannya.","HR. Bukhari (makna)"],["Amal yang paling dicintai Allah adalah yang paling konsisten, meski sedikit.","HR. Bukhari & Muslim (makna)"],["Hafalan bukan soal bakat, tapi soal hadir setiap hari. Satu ayat yang diulang lebih berharga dari sepuluh ayat yang dilupakan.","Prinsip konsistensi"],["Lupa itu normal: otak membuang yang tak diulang. Murojaah adalah cara memberi tahu otak bahwa ini penting.","Sains memori"],["Rantai harianmu adalah investasi. Jangan putus dua hari berturut-turut.","Psikologi kebiasaan"],["Setiap ayat yang kamu hafal adalah tabungan yang tidak bisa dicuri.","Penyemangat"]];
+const TP=["Pakai satu mushaf yang sama: letak ayat di halaman membantu memori visual.","Hafalan baru paling kuat setelah Subuh dan diulang sebelum tidur — tidur mengunci memori.","Murojaah dulu, ziyadah kemudian. Jangan tambah hafalan saat antrean menumpuk.","Baca artinya satu kali saja — makna menjadi jangkar ingatan.","Hafalkan per ayat, lalu sambungkan dengan ayat sebelumnya.","Menguji diri tanpa melihat jauh lebih efektif daripada membaca ulang berkali-kali.","Beri tahu satu teman target pekananmu: akuntabilitas menaikkan konsistensi.","Saat jenuh, kecilkan target hari itu (aturan 5 menit), tapi jangan nol.","Istirahat 5 menit setiap 25 menit menghafal (Pomodoro) agar fokus terjaga."];
+const mCard=()=>{const m=MO[mi%MO.length],t=TP[(mi*2+1)%TP.length];return`<div class="rounded-3xl p-5 space-y-3 bg-gradient-to-br from-emerald-900/60 to-slate-900 border border-emerald-700/40"><div class="flex justify-between items-start gap-3"><p class="text-base font-semibold leading-relaxed">“${m[0]}”</p><button onclick="mnext()" class="text-xs bg-slate-800 px-2.5 py-1.5 rounded-lg shrink-0">↻</button></div><p class="text-xs text-emerald-300">— ${m[1]}</p><p class="text-sm text-slate-300 border-t border-slate-700/60 pt-3">💡 <b>Tips:</b> ${t}</p></div>`};
+const mnext=()=>{mi++;drawGuru()};
+const pad=n=>String(n).padStart(2,'0');let hj='',hjd=-1;
+function tick(){const n=new Date(),d=today();$('clk').textContent=n.toLocaleTimeString('en-GB');
+ if(hjd!=d||!hj){hjd=d;try{hj=n.toLocaleDateString('id-u-ca-islamic-umalqura',{day:'numeric',month:'long',year:'numeric'})}catch{hj=''}}
+ $('hij').textContent=n.toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short'})+' · '+hj;
+ const P=S.plan,c=$('cdn');
+ if(P){const ms=(P.dl+1)*DAY+n.getTimezoneOffset()*6e4-n.getTime();
+  if(ms<=0)c.textContent='⏰ Deadline terlewat';else{const dd=Math.floor(ms/DAY),r=ms%DAY;c.textContent=`🎯 ${dd} hari ${pad(Math.floor(r/36e5))}:${pad(Math.floor(r/6e4)%60)}:${pad(Math.floor(r/1e3)%60)}`;c.className='text-right font-semibold tabular-nums '+(dd<7?'text-red-400':'text-amber-300')}}else c.textContent='';
+ const z=$('zt');if(z&&zStart){const q=Math.floor((Date.now()-zStart)/1e3);z.textContent=`⏱ ${pad(Math.floor(q/60))}:${pad(q%60)} / ${zMin} mnt`}}
+
 /* ===== 8. UTIL ===== */
 function toast(m){const t=$('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.add('hidden'),2600)}
-function tab(x){['L','M','T'].forEach(k=>{$('p'+k).classList.toggle('hidden',k!=x);$('tab'+k).className='flex-1 py-2.5 rounded-xl text-sm font-bold '+(k==x?'on':'text-slate-400')});if(x=='M')drawMur();if(x=='T')drawTest()}
+function tab(x){['G','L','M','T'].forEach(k=>{$('p'+k).classList.toggle('hidden',k!=x);$('tab'+k).className='flex-1 py-2.5 rounded-xl text-xs sm:text-sm font-bold '+(k==x?'on':'text-slate-400')});if(x=='M')drawMur();if(x=='T')drawTest();if(x=='G')drawGuru()}
 function setLang(l){lang=l;localStorage.ml_lang=l;$('lang').value=l;$('H').lang=l;$('H').dir=I[l].dir;
  document.querySelectorAll('[data-i]').forEach(e=>e.textContent=T(e.dataset.i));ui();if(V.length&&!$('pL').classList.contains('hidden'))draw();if(!$('pM').classList.contains('hidden'))drawMur();if(!$('pT').classList.contains('hidden'))drawTest()}
-Object.assign(window,{setQari,setGoal,startTest,ans,nextQ,drawTest,play,once,mark,rate,focusMode,loadSurah,tab,setLang});
+Object.assign(window,{zStep,zAct,mnext,playAll,edit,savePlan,opt,replan,chk,goLearn,setQari,setGoal,startTest,ans,nextQ,drawTest,play,once,mark,rate,focusMode,loadSurah,tab,setLang});
 
-(async()=>{setLang(lang);tab('L');stats();
+(async()=>{setLang(lang);tab('G');stats();tick();setInterval(tick,1000);
  let list=[];try{list=await api('surah')}catch{}
  if(!list.length)list=[{number:1,englishName:'Al-Faatiha',name:'الفاتحة'},{number:67,englishName:'Al-Mulk',name:'الملك'},{number:78,englishName:"An-Naba'",name:'النبأ'},{number:112,englishName:'Al-Ikhlaas',name:'الإخلاص'}];
- $('sel').innerHTML=list.map(s=>`<option value="${s.number}">${s.number}. ${s.englishName} (${s.name})</option>`).join('');
+ LST=list;$('sel').innerHTML=list.map(s=>`<option value="${s.number}">${s.number}. ${s.englishName} (${s.name})</option>`).join('');
  $('sel').value=localStorage.ml_surah||(list.some(s=>s.number==67)?67:list[0].number);
  $('qari').value=qari;if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
- loadSurah();initFB()})();
+ loadSurah();initFB();drawGuru()})();
 </script>
 </body>
 </html>
