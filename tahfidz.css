@@ -308,3 +308,64 @@ html[data-theme="goldwhite"] .viewbar button[aria-current="page"]::after { backg
   background: var(--grad-judul); -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 .splash-content .splash-arab { font-size: 1.2rem; background: none; -webkit-background-clip: initial; background-clip: initial; color: var(--teks-lembut); }
+
+/* ============================================================
+   UX: navigasi bawah (ponsel), beranda "Misi hari ini", kartu misi,
+   skeleton, target sentuh lebih besar
+   ============================================================ */
+:root { --nav-h: 60px; }
+@media (max-width: 720px) {
+  :root { --player-h: calc(64px + var(--nav-h)); }
+  .viewbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 910; width: auto; margin: 0; box-sizing: border-box;
+    height: calc(var(--nav-h) + env(safe-area-inset-bottom)); padding: 6px 6px env(safe-area-inset-bottom);
+    border-radius: 20px 20px 0 0; box-shadow: 0 -10px 30px rgba(0, 0, 0, .22);
+  }
+  .viewbar button { font-size: .66rem; padding: 6px 2px; }
+  .player { bottom: calc(var(--nav-h) + env(safe-area-inset-bottom)); padding-bottom: 0; }
+}
+.misi {
+  display: flex; align-items: center; gap: 10px; width: min(var(--w), calc(100% - 24px)); margin: 8px auto 0; padding: 8px 10px 8px 12px;
+  border: 1px solid var(--tepi-aksen); border-radius: 12px; background: var(--kaca); backdrop-filter: blur(12px); box-shadow: var(--bayang);
+}
+.misi[hidden] { display: none; }
+.misi .mi { font: 700 .86rem var(--f-display); color: var(--putar-teks); white-space: nowrap; }
+.misi div { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.25; }
+.misi b { font-size: .82rem; color: var(--teks); } .misi small { font-size: .72rem; color: var(--redup); }
+.misi .x { border: 0; background: none; color: var(--redup); font-size: .9rem; padding: 6px; cursor: pointer; min-height: 0; }
+body[data-view]:not([data-view="mushaf"]) .misi { display: none; }
+
+.thc.hero { gap: 16px; }
+.herotop { display: flex; align-items: center; gap: 16px; }
+.thring {
+  --p: 0; position: relative; flex: none; width: 92px; height: 92px; border-radius: 50%; display: grid; place-content: center; text-align: center;
+  background: conic-gradient(var(--aksen) calc(var(--p) * 1%), color-mix(in srgb, var(--aksen) 14%, transparent) 0); box-shadow: 0 0 28px var(--glow-aksen);
+}
+.thring::before { content: ""; position: absolute; inset: 9px; border-radius: 50%; background: var(--latar-solid); }
+.thring b, .thring small { position: relative; line-height: 1.1; }
+.thring b { font: 700 1.3rem var(--f-display); color: var(--teks); } .thring small { font-size: .62rem; color: var(--redup); }
+.herotxt { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.pill { align-self: flex-start; padding: 4px 10px; border-radius: 999px; font-size: .72rem; font-weight: 700; background: var(--kaca-halus); border: 1px solid var(--tepi); }
+.pill.ok { color: var(--ok); } .pill.warn { color: var(--putar-teks); } .pill.err { color: var(--bahaya); }
+.tiles { display: grid; gap: 8px; }
+.tile {
+  display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 14px; text-align: start; cursor: pointer; font: inherit; color: var(--teks);
+  border: 1px solid var(--tepi); border-radius: 14px; background: var(--kaca-halus); transition: transform .12s, border-color .2s, background .2s;
+}
+.tile:hover { border-color: var(--aksen); } .tile:active { transform: scale(.985); }
+.tile i { font-style: normal; font-size: 1.4rem; } .tile span { flex: 1; display: flex; flex-direction: column; }
+.tile b { font: 600 .95rem var(--f-display); } .tile small { font-size: .74rem; color: var(--redup); }
+.tile em { font-style: normal; font-size: 1.25rem; color: var(--aksen); }
+.tile.done { border-color: color-mix(in srgb, var(--ok) 50%, transparent); background: color-mix(in srgb, var(--ok) 10%, transparent); }
+.tile.done em { color: var(--ok); }
+@media (min-width: 720px) { .tiles { grid-template-columns: repeat(3, 1fr); } }
+
+.skl {
+  display: block; height: 1.1em; margin: .55em 0 .55em auto; width: 82%; border-radius: 8px;
+  background: linear-gradient(90deg, var(--kaca-halus), var(--tepi), var(--kaca-halus)); background-size: 200% 100%; animation: shimmer 1.2s linear infinite;
+}
+@keyframes shimmer { to { background-position: -200% 0; } }
+.thrate button { min-height: 60px; font-size: .86rem; }
+.thc details > summary { min-height: 36px; display: flex; align-items: center; }
+@media (max-width: 720px) { .thbtn { min-height: 46px; } .thhead .thbtn.kecil { min-height: 36px; } }
+@media (prefers-reduced-motion: reduce) { .skl { animation: none; } }
