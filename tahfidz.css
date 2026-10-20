@@ -369,3 +369,64 @@ body[data-view]:not([data-view="mushaf"]) .misi { display: none; }
 .thc details > summary { min-height: 36px; display: flex; align-items: center; }
 @media (max-width: 720px) { .thbtn { min-height: 46px; } .thhead .thbtn.kecil { min-height: 36px; } }
 @media (prefers-reduced-motion: reduce) { .skl { animation: none; } }
+
+/* ============================================================
+   Konsistensi visual: satu bahasa ikon (garis tipis), satu aksen,
+   satu keluarga bentuk — mengikuti tema halaman yang aktif
+   ============================================================ */
+:root { --th-r: 12px; --th-rc: 16px; }
+
+/* Warna: hanya aksen tema + netral (tanpa merah/kuning/hijau terpisah) */
+.thp.ok, .thp.warn, .thp.err { color: var(--aksen); font-weight: 600; }
+.thp.ok .ik, .thp.warn .ik, .thp.err .ik { vertical-align: -3px; margin-inline-end: 6px; }
+.pill, .pill.ok, .pill.warn, .pill.err { display: inline-flex; align-items: center; gap: 6px; border-radius: 8px; color: var(--aksen); border: 1px solid var(--tepi-aksen); background: var(--kaca-halus); }
+.pill .ik { width: 14px; height: 14px; }
+.thc .bar i, .thc .bar i.em, .thc .bar i.ok { background: linear-gradient(90deg, var(--g1), var(--aksen)); }
+.thchart i.hari { background: linear-gradient(180deg, var(--aksen), var(--g1)); }
+.thc.moti { background: linear-gradient(135deg, color-mix(in srgb, var(--aksen) 9%, var(--kaca)), var(--kaca)); }
+.thc.emas { border-color: var(--tepi-aksen); }
+.viewbar .dot { background: var(--aksen); color: var(--on-aksen, #fff); }
+.thsteps span.lalu { color: var(--aksen); }
+
+/* Bentuk: radius seragam */
+.thc { border-radius: var(--th-rc); }
+.thbtn, .thchip, .thrate button, .thq, .tile, .thf select, .thf input[type="number"], .thf input[type="date"], .thtask, .thsteps span, .thgrid > div, .thayat { border-radius: var(--th-r); }
+.thbtn.kecil { border-radius: 10px; }
+.viewbar { border-radius: var(--th-rc); } .viewbar button { border-radius: var(--th-r); }
+.misi { border-radius: var(--th-r); }
+@media (max-width: 720px) { .viewbar { border-radius: var(--th-rc) var(--th-rc) 0 0; } }
+
+/* Tombol: satu keluarga — utama (terisi), sekunder (garis), kecil */
+.thbtn { gap: 8px; letter-spacing: .005em; }
+.thbtn .ik, .thchip .ik { width: 17px; height: 17px; }
+.thbtn.emas { background: linear-gradient(135deg, var(--g1), var(--g2)); color: #fff; }
+.thbtn.sec { background: transparent; color: var(--teks); border: 1px solid var(--tepi-aksen); box-shadow: none; }
+.thbtn.sec:hover { background: var(--kaca-halus); border-color: var(--aksen); filter: none; }
+.thchip { display: inline-flex; align-items: center; gap: 7px; border-radius: var(--th-r); border: 1px solid var(--tepi-aksen); color: var(--teks); background: transparent; font-weight: 600; }
+.thchip:hover { border-color: var(--aksen); color: var(--aksen); }
+
+/* Ikon pada judul, daftar, dan kartu */
+.thh .ik, .thc summary .ik { width: 18px; height: 18px; margin-inline-end: 8px; color: var(--aksen); vertical-align: -3px; }
+.thc summary { list-style-position: inside; }
+.tile i { display: grid; place-items: center; width: 42px; height: 42px; border-radius: var(--th-r); background: color-mix(in srgb, var(--aksen) 11%, transparent); color: var(--aksen); }
+.tile i .ik { width: 21px; height: 21px; }
+.tile em { display: grid; place-items: center; color: var(--redup); } .tile em .ik { width: 18px; height: 18px; }
+.tile.done { border-color: var(--tepi-aksen); background: var(--kaca-halus); } .tile.done em { color: var(--aksen); }
+.thtask i { display: grid; place-items: center; width: 22px; flex: none; color: var(--redup); } .thtask i .ik { width: 20px; height: 20px; }
+.thtask.selesai i { color: var(--aksen); }
+.misi .mi { display: inline-flex; align-items: center; gap: 6px; color: var(--aksen); } .misi .mi .ik { width: 20px; height: 20px; }
+.misi .x .ik { width: 16px; height: 16px; }
+.thhead .thbtn.kecil .ik { width: 16px; height: 16px; margin: 0; }
+.thsrc { color: var(--aksen); }
+
+/* Penilaian murojaah & kuis: satu aksen, perbedaan lewat bobot visual */
+.thrate .r0 { color: var(--teks-lembut); border-color: var(--tepi); }
+.thrate .r1 { color: var(--aksen); border-color: var(--tepi-aksen); }
+.thrate .r2 { background: linear-gradient(135deg, var(--g1), var(--g2)); color: #fff; border-color: transparent; }
+.thrate button:hover { border-color: var(--aksen); }
+.thq.benar { border-color: var(--aksen); background: color-mix(in srgb, var(--aksen) 14%, transparent); }
+.thq.salah { border-style: dashed; border-color: var(--redup); opacity: .6; background: transparent; }
+
+/* Tema Emas Hitam: teks pada permukaan emas dibuat gelap */
+html[data-theme="goldblack"] .thrate .r2, html[data-theme="goldblack"] .thbtn.emas, html[data-theme="goldblack"] .viewbar .dot { color: #14100a; }
+html[data-theme="goldblack"] .thrate .r2, html[data-theme="goldblack"] .thbtn.emas { background: linear-gradient(135deg, #ecd078, #c29a35); }
