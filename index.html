@@ -1,368 +1,390 @@
 <!DOCTYPE html>
-<html lang="id" id="H">
+<html lang="id" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#022c22">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon.svg">
-<title>MutqinLab — Hafalan & Murojaah Al-Qur'an</title>
-<script>
-document.documentElement.dataset.theme=localStorage.ml_theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
-(()=>{const L={'.bg-slate-950':'background-color:#FAF6EC','.bg-slate-900':'background-color:#fff','.bg-slate-900\\/60':'background-color:#fff;box-shadow:0 1px 2px rgba(60,50,20,.06),0 6px 18px rgba(60,50,20,.05)','.bg-slate-900\\/70':'background-color:rgba(255,255,255,.7)','.bg-slate-900\\/40':'background-color:#fff','.bg-slate-800':'background-color:#F0E9D8','.hover\\:bg-slate-800:hover':'background-color:#F0E9D8','.bg-slate-700':'background-color:#DCE8DF','.border-slate-800':'border-color:#E8E0CC','.border-slate-700':'border-color:#DDD3BA','.border-slate-700\\/60':'border-color:#E8E0CC','.border-emerald-700\\/40':'border-color:#BFE0CB','.text-white':'color:#16261D','.text-slate-100':'color:#16261D','.text-slate-200':'color:#243229','.text-slate-300':'color:#3A4A40','.text-slate-400':'color:#5E6C63','.text-slate-500':'color:#76827A','.text-slate-950':'color:#fff','.text-brand-400':'color:#047857','.text-emerald-300':'color:#047857','.text-emerald-400':'color:#047857','.text-amber-300':'color:#92400E','.text-amber-400':'color:#B45309','.text-yellow-400':'color:#B45309','.text-red-400':'color:#B91C1C','.bg-brand-500':'background-color:#047857','.bg-amber-500':'background-color:#B45309','.bg-brand-500\\/20':'background-color:rgba(4,120,87,.1)','.bg-brand-500\\/40':'background-color:rgba(4,120,87,.3)','.border-brand-500\\/40':'border-color:rgba(4,120,87,.35)','.bg-gradient-to-br':'background-image:linear-gradient(135deg,#E3F3E9,#FFF6DC)','.glass':'background:rgba(250,246,236,.92)','.on':'background:#047857;color:#fff'};
-const st=document.createElement('style');st.textContent=Object.entries(L).map(([k,v])=>'html[data-theme=light] '+k+'{'+v.replace(/;/g,'!important;')+'!important}').join('');document.head.appendChild(st)})();
-</script>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','sans-serif']},colors:{brand:{400:'#4ade80',500:'#22c55e',600:'#16a34a'}}}}}</script>
-<style>
-.ar{direction:rtl;font-family:'Amiri',serif;line-height:2.3;transition:filter .3s}
-.focus .ar:not(.show){filter:blur(8px);cursor:pointer}
-.glass{background:rgba(15,23,42,.8);backdrop-filter:blur(16px)}
-.on{background:#22c55e;color:#022c22}
-.playing{border-color:#22c55e!important;box-shadow:0 0 0 1px #22c55e55}
-body{line-height:1.6;-webkit-font-smoothing:antialiased;transition:background-color .3s}
-button,select{min-height:40px}select,input[type=number],input[type=date]{min-height:44px}
-button{transition:transform .12s,background-color .2s}button:active{transform:scale(.97)}
-:focus-visible{outline:2px solid #34d399;outline-offset:2px}
-@keyframes up{from{opacity:0;transform:translateY(8px)}}
-#gur>div>*,#zg>*,#mg>*,#list>div,#mur>*,#tst>*{animation:up .35s ease both}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mushaf Tahfidz Pro</title>
+  <meta name="description" content="Mushaf Madinah 604 halaman untuk menghafal Al-Qur'an: mode tutup ayat, audio per ayat dengan pengulangan, penanda, dan pelacak hafalan.">
+  <meta name="theme-color" content="#0b1210">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Mushaf">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Reem+Kufi:wght@400;600;700&family=Amiri+Quran&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="tahfidz.css">
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
-<header class="border-b border-slate-800 sticky top-0 z-40 glass">
- <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center gap-2">
-  <div class="flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-500 to-teal-300 grid place-items-center text-slate-950 font-extrabold">ML</div><span class="text-lg font-extrabold tracking-tight">MUTQINLAB</span></div>
-  <div class="flex items-center gap-2">
-   <button id="thm" onclick="theme()" class="bg-slate-800 border border-slate-700 w-10 rounded-xl text-base" aria-label="Tema"></button>
-   <select id="lang" onchange="setLang(this.value)" class="bg-slate-900 border border-slate-700 text-xs font-semibold text-brand-400 px-2 py-2 rounded-xl"><option value="id">🇮🇩 ID</option><option value="ar">🇸🇦 AR</option><option value="en">🇬🇧 EN</option></select>
-   <button id="authBtn" onclick="authClick()" class="bg-brand-500 text-slate-950 font-bold text-xs px-4 py-2.5 rounded-xl"></button>
+<body>
+
+  <!-- Sprite ikon -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/></symbol>
+    <symbol id="i-type" viewBox="0 0 24 24"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></symbol>
+    <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="M22 4L12 14l-3-3"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10z"/><path d="M2 21c0-3 1.9-5.4 5.1-6.5C9.3 13.7 12 13 12 13"/></symbol>
+    <symbol id="i-auto" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20 6 4"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/></symbol>
+    <symbol id="i-prev" viewBox="0 0 24 24"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></symbol>
+    <symbol id="i-next" viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></symbol>
+    <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.8-3.4L23 10M1 14l4.7 4.4A9 9 0 0 0 20.5 15"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 11v5M12 8h.01"/></symbol>
+  </svg>
+
+  <a class="skip" href="#teks">Lewati ke teks mushaf</a>
+
+  <div id="splash" class="splash" role="status" aria-live="polite">
+    <div class="splash-content">
+      <img src="icon.svg" alt="" width="64" height="64">
+      <span class="splash-arab" lang="ar" dir="rtl">مصحف للحفظ</span>
+      <strong>Mushaf Tahfidz Pro</strong>
+      <span class="splash-status">Menyiapkan mushaf</span>
+      <span class="splash-line" aria-hidden="true"><i></i></span>
+    </div>
   </div>
- </div>
-</header>
-<div class="border-b border-slate-800 bg-slate-900/70"><div class="max-w-5xl mx-auto px-4 py-2 flex justify-between items-center gap-3 text-xs"><div><b id="clk" class="text-base font-extrabold tabular-nums"></b><span id="hij" class="text-slate-400 ms-2"></span></div><div id="cdn" class="text-right font-semibold tabular-nums"></div></div></div>
 
-<main class="max-w-5xl mx-auto px-4 py-6 pb-28 flex-grow w-full space-y-5">
- <nav class="fixed bottom-0 inset-x-0 z-40 glass border-t border-slate-800 flex justify-center gap-1 p-2" style="padding-bottom:max(.5rem,env(safe-area-inset-bottom))">
-  <button id="tabG" onclick="tab('G')" data-i="tabG" class="flex-1 py-2.5 rounded-xl text-sm font-bold"></button>
-  <button id="tabL" onclick="tab('L')" data-i="tabL" class="flex-1 py-2.5 rounded-xl text-sm font-bold"></button>
-  <button id="tabM" onclick="tab('M')" class="flex-1 py-2.5 rounded-xl text-sm font-bold"><span data-i="tabM"></span> <span id="qn" class="ml-1 bg-amber-500 text-slate-950 text-xs px-2 py-0.5 rounded-full">0</span></button>
-  <button id="tabT" onclick="tab('T')" data-i="tabT" class="flex-1 py-2.5 rounded-xl text-sm font-bold"></button>
- </nav>
+  <!-- Bilah atas -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="arab">مصحف للحفظ</span>
+      <small>Mushaf Tahfidz Pro</small>
+    </div>
+    <div class="header-actions">
+      <button id="btnAbout" class="about-btn" type="button" aria-label="Tentang aplikasi" title="Tentang aplikasi">
+        <svg class="ik" aria-hidden="true"><use href="#i-info"/></svg>
+      </button>
+      <div class="auth-box">
+        <svg class="ik" aria-hidden="true"><use href="#i-user"/></svg>
+        <span id="userStatus">Tamu</span>
+        <button id="authBtn" type="button">Masuk</button>
+      </div>
+    </div>
+  </header>
 
- <section id="pG"><div id="gur"></div><div id="sx" class="space-y-4 mt-4 hidden"><section class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-  <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl"><span data-i="s1" class="text-xs text-slate-400 block"></span><b id="st1" class="text-2xl font-extrabold">0</b></div>
-  <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl"><span data-i="s2" class="text-xs text-slate-400 block"></span><b id="st2" class="text-2xl font-extrabold text-emerald-400">0%</b></div>
-  <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl"><span data-i="s3" class="text-xs text-slate-400 block"></span><b id="st3" class="text-2xl font-extrabold text-amber-400">0</b></div>
-  <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl"><span data-i="s4" class="text-xs text-slate-400 block"></span><b id="st4" class="text-2xl font-extrabold text-yellow-400">🔥 0</b></div>
- </section>
+  <!-- Toolbar -->
+  <nav class="viewbar" id="viewbar" aria-label="Menu utama">
+    <button type="button" data-view="mushaf" aria-current="page"><svg class="ik" aria-hidden="true"><use href="#i-book"/></svg>Mushaf</button>
+    <button type="button" data-view="g"><svg class="ik" aria-hidden="true"><use href="#i-target"/></svg>Rencana</button>
+    <button type="button" data-view="z"><svg class="ik" aria-hidden="true"><use href="#i-leaf"/></svg>Ziyadah</button>
+    <button type="button" data-view="m"><svg class="ik" aria-hidden="true"><use href="#i-repeat"/></svg>Murojaah<span class="dot" id="thDot" hidden></span></button>
+    <button type="button" data-view="t"><svg class="ik" aria-hidden="true"><use href="#i-check"/></svg>Tes</button>
+  </nav>
 
- <section class="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-3">
-  <div class="flex justify-between items-center text-xs"><b data-i="wk"></b><label class="text-slate-400 flex items-center gap-2"><span data-i="goal"></span>
-   <select id="goal" onchange="setGoal(this.value)" class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-brand-400 font-bold"><option>3</option><option>5</option><option>10</option><option>20</option></select></label></div>
-  <div class="h-2 bg-slate-800 rounded-full overflow-hidden"><div id="gbar" class="h-full bg-brand-500 transition-all" style="width:0"></div></div>
-  <div id="wkc" class="flex items-end gap-2 h-20"></div>
- </section>
+  <nav class="toolbar" aria-label="Kontrol mushaf">
+    <div class="seg" id="modeGroup" role="radiogroup" aria-label="Mode hafalan">
+        <button type="button" role="radio" data-mode="normal" aria-checked="true" title="Mode Normal (1)">
+        <svg class="ik" aria-hidden="true"><use href="#i-book"/></svg><span class="sr">Normal</span>
+      </button>
+      <button type="button" role="radio" data-mode="blur" aria-checked="false" title="Tutup semua kata (2)">
+        <svg class="ik" aria-hidden="true"><use href="#i-eye-off"/></svg><span class="sr">Tutup</span>
+      </button>
+      <button type="button" role="radio" data-mode="first" aria-checked="false" title="Hanya kata pertama tiap ayat (3)">
+        <svg class="ik" aria-hidden="true"><use href="#i-type"/></svg><span class="sr">Kata awal</span>
+      </button>
+    </div>
 
- </div></section>
+    <button id="btnNavOpen" class="chip" type="button" title="Navigasi surat, juz, dan ayat (/)">
+      <svg class="ik" aria-hidden="true"><use href="#i-compass"/></svg>
+      <span id="navLabel">Pilih surat</span>
+    </button>
 
- <section id="pL" class="space-y-4">
-  <div id="zg"></div>
-  <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl flex flex-wrap items-center gap-3">
-   <select id="sel" onchange="loadSurah()" class="flex-1 min-w-[200px] bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm font-semibold"></select>
-   <details class="w-full basis-full"><summary class="cursor-pointer text-xs text-slate-400">⚙️ Pengaturan audio & tampilan</summary><div class="flex flex-wrap items-center gap-3 mt-3">
-   <label class="text-xs text-slate-400 flex items-center gap-2"><span data-i="loop"></span>
-    <select id="loops" class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1.5 text-brand-400 font-bold"><option>1</option><option selected>3</option><option>5</option><option>10</option><option>20</option></select>×</label>
-   <select id="qari" onchange="setQari(this.value)" class="bg-slate-950 border border-slate-800 rounded-xl px-2 py-2.5 text-xs font-semibold"><option value="ar.alafasy">Alafasy</option><option value="ar.husary">Al-Husary</option><option value="ar.minshawi">Minshawi</option><option value="ar.abdulbasitmurattal">Abdul Basit</option><option value="ar.abdurrahmaansudais">Sudais</option><option value="ar.saoodshuraym">Shuraym</option></select>
-   <button id="fbtn" onclick="focusMode()" data-i="focus" class="bg-slate-800 border border-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold"></button>
-   <button onclick="playAll()" data-i="all" class="bg-slate-800 border border-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold"></button></div></details>
-  </div>
-  <h3 id="title" class="font-bold text-lg px-1"></h3>
-  <div id="list" class="space-y-4"></div>
- </section>
+    <div class="aksi">
+      <button id="btnMoreActions" class="icon-btn" type="button" aria-expanded="false" aria-controls="actionItems" aria-label="Aksi halaman" title="Aksi halaman">
+        <svg class="ik" aria-hidden="true"><use href="#i-more"/></svg>
+      </button>
+      <div id="actionItems" class="aksi-items" role="group" aria-label="Aksi halaman" hidden>
+      <button id="btnBookmark" class="icon-btn" type="button" aria-pressed="false" title="Simpan penanda halaman (B)"><svg class="ik" aria-hidden="true"><use href="#i-bookmark"/></svg><span class="sr">Penanda</span></button>
+      <button id="btnBookmarks" class="icon-btn" type="button" title="Daftar penanda"><svg class="ik" aria-hidden="true"><use href="#i-list"/></svg><span class="sr">Daftar penanda</span></button>
+      <button id="btnMemo" class="icon-btn" type="button" aria-pressed="false" title="Tandai halaman ini sudah hafal (M)"><svg class="ik" aria-hidden="true"><use href="#i-check"/></svg><span class="sr">Tandai hafal</span></button>
+      <button id="btnProgress" class="icon-btn" type="button" title="Progres hafalan"><svg class="ik" aria-hidden="true"><use href="#i-chart"/></svg><span class="sr">Progres hafalan</span></button>
+      <button id="btnInstall" class="icon-btn" type="button" aria-label="Instal aplikasi" title="Instal aplikasi"><svg class="ik" aria-hidden="true"><use href="#i-download"/></svg><span class="sr">Instal aplikasi</span></button>
+      <button id="btnTheme" class="icon-btn" type="button" title="Ganti tema"><svg class="ik" aria-hidden="true"><use id="themeIcon" href="#i-moon"/></svg><span class="sr">Ganti tema</span></button>
+      <button id="btnSettings" class="icon-btn" type="button" title="Pengaturan"><svg class="ik" aria-hidden="true"><use href="#i-sliders"/></svg><span class="sr">Pengaturan</span></button>
+      </div>
+    </div>
+  </nav>
 
- <section id="pM" class="hidden space-y-4"><div id="mg"></div><div id="mur"></div></section>
- <section id="pT" class="hidden"><div id="tst"></div></section>
+  <!-- Halaman mushaf -->
+  <!-- Program tahfidz: Rencana · Ziyadah · Murojaah · Tes -->
+  <section id="tahfidz" hidden aria-label="Program tahfidz">
+    <div class="thclock"><b id="thClk"></b><span id="thHij"></span><span id="thCdn"></span></div>
+    <div id="thBody"></div>
+  </section>
 
- <details class="bg-slate-900/40 border border-slate-800 rounded-2xl p-5">
-  <summary data-i="meth" class="font-bold cursor-pointer"></summary>
-  <ol class="list-decimal ps-5 mt-3 space-y-2 text-sm text-slate-300"><li data-i="m1"></li><li data-i="m2"></li><li data-i="m3"></li><li data-i="m4"></li></ol>
- </details>
-</main>
+  <main id="wrap">
+    <section class="frame" id="frame" aria-label="Halaman mushaf">
+      <div class="edge e-top"></div><div class="edge e-bottom"></div>
+      <div class="edge e-left"></div><div class="edge e-right"></div>
+      <svg class="corner c1" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 28 Q2 2 28 2"/><path d="M2 2 H12 M2 2 V12"/><circle cx="9" cy="9" r="2.6" fill="currentColor" stroke="none"/></svg>
+      <svg class="corner c2" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 28 Q2 2 28 2"/><path d="M2 2 H12 M2 2 V12"/><circle cx="9" cy="9" r="2.6" fill="currentColor" stroke="none"/></svg>
+      <svg class="corner c3" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 28 Q2 2 28 2"/><path d="M2 2 H12 M2 2 V12"/><circle cx="9" cy="9" r="2.6" fill="currentColor" stroke="none"/></svg>
+      <svg class="corner c4" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 28 Q2 2 28 2"/><path d="M2 2 H12 M2 2 V12"/><circle cx="9" cy="9" r="2.6" fill="currentColor" stroke="none"/></svg>
 
-<footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
- <p class="font-bold text-slate-300">MutqinLab — Open Source</p><p data-i="foot" class="mt-1"></p>
-</footer>
+      <div id="kepala"><span id="kSurah"></span><span id="kJuz"></span></div>
+      <div id="teks" lang="ar" dir="rtl"></div>
+      <div id="kaki"><span id="kNo"></span></div>
+    </section>
+  </main>
 
-<div id="modal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4">
- <div class="bg-slate-900 border border-slate-800 rounded-3xl p-7 max-w-sm w-full text-center space-y-4 relative">
-  <button onclick="modal(0)" class="absolute top-4 right-5 text-slate-400">✕</button>
-  <h3 data-i="sync" class="text-xl font-bold"></h3>
-  <p id="cfgInfo" class="text-xs text-slate-400 leading-relaxed"></p>
-  <button onclick="login()" class="w-full bg-slate-950 border border-slate-700 hover:bg-slate-800 font-semibold py-3 rounded-xl text-sm" data-i="google"></button>
- </div>
-</div>
-<div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-brand-500 text-slate-950 font-bold text-sm px-5 py-3 rounded-2xl shadow-xl hidden z-50 max-w-[90%] text-center"></div>
+  <footer class="site-footer">
+    <p>Crafted with <span class="heart">♥</span> by <span class="creator">Kurniapedia</span> 2026</p>
+  </footer>
 
-<script type="module">
-/* ===== 1. KONFIGURASI FIREBASE (isi dari Firebase Console → Project settings → Web app) =====
-   Kosongkan = mode offline (data tersimpan di perangkat). */
-const FB={apiKey:"",authDomain:"",projectId:"",appId:""};
+  <dialog id="dlgAbout" class="modal" aria-labelledby="aboutTitle">
+    <div class="modal-box">
+      <header class="modal-head">
+        <h2 id="aboutTitle">Tentang Mushaf Tahfidz Pro</h2>
+        <button class="icon-btn kecil" type="button" data-close aria-label="Tutup"><svg class="ik" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </header>
+      <div class="modal-body about-body">
+        <p class="about-intro">Mushaf Madinah 604 halaman untuk membaca, menjaga, dan menguatkan hafalan Al-Qur'an.</p>
+        <section class="about-section">
+          <h3 class="sub">Panduan penggunaan</h3>
+          <ul class="about-list">
+            <li>Geser ke kiri atau kanan pada halaman untuk berpindah halaman.</li>
+            <li>Pilih surat, juz, atau ayat melalui tombol navigasi.</li>
+            <li>Gunakan mode Tutup atau Kata awal untuk latihan hafalan; ketuk ayat untuk membuka dan melihat terjemahan.</li>
+            <li>Ketuk tanda akhir ayat untuk memutar, mengulang, atau melatih lantunan.</li>
+            <li>Simpan penanda dan progres hafalan dari menu Aksi halaman.</li>
+            <li>Buka tab Rencana untuk menyusun target hafalan (surat dan ayat), lalu ikuti panduan Ziyadah (hafalan baru), Murojaah (pengulangan terjadwal), dan Tes.</li>
+          </ul>
+        </section>
+        <section class="about-section">
+          <h3 class="sub">Referensi</h3>
+          <ul class="about-list sumber-list">
+            <li>Teks dan font mushaf: QCF v4, Mushaf Madinah.</li>
+            <li>Peta halaman dan terjemahan Indonesia Kemenag: Quran.com API.</li>
+            <li>Audio murattal: EveryAyah.com.</li>
+          </ul>
+        </section>
+        <section class="about-section">
+          <h3 class="sub">Kurniapedia</h3>
+          <div class="about-social" aria-label="Media sosial Kurniapedia">
+            <a href="https://instagram.com/kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="Instagram Kurniapedia" title="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+            <a href="https://tiktok.com/@kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="TikTok Kurniapedia" title="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a>
+            <a href="https://www.youtube.com/@kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="YouTube Kurniapedia" title="YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a>
+            <a href="https://wa.me/+6285870906050" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Kurniapedia" title="WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </dialog>
 
-const $=id=>document.getElementById(id);
-const DAY=864e5,today=()=>Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/DAY);
-const I={
-id:{dir:'ltr',sub:'',s1:'Ayat Dihafal',s2:'Indeks Mutqin',s3:'Antrean Murojaah',s4:'Streak',tabL:'📖 Ziyadah',tabM:'🔁 Murojaah',loop:'Ulang audio',focus:'👁️ Mode Blur',all:'▶ Putar Semua',hafal:'✅ Tandai Hafal',hafald:'✓ Dalam SRS',audio:'🔊 Audio',empty:'Alhamdulillah, tidak ada murojaah hari ini 🎉 Tambah hafalan baru di tab Belajar.',cue:'Lanjutkan ayat setelah ini:',start:'(Awal surah)',show:'Tampilkan Jawaban',day:'hr',b0:'🔴 Lupa',b1:'🟡 Ragu',b2:'🟢 Mutqin',login:'Masuk Cloud',logout:'Keluar',sync:'Sinkronkan ke Cloud',google:'Lanjutkan dengan Google',nocfg:'Mode offline: isi konfigurasi Firebase di index.html untuk sinkronisasi antar perangkat.',cfg:'Progres tersimpan aman & tersinkron di semua perangkatmu.',toastH:'Alhamdulillah! Murojaah pertama besok (setelah tidur).',toastR:'Tercatat. Jadwal berikutnya: ',meth:'🧠 Metode Hafalan yang Terbukti',m1:'Talqin: dengarkan ayat dari qari 3–5× sambil melihat mushaf, lalu baca bersama.',m2:'Tikrar: ulangi audio 10–20× (atur "Ulang audio"), lalu aktifkan Mode Blur dan tes dirimu.',m3:'Sambung ayat: murojaah selalu dimulai dari ayat sebelumnya — persis seperti ujian setoran.',m4:'Ziyadah sedikit, murojaah banyak: tambah ≤5 ayat/hari, jaga antrean murojaah tetap bersih setiap hari.',foot:'Membantu penghafal Al-Qur\'an seluruh dunia — 100% gratis',err:'Gagal memuat. Periksa koneksi internet.'},
-en:{dir:'ltr',s1:'Verses Memorized',s2:'Mutqin Index',s3:'Review Queue',s4:'Streak',tabL:'📖 Ziyadah',tabM:'🔁 Review',loop:'Audio loop',focus:'👁️ Blur Mode',all:'▶ Play All',hafal:'✅ Mark Memorized',hafald:'✓ In SRS',audio:'🔊 Audio',empty:'Alhamdulillah, nothing to review today 🎉 Add new verses in the Learn tab.',cue:'Continue the verse after this one:',start:'(Start of surah)',show:'Show Answer',day:'d',b0:'🔴 Forgot',b1:'🟡 Unsure',b2:'🟢 Mutqin',login:'Cloud Login',logout:'Sign out',sync:'Cloud Sync',google:'Continue with Google',nocfg:'Offline mode: add your Firebase config in index.html to sync across devices.',cfg:'Your progress is saved and synced across all your devices.',toastH:'Alhamdulillah! First review tomorrow (after sleep).',toastR:'Saved. Next review in: ',meth:'🧠 Proven Memorization Method',m1:'Talqin: listen to the verse 3–5× while reading, then recite along.',m2:'Tikrar: loop the audio 10–20× (set "Audio loop"), then enable Blur Mode and test yourself.',m3:'Verse linking: review always starts from the previous verse — just like a real recitation exam.',m4:'Little new, lots of review: add ≤5 verses/day and clear your review queue daily.',foot:'Empowering Quran memorizers worldwide — 100% free',err:'Failed to load. Check your connection.'},
-ar:{dir:'rtl',s1:'الآيات المحفوظة',s2:'مؤشر الإتقان',s3:'قائمة المراجعة',s4:'الاستمرارية',tabL:'📖 زيادة',tabM:'🔁 مراجعة',loop:'تكرار الصوت',focus:'👁️ وضع التغطية',all:'▶ تشغيل الكل',hafal:'✅ تم الحفظ',hafald:'✓ في المراجعة',audio:'🔊 صوت',empty:'الحمد لله، لا مراجعة اليوم 🎉 أضف محفوظات جديدة من تبويب تعلّم.',cue:'أكمل الآية التي بعد هذه:',start:'(بداية السورة)',show:'أظهر الجواب',day:'ي',b0:'🔴 نسيت',b1:'🟡 متردد',b2:'🟢 متقن',login:'تسجيل الدخول',logout:'خروج',sync:'المزامنة السحابية',google:'المتابعة عبر Google',nocfg:'وضع بدون اتصال: أضف إعدادات Firebase للمزامنة بين الأجهزة.',cfg:'تقدمك محفوظ ومتزامن على كل أجهزتك.',toastH:'الحمد لله! أول مراجعة غداً (بعد النوم).',toastR:'تم. المراجعة القادمة بعد: ',meth:'🧠 منهج الحفظ المجرَّب',m1:'التلقين: استمع للآية ٣–٥ مرات مع النظر في المصحف ثم رددها.',m2:'التكرار: كرر الصوت ١٠–٢٠ مرة ثم فعّل وضع التغطية واختبر نفسك.',m3:'ربط الآيات: ابدأ المراجعة دائماً من الآية السابقة كما في العرض على الشيخ.',m4:'حفظ قليل ومراجعة كثيرة: ≤٥ آيات يومياً وأنجز قائمة المراجعة كل يوم.',foot:'نخدم حفظة القرآن حول العالم — مجاني ١٠٠٪',err:'تعذر التحميل. تحقق من الاتصال.'}};
-Object.assign(I.id,{tabG:'🧭 Rencana',tabT:'🎯 Tes',qari:'Qari',goal:'Target harian',wk:'Aktivitas 7 hari',unm:'Hapus ayat ini dari jadwal murojaah?',tdesc:'Tes sambung ayat: pilih ayat yang benar setelah ayat yang ditampilkan. Jawaban salah dijadwalkan murojaah hari ini.',tstart:'Mulai Tes',tq:'Ayat setelahnya adalah…',tnext:'Lanjut ▸',tscore:'Skor',tagain:'Ulangi Tes',noq:'Surah terlalu pendek untuk tes.',tgood:'MasyaAllah! Pertahankan.',tkeep:'Terus murojaah, in syaa Allah mutqin.'});
-Object.assign(I.en,{tabG:'🧭 Plan',tabT:'🎯 Test',qari:'Reciter',goal:'Daily goal',wk:'Last 7 days',unm:'Remove this verse from your review schedule?',tdesc:'Verse-linking test: pick the correct verse that follows the one shown. Wrong answers are scheduled for review today.',tstart:'Start Test',tq:'The next verse is…',tnext:'Next ▸',tscore:'Score',tagain:'Retake Test',noq:'Surah too short for a test.',tgood:'MashaAllah! Keep it up.',tkeep:'Keep reviewing, in shaa Allah you will master it.'});
-Object.assign(I.ar,{tabG:'🧭 الخطة',tabT:'🎯 اختبار',qari:'القارئ',goal:'الهدف اليومي',wk:'آخر ٧ أيام',unm:'حذف هذه الآية من جدول المراجعة؟',tdesc:'اختبار ربط الآيات: اختر الآية الصحيحة التي تلي الآية المعروضة. الإجابة الخاطئة تُجدول للمراجعة اليوم.',tstart:'ابدأ الاختبار',tq:'الآية التالية هي…',tnext:'التالي ▸',tscore:'النتيجة',tagain:'أعد الاختبار',noq:'السورة قصيرة جداً للاختبار.',tgood:'ما شاء الله! استمر.',tkeep:'واصل المراجعة بإذن الله ستتقن.'});
-let lang=localStorage.ml_lang||'id';const T=k=>I[lang][k]??I.id[k]??'';
+  <!-- Kartu ayat terpilih -->
+  <aside id="ayatSheet" class="ayat-sheet" hidden aria-label="Ayat terpilih">
+    <div class="as-head">
+      <strong id="asKey">QS</strong>
+      <button id="asClose" class="icon-btn kecil" type="button" aria-label="Tutup"><svg class="ik" aria-hidden="true"><use href="#i-x"/></svg></button>
+    </div>
+    <p id="asText" class="as-text"></p>
+    <div class="as-act">
+      <button id="asPlay" type="button"><svg class="ik f" aria-hidden="true"><use href="#i-play"/></svg>Putar ayat</button>
+      <button id="asDrill" type="button" title="Putar ayat, beri jeda sepanjang ayat agar Anda melantunkannya, ulang 5x"><svg class="ik" aria-hidden="true"><use href="#i-target"/></svg>Latih hafalan</button>
+      <button id="asFrom" type="button"><svg class="ik" aria-hidden="true"><use href="#i-next"/></svg>Lanjut sampai akhir surat</button>
+    </div>
+  </aside>
 
-/* ===== 2. STATE & SRS (SM-2 yang disederhanakan) ===== */
-let S={items:{},log:{}};try{S=JSON.parse(localStorage.ml_state)||S}catch{}
-let user=null,db=null,fs=null,timer;
-const live=k=>S.items[k]&&!S.items[k].x;
-let qari=localStorage.ml_qari||'ar.alafasy';
-const nx=(it,q)=>{const n={...it};
- if(q==0){n.l++;n.r=0;n.i=1;n.e=Math.max(1.3,n.e-.2)}
- else if(q==1){n.i=Math.max(1,Math.round(n.i*1.2));n.e=Math.max(1.3,n.e-.05);n.r++}
- else{n.i=n.r==0?3:n.r==1?7:Math.round(n.i*n.e);n.e=Math.min(3,n.e+.05);n.r++}
- n.d=today()+n.i;n.u=Date.now();return n};
-const streak=()=>{let d=today(),c=0;if(!S.log[d])d--;while(S.log[d]){c++;d--}return c};
-const act=()=>{S.log[today()]=(S.log[today()]||0)+1};
-function save(){localStorage.ml_state=JSON.stringify(S);stats();clearTimeout(timer);if(user)timer=setTimeout(push,1500)}
-function stats(){const a=Object.values(S.items).filter(i=>!i.x),due=a.filter(i=>i.d<=today()).length;
- $('st1').textContent=a.length;$('st2').textContent=(a.length?Math.round(a.filter(i=>i.i>=7).length/a.length*100):0)+'%';
- $('st3').textContent=due;$('qn').textContent=due;$('st4').textContent='🔥 '+streak();week()}
-function week(){const g=S.goal||5,t=S.log[today()]||0,L=[6,5,4,3,2,1,0].map(o=>S.log[today()-o]||0),mx=Math.max(g,...L);
- $('gbar').style.width=Math.min(100,t/g*100)+'%';$('goal').value=g;
- $('wkc').innerHTML=L.map((c,x)=>`<div class="flex-1 h-full flex flex-col justify-end items-center gap-1" title="${c}"><div class="w-full rounded-t ${x==6?'bg-brand-500':'bg-brand-500/40'}" style="height:${c/mx*100}%;min-height:3px"></div><span class="text-[10px] text-slate-500">${new Date((today()-6+x)*DAY).toLocaleDateString(lang,{weekday:'narrow',timeZone:'UTC'})}</span></div>`).join('')}
-const setGoal=v=>{S.goal=+v;save()};
-const merge=r=>{for(const k in r.items||{}){const a=S.items[k],b=r.items[k];if(!a||b.u>a.u)S.items[k]=b}for(const d in r.log||{})S.log[d]=Math.max(S.log[d]||0,r.log[d]);if(r.goal&&!S.goal)S.goal=r.goal;if(r.plan&&!S.plan)S.plan=r.plan};
+  <!-- Pemutar audio -->
+  <footer class="player" id="player" aria-label="Pemutar audio">
+    <div class="pl-progress" aria-hidden="true"><i id="plBar"></i></div>
+    <div class="pl-main">
+      <div class="pl-ctrl">
+        <button id="plPrev" class="icon-btn" type="button" aria-label="Ayat sebelumnya"><svg class="ik" aria-hidden="true"><use href="#i-prev"/></svg></button>
+        <button id="plPlay" class="icon-btn utama" type="button" aria-label="Putar"><svg class="ik f" aria-hidden="true"><use id="plPlayIcon" href="#i-play"/></svg></button>
+        <button id="plNext" class="icon-btn" type="button" aria-label="Ayat berikutnya"><svg class="ik" aria-hidden="true"><use href="#i-next"/></svg></button>
+        <button id="plStop" class="icon-btn" type="button" aria-label="Berhenti"><svg class="ik f" aria-hidden="true"><use href="#i-stop"/></svg></button>
+      </div>
+      <div class="pl-status" aria-live="polite">
+        <strong id="plTitle">Murattal</strong>
+        <small id="plSub">Siap diputar</small>
+      </div>
+      <button id="plMore" class="icon-btn" type="button" aria-expanded="false" aria-controls="plPanel" aria-label="Opsi audio"><svg class="ik" aria-hidden="true"><use href="#i-up"/></svg></button>
+    </div>
+    <div class="pl-panel" id="plPanel" hidden>
+      <label>Qari
+        <select id="selQari"></select>
+      </label>
+      <label>Cakupan putar
+        <select id="selMode">
+          <option value="page">Seluruh halaman ini</option>
+          <option value="ayah">Ayat terpilih</option>
+          <option value="range">Rentang ayat</option>
+          <option value="surah">Dari ayat terpilih sampai akhir surat</option>
+        </select>
+      </label>
+      <div class="rentang" id="rngWrap" hidden>
+        <label>Surat <select id="rngSurah"></select></label>
+        <label>Dari ayat <input type="number" id="rngFrom" min="1" value="1" inputmode="numeric"></label>
+        <label>Sampai <input type="number" id="rngTo" min="1" value="1" inputmode="numeric"></label>
+      </div>
+      <label>Ulang tiap ayat
+        <select id="selRepAyat">
+          <option value="1">1×</option><option value="2">2×</option><option value="3">3×</option>
+          <option value="5">5×</option><option value="7">7×</option><option value="10">10×</option><option value="0">Tanpa batas</option>
+        </select>
+      </label>
+      <label>Ulang seluruh rentang
+        <select id="selRepRange">
+          <option value="1">1×</option><option value="2">2×</option><option value="3">3×</option>
+          <option value="5">5×</option><option value="10">10×</option><option value="0">Tanpa batas</option>
+        </select>
+      </label>
+      <label>Kecepatan
+        <select id="selSpeed">
+          <option value="0.6">0,6×</option><option value="0.75">0,75×</option><option value="0.9">0,9×</option>
+          <option value="1">1× (normal)</option><option value="1.1">1,1×</option><option value="1.25">1,25×</option><option value="1.5">1,5×</option>
+        </select>
+      </label>
+      <label>Jeda antar ayat
+        <select id="selGap">
+          <option value="0">Tanpa jeda</option><option value="1">1 detik</option><option value="2">2 detik</option>
+          <option value="3">3 detik</option><option value="-1">Sepanjang ayat (giliran Anda)</option>
+        </select>
+      </label>
+    </div>
+  </footer>
 
-/* ===== 3. DATA AL-QUR'AN (alquran.cloud — gratis, tanpa API key) ===== */
-async function api(p){const k='q_'+p;try{const c=localStorage.getItem(k);if(c)return JSON.parse(c)}catch{}
- const j=await(await fetch('https://api.alquran.cloud/v1/'+p)).json();try{localStorage.setItem(k,JSON.stringify(j.data))}catch{}return j.data}
-const cache={};
-async function getS(n){const ck=n+qari;if(cache[ck])return cache[ck];
- const[d,ad]=await Promise.all([api(`surah/${n}/editions/quran-uthmani,id.indonesian,en.sahih`),api(`surah/${n}/${qari}`)]);
- const V=d[0].ayahs.map((a,i)=>({n:a.numberInSurah,t:(i==0&&n!=1&&n!=9)?a.text.split(' ').slice(4).join(' '):a.text,id:d[1].ayahs[i].text,en:d[2].ayahs[i].text,au:ad.ayahs[i].audio}));
- return cache[ck]={name:d[0].name,en:d[0].englishName,V}}
-const tr=v=>lang=='id'?v.id:lang=='en'?v.en:'';
-const esc=s=>s.replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+  <!-- Dialog: Navigasi -->
+  <dialog id="dlgNav" class="modal" aria-labelledby="navTitle">
+    <div class="modal-box">
+      <header class="modal-head">
+        <h2 id="navTitle">Navigasi</h2>
+        <button class="icon-btn kecil" type="button" data-close aria-label="Tutup"><svg class="ik" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </header>
+      <div class="tabs" role="tablist" aria-label="Jenis navigasi">
+        <button type="button" role="tab" id="tabSurat" aria-selected="true" aria-controls="panSurat">Surat</button>
+        <button type="button" role="tab" id="tabJuz" aria-selected="false" aria-controls="panJuz" tabindex="-1">Juz</button>
+        <button type="button" role="tab" id="tabAyat" aria-selected="false" aria-controls="panAyat" tabindex="-1">Ayat</button>
+      </div>
+      <div class="modal-body">
+        <div id="panSurat" role="tabpanel" aria-labelledby="tabSurat">
+          <label class="search"><svg class="ik" aria-hidden="true"><use href="#i-search"/></svg>
+            <input id="navSearch" type="search" placeholder="Cari surat, atau ketik 2:255" autocomplete="off" aria-label="Cari surat atau ayat">
+          </label>
+          <ul id="listSurat" class="list"></ul>
+        </div>
+        <div id="panJuz" role="tabpanel" aria-labelledby="tabJuz" hidden>
+          <div id="gridJuz" class="grid-juz"></div>
+        </div>
+        <div id="panAyat" role="tabpanel" aria-labelledby="tabAyat" hidden>
+          <div class="form-ayat">
+            <label>Surat <select id="ayatSurah"></select></label>
+            <label>Ayat <input id="ayatNo" type="number" min="1" value="1" inputmode="numeric"></label>
+            <button id="ayatGo" type="button" class="btn-utama">Buka ayat</button>
+          </div>
+          <p class="catatan">Halaman ayat dicari lewat Quran.com API. Jika sedang luring, aplikasi membuka awal surat.</p>
+        </div>
+      </div>
+    </div>
+  </dialog>
 
-/* ===== 4. AUDIO: talqin & tikrar ===== */
-const au=new Audio();let run=0,V=[],CN=1,focus=false;
-function play(i,chain){if(!V[i])return;const my=++run;let n=0;hl(i);au.src=V[i].au;
- au.onended=()=>{if(my!=run)return;if(++n<+$('loops').value)au.play();else if(chain&&V[i+1]&&(zEnd<0||i<zEnd))play(i+1,true);else hl(-1)};
- au.play().catch(()=>toast(T('err')))}
-function once(u){run++;au.onended=null;au.src=u;au.play()}
-function hl(i){document.querySelectorAll('#list>div').forEach((e,x)=>{e.classList.toggle('playing',x==i);if(x==i)e.scrollIntoView({block:'center',behavior:'smooth'})})}
+  <!-- Dialog: Penanda -->
+  <dialog id="dlgBm" class="modal" aria-labelledby="bmTitle">
+    <div class="modal-box">
+      <header class="modal-head">
+        <h2 id="bmTitle">Penanda halaman</h2>
+        <button class="icon-btn kecil" type="button" data-close aria-label="Tutup"><svg class="ik" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </header>
+      <div class="modal-body">
+        <ul id="bmList" class="list"></ul>
+      </div>
+      <footer class="modal-foot"><button id="bmAdd" type="button" class="btn-utama">Simpan halaman ini</button></footer>
+    </div>
+  </dialog>
 
-/* ===== 5. UI: BELAJAR ===== */
-async function loadSurah(){CN=+$('sel').value;localStorage.ml_surah=CN;Q=null;zs=-1;zStart=0;zEnd=-1;run++;au.pause();$('list').innerHTML='<p class="text-center text-slate-500 py-10">…</p>';
- try{const s=await getS(CN);V=s.V;$('title').textContent=`${CN}. ${s.en} — ${s.name}`;draw()}catch{$('list').innerHTML=`<p class="text-center text-red-400 py-10">${T('err')}</p>`}}
-function draw(){const tg=zTarget();zGuide();$('list').className=(focus?'focus ':'')+'space-y-4';
- $('list').innerHTML=V.map((v,i)=>{const has=live(CN+':'+v.n);return`<div class="p-5 bg-slate-900/60 rounded-2xl border border-slate-800 space-y-3">
- <div class="flex justify-between items-center text-xs border-b border-slate-800 pb-3"><b class="text-brand-400">${tg.includes(i)?'🎯 ':''}${v.n}</b><div class="flex gap-2">
- <button onclick="play(${i})" class="bg-slate-800 px-3 py-1.5 rounded-xl font-semibold">${T('audio')}</button>
- <button onclick="mark(${i})" class="${has?'bg-slate-800 text-slate-400':'bg-brand-500/20 border border-brand-500/40 text-brand-400'} px-3 py-1.5 rounded-xl font-semibold">${has?T('hafald'):T('hafal')}</button></div></div>
- <p class="ar text-3xl sm:text-4xl text-right" onclick="this.classList.toggle('show')">${v.t}</p>
- ${tr(v)?`<p class="text-sm text-slate-300">${esc(tr(v))}</p>`:''}</div>`}).join('')}
-function mark(i){const k=CN+':'+V[i].n;if(live(k)){if(!confirm(T('unm')))return;S.items[k]={...S.items[k],x:1,u:Date.now()};save();draw();return}S.items[k]={s:CN,a:V[i].n,r:0,i:1,e:2.3,d:today()+1,l:0,u:Date.now()};act();save();draw();toast(T('toastH'))}
-function focusMode(){focus=!focus;$('fbtn').classList.toggle('on',focus);$('list').classList.toggle('focus',focus)}
+  <!-- Dialog: Progres -->
+  <dialog id="dlgPrg" class="modal" aria-labelledby="prgTitle">
+    <div class="modal-box">
+      <header class="modal-head">
+        <h2 id="prgTitle">Progres hafalan</h2>
+        <button class="icon-btn kecil" type="button" data-close aria-label="Tutup"><svg class="ik" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </header>
+      <div class="modal-body">
+        <div class="prg-total">
+          <div class="prg-angka"><strong id="prgPct">0%</strong><span id="prgText">0 / 604 halaman</span></div>
+          <div class="bar"><i id="prgBar"></i></div>
+        </div>
+        <h3 class="sub">Per juz <small>(ketuk untuk membuka)</small></h3>
+        <ul id="prgJuz" class="list juz-list"></ul>
+      </div>
+      <footer class="modal-foot"><button id="prgMark" type="button" class="btn-utama">Tandai halaman ini hafal</button></footer>
+    </div>
+  </dialog>
 
-/* ===== 6. UI: MUROJAAH (active recall, sambung ayat) ===== */
-async function drawMur(){mGuide();const due=Object.entries(S.items).filter(([,i])=>!i.x&&i.d<=today()).sort((a,b)=>a[1].d-b[1].d),box=$('mur');
- if(!due.length){box.innerHTML=`<p class="text-center py-16 text-slate-400">${T('empty')}</p>`;return}
- const[k,it]=due[0];box.innerHTML='<p class="text-center py-16 text-slate-500">…</p>';
- try{const s=await getS(it.s),v=s.V[it.a-1],p=s.V[it.a-2];
- box.innerHTML=`<div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 space-y-5">
- <div class="flex justify-between text-xs"><b class="text-amber-400">${it.s}. ${s.en} : ${it.a}</b><span class="text-slate-500">${due.length} ▸</span></div>
- <p class="text-xs text-slate-400">${T('cue')}</p>
- ${p?`<p class="ar text-3xl text-right">${p.t}</p>`:`<p class="text-slate-500 text-sm">${T('start')}</p>`}
- <button id="rv" onclick="reveal()" class="w-full bg-brand-500 text-slate-950 font-bold py-3 rounded-xl">${T('show')}</button>
- <div id="ans" class="hidden space-y-4"><p class="ar text-3xl sm:text-4xl text-right text-brand-400">${v.t}</p>
- ${tr(v)?`<p class="text-sm text-slate-300">${esc(tr(v))}</p>`:''}
- <button onclick="once('${v.au}')" class="bg-slate-800 px-4 py-2 rounded-xl text-xs font-semibold">${T('audio')}</button>
- <div class="grid grid-cols-3 gap-2">${[0,1,2].map(q=>`<button onclick="rate('${k}',${q})" class="${['bg-red-500/10 border-red-500/30 text-red-400','bg-amber-500/10 border-amber-500/30 text-amber-400','bg-brand-500/20 border-brand-500/40 text-brand-400'][q]} border py-3 rounded-xl text-xs font-bold">${T('b'+q)}<br><span class="opacity-70">${nx(it,q).i} ${T('day')}</span></button>`).join('')}</div></div></div>`}
- catch{box.innerHTML=`<p class="text-center text-red-400 py-10">${T('err')}</p>`}}
-window.reveal=()=>{$('rv').classList.add('hidden');$('ans').classList.remove('hidden')};
-function rate(k,q){const n=nx(S.items[k],q);S.items[k]=n;S.md=S.md||{};S.md[today()]=(S.md[today()]||0)+1;act();save();toast(T('toastR')+n.i+' '+T('day'));drawMur()}
+  <!-- Dialog: Pengaturan -->
+  <dialog id="dlgSet" class="modal" aria-labelledby="setTitle">
+    <div class="modal-box">
+      <header class="modal-head">
+        <h2 id="setTitle">Pengaturan</h2>
+        <button class="icon-btn kecil" type="button" data-close aria-label="Tutup"><svg class="ik" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </header>
+      <div class="modal-body set-body">
+        <fieldset class="grp">
+          <legend>Tema</legend>
+          <div class="radio-row">
+            <label><input type="radio" name="theme" value="auto"><span>Otomatis</span></label>
+            <label><input type="radio" name="theme" value="light"><span>Terang</span></label>
+            <label><input type="radio" name="theme" value="dark"><span>Gelap</span></label>
+            <label><input type="radio" name="theme" value="sepia"><span>Sepia</span></label>
+          </div>
+        </fieldset>
+        <div class="grp">
+          <label class="row" for="setWidth"><span>Lebar halaman</span><output id="setWidthVal">700 px</output></label>
+          <input id="setWidth" type="range" min="480" max="960" step="20" value="700">
+        </div>
+        <div class="grp">
+          <label class="check"><input id="setReveal" type="checkbox"><span>Buka ayat otomatis saat audio memutarnya <small>(pada mode Tutup / Kata awal)</small></span></label>
+          <label class="check"><input id="setTrans" type="checkbox"><span>Tampilkan terjemahan Indonesia saat ayat dipilih</span></label>
+          <label class="check"><input id="setWake" type="checkbox"><span>Jaga layar tetap menyala</span></label>
+        </div>
+        <div class="grp">
+          <h3 class="sub">Data</h3>
+          <div class="btn-row">
+            <button id="btnExport" type="button" class="btn"><svg class="ik" aria-hidden="true"><use href="#i-download"/></svg>Ekspor cadangan</button>
+            <button id="btnImport" type="button" class="btn"><svg class="ik" aria-hidden="true"><use href="#i-upload"/></svg>Impor cadangan</button>
+            <button id="btnDiag" type="button" class="btn"><svg class="ik" aria-hidden="true"><use href="#i-list"/></svg>Salin info diagnostik</button>
+            <button id="btnReset" type="button" class="btn bahaya"><svg class="ik" aria-hidden="true"><use href="#i-trash"/></svg>Hapus data lokal</button>
+          </div>
+          <input id="fileImport" type="file" accept="application/json,.json" hidden>
+          <p class="catatan">Masuk dengan Google untuk menyinkronkan progres, penanda, dan pengaturan antar perangkat.</p>
+        </div>
+        <div class="grp sumber">
+          <h3 class="sub">Sumber data</h3>
+          <p class="catatan">Teks &amp; font: mushaf Madinah (QCF v4) · Peta ayat, halaman &amp; terjemahan Indonesia (Kemenag): Quran.com API · Audio: EveryAyah.com. Semua sumber gratis.</p>
+        </div>
+      </div>
+    </div>
+  </dialog>
 
-/* ===== 7. FIREBASE: Google login + Firestore sync ===== */
-async function initFB(){if(!FB.apiKey)return;const v='10.14.1',g=m=>import(`https://www.gstatic.com/firebasejs/${v}/firebase-${m}.js`);
- const[{initializeApp},A,F]=await Promise.all([g('app'),g('auth'),g('firestore')]);const app=initializeApp(FB),auth=A.getAuth(app);db=F.getFirestore(app);fs=F;window._A={A,auth};
- A.onAuthStateChanged(auth,async u=>{user=u;ui();if(u){try{const r=await F.getDoc(F.doc(db,'users',u.uid));if(r.exists())merge(r.data());save();await push();if(!$('pL').classList.contains('hidden'))draw()}catch(e){console.error(e)}}})}
-async function push(){if(user)try{await fs.setDoc(fs.doc(db,'users',user.uid),{items:S.items,log:S.log,goal:S.goal||5,plan:S.plan||null,u:Date.now()})}catch(e){console.error(e)}}
-window.login=async()=>{if(!FB.apiKey)return toast(T('nocfg'));try{await _A.A.signInWithPopup(_A.auth,new _A.A.GoogleAuthProvider());modal(0)}catch(e){toast(e.code||'Error')}};
-window.authClick=()=>user?_A.A.signOut(_A.auth):modal(1);
-window.modal=o=>{$('modal').classList.toggle('hidden',!o);$('modal').classList.toggle('flex',!!o);$('cfgInfo').textContent=FB.apiKey?T('cfg'):T('nocfg')};
-function ui(){$('authBtn').textContent=user?T('logout')+' ('+(user.displayName||'').split(' ')[0]+')':T('login')}
+  <div id="toasts" role="status" aria-live="polite"></div>
 
-/* ===== 7b. TES SAMBUNG AYAT ===== */
-let Q=null;const shuf=a=>[...a].sort(()=>Math.random()-.5);
-function startTest(){if(V.length<2)return toast(T('noq'));
- const idx=V.map((_,i)=>i).slice(0,-1),mine=idx.filter(i=>live(CN+':'+V[i+1].n));
- Q={i:0,sc:0,a:null,q:shuf(mine.length>=3?mine:idx).slice(0,10).map(i=>({i,ok:i+1,o:shuf([i+1,...shuf(V.map((_,x)=>x).filter(x=>x!=i&&x!=i+1)).slice(0,3)])}))};drawTest()}
-function ans(x){if(Q.a!==null)return;Q.a=x;const q=Q.q[Q.i];
- if(x==q.ok)Q.sc++;else{const k=CN+':'+V[q.ok].n;if(live(k)){S.items[k]={...S.items[k],r:0,d:today(),l:S.items[k].l+1,u:Date.now()};save()}}drawTest()}
-function nextQ(){Q.i++;Q.a=null;if(Q.i>=Q.q.length){act();save()}drawTest()}
-function drawTest(){const b=$('tst'),c='bg-slate-900/60 border border-slate-800 rounded-3xl p-6 space-y-4';
- if(!Q){b.innerHTML=`<div class="${c} text-center"><p class="text-sm text-slate-300">${T('tdesc')}</p><p class="font-bold">${esc($('title').textContent)}</p><button onclick="startTest()" class="bg-brand-500 text-slate-950 font-bold px-6 py-3 rounded-xl">${T('tstart')}</button></div>`;return}
- if(Q.i>=Q.q.length){const n=Q.q.length;b.innerHTML=`<div class="${c} text-center"><p class="text-5xl font-extrabold text-brand-400">${Q.sc}/${n}</p><p class="text-slate-300">${T('tscore')} — ${Q.sc>=n*.8?T('tgood'):T('tkeep')}</p><button onclick="startTest()" class="bg-brand-500 text-slate-950 font-bold px-6 py-3 rounded-xl">${T('tagain')}</button></div>`;return}
- const q=Q.q[Q.i],done=Q.a!==null;
- b.innerHTML=`<div class="${c}"><div class="flex justify-between text-xs text-slate-400"><b class="text-amber-400">${q.i+1}</b><span>${Q.i+1}/${Q.q.length}</span></div>
- <p class="ar text-3xl text-right">${V[q.i].t}</p><p class="text-xs text-slate-400">${T('tq')}</p>
- ${q.o.map(x=>`<button onclick="ans(${x})" class="w-full ar text-2xl text-right p-3 rounded-xl border ${done?(x==q.ok?'border-brand-500 bg-brand-500/20':x==Q.a?'border-red-500 bg-red-500/20':'border-slate-800'):'border-slate-700 hover:bg-slate-800'}">${V[x].t}</button>`).join('')}
- ${done?`<button onclick="nextQ()" class="w-full bg-brand-500 text-slate-950 font-bold py-3 rounded-xl">${T('tnext')}</button>`:''}</div>`}
-const setQari=v=>{qari=v;localStorage.ml_qari=v;loadSurah()};
-
-/* ===== 7c. RENCANA: perencana, pemandu & evaluator ===== */
-let LST=[],editing=false;
-const nm=s=>(LST.find(x=>x.number==s)||{}).englishName||'Surah '+s,lab=u=>nm(u.s)+' '+u.a;
-const LV={1:1.6,2:1,3:.75},DN=d=>new Date(d*DAY).toLocaleDateString('id',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});
-let W=null;
-const nAy=x=>(LST.find(y=>y.number==x)||{}).numberOfAyahs||1,rng=P=>`${nm(P.f)} ${P.fa||1} – ${nm(P.t)} ${P.ta||nAy(P.t)}`;
-const units=P=>{const r=[],o=[];for(let x=P.f;x<=P.t;x++)r.push(x);if(P.o=='b')r.reverse();
- r.forEach(x=>{const n=nAy(x),a0=x==P.f?(P.fa||1):1,a1=x==P.t?Math.min(n,P.ta||n):n;for(let a=a0;a<=a1;a++)o.push({s:x,a})});return o};
-const scope=P=>Object.values(S.items).filter(i=>!i.x&&(i.s>P.f||i.s==P.f&&i.a>=(P.fa||1))&&(i.s<P.t||i.s==P.t&&i.a<=(P.ta||9999)));
-function calc(P,done){const U=units(P),total=U.length,rem=Math.max(0,total-done),act=Math.floor(Math.max(0,P.dl-today())*(7-P.off)/7),
- m=Math.min(act,Math.max(5,Math.round(act*.15))),z=Math.max(1,act-m),mpa=3.5*LV[P.lv]*(P.gu?.9:1)*(P.ti?1:1.15),
- mx=Math.max(1,Math.min(30,Math.floor(P.mins*.6/mpa))),pd=Math.max(1,Math.ceil(rem/z)),
- need=Math.min(480,Math.ceil(pd*mpa/.6)),fin=today()+Math.ceil((Math.ceil(rem/mx)+m)*7/(7-P.off));
- return{U,total,rem,act,m,z,mpa,mx,pd,ok:pd<=mx,need,fin}}
-const SC='w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-100',
- fl=(l,h)=>`<label class="block text-xs text-slate-400 space-y-1"><span>${l}</span>${h}</label>`,
- sl=(id,o,v)=>`<select id="${id}" class="${SC}">${o.map(([k,t])=>`<option value="${k}"${k==v?' selected':''}>${t}</option>`).join('')}</select>`,
- ck=(id,t,v)=>`<label class="flex items-center gap-2 text-sm text-slate-300"><input type="checkbox" id="${id}"${v?' checked':''} class="w-4 h-4"> ${t}</label>`,
- card='bg-slate-900/60 border border-slate-800 rounded-3xl p-5 space-y-3',
- bar=(l,n,tot,c)=>`<div><div class="flex justify-between text-xs text-slate-400"><span>${l}</span><span>${n}/${tot}</span></div><div class="h-2 bg-slate-800 rounded-full overflow-hidden"><div class="h-full ${c}" style="width:${tot?Math.min(100,n/tot*100):0}%"></div></div></div>`;
-const wsel=(k,o,v)=>`<select onchange="wset('${k}',this.value)" class="${SC}">${o.map(([a,b])=>`<option value="${a}"${a==v?' selected':''}>${b}</option>`).join('')}</select>`,
- wck=(k,t,v)=>`<label class="flex items-center gap-2 text-sm text-slate-300"><input type="checkbox"${v?' checked':''} onchange="wset('${k}',this.checked?1:0)" class="w-4 h-4"> ${t}</label>`,
- wnum=(k,v,mx)=>`<input type="number" min="1" max="${mx}" value="${v}" onchange="wset('${k}',this.value)" class="${SC}">`,
- chip=(f,t)=>`<button onclick="${f}" class="bg-slate-800 px-3 py-1.5 rounded-lg text-xs font-bold">${t}</button>`,wr=()=>{$('gur').innerHTML=wiz()},
- okTgt=P=>P.f<P.t||(P.f==P.t&&P.fa<=P.ta);
-function wInit(){const P=S.plan||{},big=LST.length>100,f=big?78:(LST[0]||{number:1}).number,t=big?114:(LST[LST.length-1]||{number:1}).number;
- W={st:1,P:{f,fa:1,t,ta:nAy(t),o:'b',dl:today()+90,mins:30,lv:2,off:1,tm:'s',gu:0,te:0,ti:1,...P}};W.P.fa=W.P.fa||1;W.P.ta=W.P.ta||nAy(W.P.t)}
-function wset(k,v){const P=W.P;if(['f','t','fa','ta','dl','mins','lv','off'].includes(k)){v=+v;if(k=='dl'&&!(v>0))return}P[k]=v;
- if(k=='f')P.fa=1;if(k=='t')P.ta=nAy(P.t);if(k=='fa')P.fa=Math.max(1,Math.min(nAy(P.f),v||1));if(k=='ta')P.ta=Math.max(1,Math.min(nAy(P.t),v||1));wr()}
-function wpre(f,t){const P=W.P;P.f=f;P.fa=1;P.t=t;P.ta=nAy(t);wr()}
-function wgo(d){const P=W.P;if(d>0){if(W.st==1&&!okTgt(P))return toast('Titik akhir harus setelah titik mulai');if(W.st==2&&!(P.dl>today()))return toast('Pilih tanggal deadline setelah hari ini')}W.st=Math.max(1,Math.min(4,W.st+d));wr()}
-function wiz(){if(!W)wInit();const P=W.P,st=W.st,TT=['Target','Waktu','Kondisimu','Ringkasan'],so=LST.map(x=>[x.number,x.number+'. '+x.englishName]);let b='';
- if(st==1){const tot=units(P).length;b=`<p class="text-sm font-semibold">Apa yang ingin kamu hafal?</p><div class="flex flex-wrap items-center gap-2">${[['Juz 30',78,114],['Juz 29',67,77],['Juz 28',58,66]].map(x=>chip(`wpre(${x[1]},${x[2]})`,x[0])).join('')}<span class="text-xs text-slate-500">atau tentukan sendiri:</span></div>
- <div class="grid grid-cols-3 gap-3 items-end"><div class="col-span-2">${fl('Mulai dari surah',wsel('f',so,P.f))}</div>${fl('Ayat ke-',wnum('fa',P.fa,nAy(P.f)))}</div>
- <div class="grid grid-cols-3 gap-3 items-end"><div class="col-span-2">${fl('Sampai surah',wsel('t',so,P.t))}</div>${fl('Ayat ke-',wnum('ta',P.ta,nAy(P.t)))}</div>
- ${fl('Urutan menghafal',wsel('o',[['b','Mundur — dari surah akhir ke awal (mudah untuk pemula)'],['f','Maju — sesuai urutan mushaf']],P.o))}
- <p class="text-sm ${okTgt(P)?'text-emerald-300':'text-red-400'}">${okTgt(P)?`🎯 ${rng(P)} · ${tot} ayat`:'Titik akhir harus berada setelah titik mulai'}</p>`}
- else if(st==2)b=`<p class="text-sm font-semibold">Kapan targetnya harus selesai, dan berapa waktumu?</p>
- ${fl('Batas waktu (deadline)',`<input type="date" value="${new Date(P.dl*DAY).toISOString().slice(0,10)}" onchange="wset('dl',Math.floor(Date.parse(this.value)/864e5))" class="${SC}">`)}
- <div class="flex flex-wrap gap-2">${[[30,'1 bulan'],[90,'3 bulan'],[180,'6 bulan'],[365,'1 tahun']].map(x=>chip(`wset('dl',${today()+x[0]})`,x[1])).join('')}<span class="text-xs text-slate-400 self-center">${DN(P.dl)} · ${P.dl-today()} hari lagi</span></div>
- ${fl('Waktu yang bisa kamu sediakan setiap hari',wsel('mins',[15,30,45,60,90,120,180,240,300,480].map(x=>[x,x+' menit']),P.mins))}
- ${fl('Hari libur per pekan',wsel('off',[[0,'Tidak libur (setiap hari)'],[1,'1 hari per pekan'],[2,'2 hari per pekan']],P.off))}
- <p class="text-xs text-slate-500">Pilih waktu yang benar-benar bisa dijaga. Lebih baik sedikit tapi rutin.</p>`;
- else if(st==3)b=`<p class="text-sm font-semibold">Ceritakan kondisimu agar rencananya pas.</p>
- ${fl('Kemampuan saat ini',wsel('lv',[[1,'Belum lancar membaca Al-Qur\'an'],[2,'Lancar membaca, belum punya hafalan'],[3,'Sudah berpengalaman menghafal']],P.lv))}
- ${fl('Waktu terbaik untuk menghafal',wsel('tm',[['s','Setelah Subuh'],['p','Pagi / siang'],['m','Malam hari']],P.tm))}
- <div class="space-y-2">${wck('gu','Punya ustaz/ustazah untuk setoran rutin',P.gu)}${wck('te','Punya teman hafalan / komunitas',P.te)}${wck('ti','Tidur cukup (7 jam atau lebih)',P.ti)}</div>`;
- else{const d=scope(P).length,c=calc(P,d);b=`<p class="text-sm font-semibold">Periksa ringkasan rencanamu</p>
- <div class="grid grid-cols-2 gap-3 text-center">${[['Total target',c.total+' ayat'],['Sudah hafal',d+' ayat'],['Hari aktif tersisa',c.act+' hari'],['Target harian',c.pd+' ayat/hari']].map(x=>`<div class="bg-slate-950 border border-slate-800 rounded-2xl p-3"><div class="text-[11px] text-slate-400">${x[0]}</div><div class="font-extrabold text-lg">${x[1]}</div></div>`).join('')}</div>
- <p class="text-sm">🎯 ${rng(P)}</p><p class="text-xs text-slate-400">±${c.m} hari terakhir dipakai khusus untuk memantapkan hafalan (fase Mutqin), tanpa ayat baru.</p>
- ${c.ok?`<p class="text-sm text-emerald-300">✅ Realistis: ${c.pd} ayat/hari masih dalam kapasitasmu (±${c.mx} ayat/hari).</p>`:`<div class="space-y-2"><p class="text-sm text-amber-300">⚠️ Butuh ${c.pd} ayat/hari, sedangkan kapasitasmu ±${c.mx}. Pilih penyesuaian:</p><div class="flex flex-wrap gap-2">${chip(`wset('dl',${c.fin})`,'📅 Perpanjang deadline ke '+DN(c.fin))}${chip(`wset('mins',${Math.min(480,Math.ceil(c.need/15)*15)})`,'⏱ Naikkan jadi '+Math.min(480,Math.ceil(c.need/15)*15)+' mnt/hari')}</div></div>`}`}
- return`<div class="${card}"><div class="flex justify-between items-center"><h3 class="font-bold text-lg">Susun Rencana Hafalan</h3>${S.plan?'<button onclick="edit(0)" class="text-xs bg-slate-800 px-3 py-1.5 rounded-lg">Batal</button>':''}</div>
- <p class="text-xs text-slate-400">Isi 4 langkah singkat (±1 menit). Aplikasi menghitung sisanya untukmu.</p>
- <div class="flex gap-1">${TT.map((x,i)=>`<span class="flex-1 text-center text-[11px] py-1.5 rounded-lg ${i+1==st?'on font-bold':i+1<st?'bg-slate-700 text-slate-300':'bg-slate-800 text-slate-500'}">${i+1}. ${x}</span>`).join('')}</div>
- <div class="space-y-4 pt-1">${b}</div>
- <div class="flex gap-2 pt-1">${st>1?'<button onclick="wgo(-1)" class="px-5 bg-slate-800 rounded-xl text-sm py-3">◀ Kembali</button>':''}${st<4?'<button onclick="wgo(1)" class="flex-1 bg-brand-500 text-slate-950 font-bold py-3 rounded-xl">Lanjut ▶</button>':'<button onclick="savePlan()" class="flex-1 bg-brand-500 text-slate-950 font-bold py-3 rounded-xl">✅ Mulai Rencana</button>'}</div></div>`}
-function savePlan(){const P={...W.P};if(!(P.dl>today()))return toast('Cek tanggal deadline');const d=scope(P).length,c=calc(P,d);P.st=today();P.base=d;P.pd=c.ok?c.pd:c.mx;S.plan=P;editing=false;W=null;save();drawGuru()}
-function replan(){const P=S.plan,d=scope(P).length,c=calc(P,d);P.st=today();P.base=d;P.pd=c.ok?c.pd:c.mx;save();drawGuru();toast('✓')}
-function opt(k){const P=S.plan,c=calc(P,scope(P).length);if(k=='d')P.dl=c.fin;else P.mins=c.need;replan()}
-const edit=v=>{editing=!!v;if(v)W=null;drawGuru()},goLearn=(s,a)=>{$('sel').value=s;tab('L');loadSurah().then(()=>document.querySelectorAll('#list>div')[a-1]?.scrollIntoView({block:'center'}))};
-function chk(i){const t=today();S.cl=S.cl||{};const a=S.cl[t]||[];a[i]=!a[i];S.cl[t]=a;save();drawGuru();if([0,1,2,3].every(x=>a[x]))toast('🎉 MasyaAllah! Semua tugas hari ini selesai')}
-function drawGuru(){const b=$('gur'),P=S.plan;$('sx').classList.toggle('hidden',!(P&&!editing));if(!P||editing){b.innerHTML=wiz();return}
- const t=today(),sc=scope(P),done=sc.length,c=calc(P,done),el=Math.floor(Math.max(0,t-P.st)*(7-P.off)/7),exp=Math.min(c.total,P.base+el*P.pd),
- due=Object.values(S.items).filter(i=>!i.x&&i.d<=t).length,mt=sc.filter(i=>i.i>=7).length,UL=c.U.filter(u=>!live(u.s+':'+u.a)),td=UL.slice(0,P.pd),
- gap=exp-done,st=gap<=0?0:gap/Math.max(1,exp)<=.2?1:2,l7=[0,1,2,3,4,5,6].filter(o=>S.log[t-o]).length,Z=Math.round(P.mins*.6),R=P.mins-Z,cl=(S.cl||{})[t]||[],
- tm={s:'Setelah Subuh',p:'Pagi/siang',m:'Malam'}[P.tm],w=Math.max(1,P.pd*(7-P.off)),D=[];
- if(st){if(l7<7-P.off-1)D.push(`Konsistensi turun (${l7} dari ${7-P.off} hari aktif pekan ini). Psikologi kebiasaan: tetapkan "kapan-di mana-apa" (implementation intention), tempel pada rutinitas tetap seperti ${tm.toLowerCase()}, dan pakai aturan 5 menit minimal agar rantai tidak putus.`);
-  if(due>10&&due>done*.2)D.push(`Murojaah menumpuk (${due} ayat). Hentikan ziyadah baru sampai antrean < 10: ingatan yang tidak diulang meluruh menurut kurva lupa.`);
-  if(P.pd>=c.mx*.9)D.push(`Beban ziyadah (${P.pd} ayat/hari) mendekati batas kapasitasmu (${c.mx}). Beban kognitif berlebih memicu lupa dan jenuh.`);
-  if(done>10&&mt/done<.4)D.push(`Baru ${Math.round(mt/done*100)}% ayat yang stabil (interval ≥7 hari). Perbanyak tes tanpa melihat (retrieval practice) dan jaga tidur ≥7 jam: memori mengendap saat tidur.`);
-  if(!P.te)D.push('Cari teman setoran: akuntabilitas sosial menaikkan konsistensi.');if(!P.gu)D.push('Setorkan hafalan ke ustaz/ustazah agar tajwid & makhraj terkoreksi — kesalahan hafalan sulit diperbaiki belakangan.')}
- const it=[`${tm}: niat ikhlas, wudhu, doa memohon kemudahan; baca target hari ini 3× dari mushaf yang sama (talqin) — ±${Math.round(Z*.25)} mnt`,
-  td.length?`Ziyadah ${td.length} ayat (${lab(td[0])} → ${lab(td[td.length-1])}): pahami artinya, dengar, tikrar ${P.lv==1?10:20}×, lalu Mode Blur — ±${Math.round(Z*.75)} mnt`:`Fase Mutqin: sambung antar-ayat & antar-surah tanpa melihat, lalu kerjakan Tes — ±${Z} mnt`,
-  `Murojaah antrean SRS: ${due} ayat — ±${R} mnt`,'🌙 Sebelum tidur: ulang ayat baru 3× tanpa melihat'],wk=[];
- for(let k=0;k<6&&k*w<UL.length;k++)wk.push(`Pekan ${k+1}: ${lab(UL[k*w])} → ${lab(UL[Math.min((k+1)*w,UL.length)-1])}`);
- b.innerHTML=`<div class="space-y-4">${hi()}
- <div class="${card}"><div class="flex justify-between items-center"><h3 class="font-bold text-lg">${done>=c.total&&c.total?'🏆 Semua ayat sudah masuk — fokus Mutqin':['✅ Sesuai rencana','🟡 Sedikit tertinggal','🔴 Tertinggal'][st]}</h3><button onclick="edit(1)" class="text-xs bg-slate-800 px-3 py-1.5 rounded-lg">Ubah rencana</button></div>
-  ${bar('Hafalan',done,c.total,'bg-brand-500')}${bar('Seharusnya hari ini',exp,c.total,'bg-amber-500')}${bar('Mutqin (interval ≥7 hari)',mt,c.total,'bg-emerald-300')}
-  <p class="text-sm">🎯 <b>${rng(P)}</b> · ${c.total} ayat · deadline ${DN(P.dl)}</p><details class="text-xs text-slate-400 leading-relaxed"><summary class="cursor-pointer mb-1">📐 Lihat perhitungan</summary>${c.total} ayat − ${done} hafal = ${c.rem} sisa · ${c.act} hari aktif sampai ${DN(P.dl)} → ${c.z} hari ziyadah + ${c.m} hari Mutqin · ${c.mpa.toFixed(1)} mnt/ayat · kapasitas ${c.mx} ayat/hari (60% waktu ziyadah, 40% murojaah) → <b class="text-white">target ${P.pd} ayat/hari</b></details></div>
- ${!c.ok?`<div class="${card} border-amber-500/40"><p class="text-sm text-amber-300">⚠️ Butuh ${c.pd} ayat/hari, kapasitasmu ±${c.mx}. Rencana ini belum realistis. Pilih salah satu:</p><div class="flex flex-wrap gap-2"><button onclick="opt('d')" class="bg-slate-800 px-3 py-2 rounded-xl text-xs font-bold">📅 Perpanjang deadline ke ${DN(c.fin)}</button><button onclick="opt('m')" class="bg-slate-800 px-3 py-2 rounded-xl text-xs font-bold">⏱ Naikkan jadi ${c.need} mnt/hari</button></div><p class="text-xs text-slate-400">Atau kecilkan cakupan surah lewat "Ubah rencana".</p></div>`:''}
- <div class="${card}"><h3 class="font-bold">📋 Panduan Hari Ini</h3>${it.map((x,i)=>`<button onclick="chk(${i})" class="w-full text-left flex gap-3 items-start text-sm ${cl[i]?'text-slate-500 line-through':'text-slate-200'}"><span>${cl[i]?'☑':'☐'}</span><span>${x}</span></button>`).join('')}
-  <div class="flex gap-2 pt-1">${td.length?`<button onclick="goLearn(${td[0].s},${td[0].a})" class="flex-1 bg-brand-500 text-slate-950 font-bold py-2.5 rounded-xl text-sm">Mulai Ziyadah</button>`:''}<button onclick="tab('M')" class="flex-1 bg-slate-800 font-bold py-2.5 rounded-xl text-sm">Murojaah (${due})</button></div></div>
- ${st?`<div class="${card}"><h3 class="font-bold">🔎 Evaluasi: terlambat ${gap} ayat</h3>${D.map(x=>`<p class="text-sm text-slate-300">• ${x}</p>`).join('')}<button onclick="replan()" class="bg-amber-500 text-slate-950 font-bold px-4 py-2.5 rounded-xl text-sm">🔄 Susun ulang dari hari ini</button></div>`:''}
- ${mCard()}
- <div class="${card}"><h3 class="font-bold">🗺️ Peta Jalan</h3>${wk.map(x=>`<p class="text-sm text-slate-300">${x}</p>`).join('')}${UL.length>6*w?`<p class="text-xs text-slate-500">… ±${Math.ceil(UL.length/w)} pekan ziyadah</p>`:''}
-  <p class="text-sm text-emerald-300">🏁 Fase Mutqin (±${c.m} hari terakhir): tanpa ayat baru — sambung surah, tes, dan murojaah. Mutqin = semua ayat interval ≥7 hari dan skor tes ≥90%.</p></div>
- <details class="${card}"><summary class="font-bold cursor-pointer">🧠 Ilmu di balik rencana ini</summary><ul class="text-sm text-slate-300 space-y-2 list-disc ps-5 mt-2"><li><b>Syar'i:</b> niat ikhlas, wudhu, doa, satu mushaf tetap, tajwid benar, setoran ke ustaz/ustazah.</li><li><b>Kognitif:</b> spaced repetition, retrieval practice, chunking per ayat, memahami arti, tidur untuk konsolidasi.</li><li><b>Psikologi:</b> target kecil harian, implementation intention, streak, akuntabilitas teman.</li><li><b>Teknologi:</b> jadwal SRS, audio berulang, pengukuran kemajuan, penyusunan ulang rencana otomatis.</li></ul></details></div>`}
-
-/* ===== 7d. ZIYADAH & MUROJAAH TERPANDU, MOTIVASI, JAM ===== */
-let zs=-1,zStart=0,zEnd=-1,zMin=20,mi=today();
-const ZS=[['Talqin','Dengarkan ayat target 3× sambil melihat mushaf yang sama, ikuti dengan suara pelan.','▶ Putar 3×'],['Pahami','Baca terjemah & tangkap kata kunci — makna menjadi jangkar ingatan.','📖 Tampilkan terjemah'],['Tikrar','Ulangi tiap ayat 20× lewat audio sampai lancar tanpa melihat. Kualitas lebih penting dari kecepatan.','🔁 Putar 20×'],['Uji','Aktifkan Blur dan lantunkan dari ingatan. Ketuk ayat untuk mengecek yang salah, lalu ulangi bagian itu.','🙈 Aktifkan Blur'],['Sambung','Lantunkan ayat sebelumnya + ayat target berurutan tanpa melihat. Jika lancar, tandai hafal — murojaah pertama besok.','✅ Tandai Hafal']];
-function zTarget(){const P=S.plan;if(P){const c=calc(P,scope(P).length),td=c.U.filter(u=>!live(u.s+':'+u.a)).slice(0,P.pd).filter(u=>u.s==CN);if(td.length)return td.map(u=>u.a-1)}
- return V.map((v,i)=>i).filter(i=>!live(CN+':'+V[i].n)).slice(0,5)}
-function zGuide(){const g=$('zg');if(!V.length){g.innerHTML='';return}
- const tg=zTarget(),P=S.plan;zMin=P?Math.round(P.mins*.6):20;let go='';
- if(P){const td=calc(P,scope(P).length).U.filter(u=>!live(u.s+':'+u.a)).slice(0,P.pd);if(td.length&&td[0].s!=CN)go=`<button onclick="goLearn(${td[0].s},${td[0].a})" class="text-xs bg-amber-500 text-slate-950 font-bold px-3 py-2 rounded-xl">🎯 Ke target hari ini: ${lab(td[0])}</button>`}
- g.innerHTML=`<div class="${card}"><div class="flex justify-between items-center gap-2"><h3 class="font-bold">🎓 Sesi Ziyadah <span id="zt" class="text-xs font-normal text-slate-400 ms-2"></span></h3>${go}</div>
- ${tg.length?`<p class="text-xs text-slate-400">Target sesi: ayat <b class="text-brand-400">${tg[0]+1}–${tg[tg.length-1]+1}</b> (${tg.length} ayat), kartu bertanda 🎯</p>
- <div class="flex gap-1">${ZS.map((x,i)=>`<span class="flex-1 text-center text-[11px] py-1.5 rounded-lg ${i==zs?'on font-bold':i<zs?'bg-slate-700 text-slate-300':'bg-slate-800 text-slate-500'}">${i+1}. ${x[0]}</span>`).join('')}</div>
- ${zs<0?'<button onclick="zStep(1)" class="w-full bg-brand-500 text-slate-950 font-bold py-3 rounded-xl">▶ Mulai Sesi Ziyadah</button>':`<p class="text-sm text-slate-200">${ZS[zs][1]}</p><div class="flex gap-2"><button onclick="zStep(-1)" class="px-4 bg-slate-800 rounded-xl text-sm">◀</button><button onclick="zAct()" class="flex-1 bg-brand-500 text-slate-950 font-bold py-2.5 rounded-xl text-sm">${ZS[zs][2]}</button><button onclick="zStep(1)" class="px-4 bg-slate-800 rounded-xl text-sm">▶</button></div>`}`:'<p class="text-sm text-emerald-300">Surah ini sudah masuk SRS semua ✓ Pilih surah lain atau fokus murojaah.</p>'}</div>`}
-function zStep(d){zs=Math.max(0,Math.min(4,zs+d));if(!zStart)zStart=Date.now();zGuide()}
-function playAll(){zEnd=-1;play(0,true)}
-function zAct(){const tg=zTarget();if(!tg.length)return;zEnd=tg[tg.length-1];
- if(zs==0){$('loops').value=3;play(tg[0],true)}
- else if(zs==1){if(focus)focusMode();toast('Baca terjemah, lalu lanjut ▶')}
- else if(zs==2){$('loops').value=20;play(tg[0],true)}
- else if(zs==3){if(!focus)focusMode()}
- else{tg.forEach(i=>{const k=CN+':'+V[i].n;if(!live(k))S.items[k]={s:CN,a:V[i].n,r:0,i:1,e:2.3,d:today()+1,l:0,u:Date.now()}});act();save();zs=-1;zStart=0;zEnd=-1;draw();toast(T('toastH'));return}
- zGuide()}
-function mGuide(){const t=today(),due=Object.values(S.items).filter(i=>!i.x&&i.d<=t).length,dn=(S.md||{})[t]||0;
- $('mg').innerHTML=`<div class="${card}"><div class="flex justify-between items-center"><h3 class="font-bold">🔁 Sesi Murojaah</h3><span class="text-xs text-slate-400">sisa ${due} ayat · ±${Math.ceil(due*.4)} mnt</span></div>${bar('Selesai hari ini',dn,due+dn,'bg-brand-500')}
- <ol class="list-decimal ps-5 space-y-1 text-sm text-slate-300"><li><b>Murojaah dulu</b>, baru ziyadah: otak segar dan antrean tidak menumpuk.</li><li><b>Lantunkan dulu</b> lanjutan ayat dari ingatan dengan suara, baru ketuk "Tampilkan".</li><li><b>Nilai jujur:</b> 🟢 hanya jika lancar tanpa ragu, 🟡 jika sempat tersendat, 🔴 jika lupa — baca ayatnya, ulang 3×, lalu nilai.</li><li>Antrean di atas 20? Cicil ±20 ayat per sesi dan tunda ziyadah.</li></ol></div>`}
-const MO=[["Dan sungguh, telah Kami mudahkan Al-Qur'an untuk peringatan, maka adakah orang yang mau mengambil pelajaran?","QS. Al-Qamar: 17"],["Maka sesungguhnya bersama kesulitan ada kemudahan.","QS. Al-Insyirah: 5"],["Sebaik-baik kalian adalah yang belajar Al-Qur'an dan mengajarkannya.","HR. Bukhari (makna)"],["Amal yang paling dicintai Allah adalah yang paling konsisten, meski sedikit.","HR. Bukhari & Muslim (makna)"],["Hafalan bukan soal bakat, tapi soal hadir setiap hari. Satu ayat yang diulang lebih berharga dari sepuluh ayat yang dilupakan.","Prinsip konsistensi"],["Lupa itu normal: otak membuang yang tak diulang. Murojaah adalah cara memberi tahu otak bahwa ini penting.","Sains memori"],["Rantai harianmu adalah investasi. Jangan putus dua hari berturut-turut.","Psikologi kebiasaan"],["Setiap ayat yang kamu hafal adalah tabungan yang tidak bisa dicuri.","Penyemangat"]];
-const TP=["Pakai satu mushaf yang sama: letak ayat di halaman membantu memori visual.","Hafalan baru paling kuat setelah Subuh dan diulang sebelum tidur — tidur mengunci memori.","Murojaah dulu, ziyadah kemudian. Jangan tambah hafalan saat antrean menumpuk.","Baca artinya satu kali saja — makna menjadi jangkar ingatan.","Hafalkan per ayat, lalu sambungkan dengan ayat sebelumnya.","Menguji diri tanpa melihat jauh lebih efektif daripada membaca ulang berkali-kali.","Beri tahu satu teman target pekananmu: akuntabilitas menaikkan konsistensi.","Saat jenuh, kecilkan target hari itu (aturan 5 menit), tapi jangan nol.","Istirahat 5 menit setiap 25 menit menghafal (Pomodoro) agar fokus terjaga."];
-const mCard=()=>{const m=MO[mi%MO.length],t=TP[(mi*2+1)%TP.length];return`<div class="rounded-3xl p-5 space-y-3 bg-gradient-to-br from-emerald-900/60 to-slate-900 border border-emerald-700/40"><div class="flex justify-between items-start gap-3"><p class="text-base font-semibold leading-relaxed">“${m[0]}”</p><button onclick="mnext()" class="text-xs bg-slate-800 px-2.5 py-1.5 rounded-lg shrink-0">↻</button></div><p class="text-xs text-emerald-300">— ${m[1]}</p><p class="text-sm text-slate-300 border-t border-slate-700/60 pt-3">💡 <b>Tips:</b> ${t}</p></div>`};
-const mnext=()=>{mi++;drawGuru()};
-const hi=()=>{const h=new Date().getHours(),g=h<4?'Selamat malam':h<11?'Selamat pagi':h<15?'Selamat siang':h<18?'Selamat sore':'Selamat malam';return`<div class="px-1"><p class="text-sm text-slate-400">${g} 👋 · 🔥 ${streak()} hari</p><h2 class="text-2xl font-extrabold tracking-tight">Mari istiqamah hari ini</h2></div>`};
-function theme(f){const h=document.documentElement;let n=h.dataset.theme;if(!f)n=n=='dark'?'light':'dark';h.dataset.theme=n;localStorage.ml_theme=n;$('thm').textContent=n=='dark'?'☀️':'🌙';document.querySelector('meta[name=theme-color]').content=n=='dark'?'#022c22':'#FAF6EC'}
-const pad=n=>String(n).padStart(2,'0');let hj='',hjd=-1;
-function tick(){const n=new Date(),d=today();$('clk').textContent=n.toLocaleTimeString('en-GB');
- if(hjd!=d||!hj){hjd=d;try{hj=n.toLocaleDateString('id-u-ca-islamic-umalqura',{day:'numeric',month:'long',year:'numeric'})}catch{hj=''}}
- $('hij').textContent=n.toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short'})+' · '+hj;
- const P=S.plan,c=$('cdn');
- if(P){const ms=(P.dl+1)*DAY+n.getTimezoneOffset()*6e4-n.getTime();
-  if(ms<=0)c.textContent='⏰ Deadline terlewat';else{const dd=Math.floor(ms/DAY),r=ms%DAY;c.textContent=`🎯 ${dd} hari ${pad(Math.floor(r/36e5))}:${pad(Math.floor(r/6e4)%60)}:${pad(Math.floor(r/1e3)%60)}`;c.className='text-right font-semibold tabular-nums '+(dd<7?'text-red-400':'text-amber-300')}}else c.textContent='';
- const z=$('zt');if(z&&zStart){const q=Math.floor((Date.now()-zStart)/1e3);z.textContent=`⏱ ${pad(Math.floor(q/60))}:${pad(q%60)} / ${zMin} mnt`}}
-
-/* ===== 8. UTIL ===== */
-function toast(m){const t=$('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.add('hidden'),2600)}
-function tab(x){['G','L','M','T'].forEach(k=>{$('p'+k).classList.toggle('hidden',k!=x);$('tab'+k).className='flex-1 sm:max-w-[190px] py-3 rounded-xl text-xs sm:text-sm font-bold '+(k==x?'on':'text-slate-400')});if(x=='M')drawMur();if(x=='T')drawTest();if(x=='G')drawGuru()}
-function setLang(l){lang=l;localStorage.ml_lang=l;$('lang').value=l;$('H').lang=l;$('H').dir=I[l].dir;
- document.querySelectorAll('[data-i]').forEach(e=>e.textContent=T(e.dataset.i));ui();if(V.length&&!$('pL').classList.contains('hidden'))draw();if(!$('pM').classList.contains('hidden'))drawMur();if(!$('pT').classList.contains('hidden'))drawTest()}
-Object.assign(window,{theme,wset,wpre,wgo,zStep,zAct,mnext,playAll,edit,savePlan,opt,replan,chk,goLearn,setQari,setGoal,startTest,ans,nextQ,drawTest,play,once,mark,rate,focusMode,loadSurah,tab,setLang});
-
-(async()=>{theme(1);setLang(lang);tab('G');stats();tick();setInterval(tick,1000);
- let list=[];try{list=await api('surah')}catch{}
- if(!list.length)list=[{number:1,englishName:'Al-Faatiha',name:'الفاتحة'},{number:67,englishName:'Al-Mulk',name:'الملك'},{number:78,englishName:"An-Naba'",name:'النبأ'},{number:112,englishName:'Al-Ikhlaas',name:'الإخلاص'}];
- LST=list;$('sel').innerHTML=list.map(s=>`<option value="${s.number}">${s.number}. ${s.englishName} (${s.name})</option>`).join('');
- $('sel').value=localStorage.ml_surah||(list.some(s=>s.number==67)?67:list[0].number);
- $('qari').value=qari;if('serviceWorker' in navigator){const had=!!navigator.serviceWorker.controller;navigator.serviceWorker.register('sw.js').catch(()=>{});navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!window._rl){window._rl=1;location.reload()}})}
- loadSurah();initFB();drawGuru()})();
-</script>
+  <script src="app.js" defer></script>
+  <script src="tahfidz.js" defer></script>
 </body>
 </html>

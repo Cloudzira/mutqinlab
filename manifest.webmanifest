@@ -1,1 +1,18 @@
-{"name":"MutqinLab — Hafalan & Murojaah Al-Qur'an","short_name":"MutqinLab","start_url":"./","scope":"./","display":"standalone","background_color":"#020617","theme_color":"#022c22","lang":"id","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
+{
+  "name": "Mushaf Tahfidz Pro",
+  "short_name": "Mushaf",
+  "description": "Mushaf Madinah 604 halaman untuk menghafal Al-Qur'an: mode tutup ayat, audio per ayat dengan pengulangan, penanda, pelacak hafalan, serta program tahfidz terpandu (rencana, ziyadah, murojaah, tes).",
+  "lang": "id",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b1210",
+  "theme_color": "#0b1210",
+  "categories": ["education", "books"],
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

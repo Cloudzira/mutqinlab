@@ -1,0 +1,164 @@
+/* ============================================================
+   Mushaf Tahfidz Pro — tahfidz.css
+   1) Tema "Zamrud & Emas": palet elegan, modern, profesional (menimpa token style.css)
+   2) Komponen program tahfidz: Rencana · Ziyadah · Murojaah · Tes
+   ============================================================ */
+
+:root {
+  --emas: #b8924a;
+  --g1: #0f6b59; --g2: #0a4d41; --aksen: #0f6b59; --on-aksen: #fff;
+  --teks: #1c2724; --teks-lembut: #4a5a55; --redup: rgba(74, 90, 85, .78);
+  --kaca: rgba(255, 255, 255, .94); --kaca-halus: rgba(15, 107, 89, .05);
+  --tepi: rgba(28, 39, 36, .1); --tepi-aksen: rgba(15, 107, 89, .3); --garis-baris: rgba(184, 146, 74, .16);
+  --latar: linear-gradient(160deg, #f4f6f3 0%, #fbfaf6 55%, #f1f4ef 100%); --latar-solid: #f5f6f2;
+  --bayang: 0 12px 32px rgba(18, 40, 34, .09);
+  --grad-judul: linear-gradient(90deg, #0a4d41, #0f6b59, #b8924a);
+  --sorot-putar: rgba(184, 146, 74, .3); --putar-teks: #9a6f1f; --glow-aksen: rgba(15, 107, 89, .28);
+  --banner-grad: linear-gradient(105deg, #0f6b59, #0a4d41); --banner-shadow: 0 4px 16px rgba(15, 107, 89, .22);
+  --toast-bg: #14201c; --toast-fg: #f1f5f2; --toast-action: #e2c27a;
+  --modal-bg: #fff; --sorot-pilih: rgba(15, 107, 89, .14);
+  --ok: #1f8a5f; --bahaya: #c0504d; --opt-bg: #f3f5f1; --opt-fg: #1c2724;
+  --footer-muted: #6b7a75; --footer-heart: #c0657a; --footer-author: #0f6b59; --footer-glow: rgba(15, 107, 89, .18);
+  --splash-grid: rgba(15, 107, 89, .06);
+}
+html[data-theme="dark"] {
+  --emas: #e2c27a;
+  --g1: #17806a; --g2: #0f5a4b; --aksen: #5fc4a6;
+  --teks: #e7efeb; --teks-lembut: #b9cbc3; --redup: rgba(185, 203, 195, .72);
+  --kaca: rgba(17, 26, 23, .95); --kaca-halus: rgba(255, 255, 255, .045);
+  --tepi: rgba(210, 230, 222, .1); --tepi-aksen: rgba(95, 196, 166, .28); --garis-baris: rgba(226, 194, 122, .1);
+  --latar: linear-gradient(160deg, #0f1714 0%, #0b1210 55%, #101a17 100%); --latar-solid: #0b1210;
+  --bayang: 0 12px 32px rgba(0, 0, 0, .4);
+  --grad-judul: linear-gradient(90deg, #bfe9dc, #5fc4a6, #e2c27a);
+  --sorot-putar: rgba(226, 194, 122, .3); --putar-teks: #e2c27a; --glow-aksen: rgba(95, 196, 166, .26);
+  --banner-grad: linear-gradient(105deg, #17806a, #0f5a4b); --banner-shadow: 0 4px 16px rgba(95, 196, 166, .2);
+  --toast-bg: #e8f3ee; --toast-fg: #14201c; --toast-action: #0f6b59;
+  --modal-bg: #141f1b; --sorot-pilih: rgba(95, 196, 166, .18);
+  --ok: #6fd0a4; --bahaya: #e08b88; --opt-bg: #1a2723; --opt-fg: #e7efeb;
+  --footer-muted: #9db0a8; --footer-heart: #e08fa3; --footer-author: #8fd3bc; --footer-glow: rgba(95, 196, 166, .2);
+  --splash-grid: rgba(95, 196, 166, .05);
+}
+
+/* ---------- Navigasi utama ---------- */
+.viewbar {
+  position: relative; z-index: 810; display: flex; gap: 4px;
+  width: min(var(--w), calc(100% - 24px)); margin: 8px auto 0; padding: 4px;
+  background: var(--kaca); border: 1px solid var(--tepi); border-radius: 12px;
+  box-shadow: var(--bayang); backdrop-filter: blur(12px);
+}
+.viewbar button {
+  position: relative; flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 7px 2px 6px; border: 0; border-radius: 9px; background: none; cursor: pointer;
+  color: var(--teks-lembut); font: 600 .66rem var(--f-ui); letter-spacing: .01em;
+  transition: background .2s, color .2s, box-shadow .2s;
+}
+.viewbar button:hover { background: var(--kaca-halus); color: var(--aksen); }
+.viewbar button[aria-current="page"] { background: linear-gradient(135deg, var(--g1), var(--g2)); color: #fff; box-shadow: 0 4px 12px var(--glow-aksen); }
+.viewbar .ik { width: 18px; height: 18px; }
+.viewbar .dot {
+  position: absolute; top: 2px; left: calc(50% + 6px); min-width: 16px; height: 16px; padding: 0 4px;
+  display: grid; place-items: center; border-radius: 8px; background: var(--emas); color: #1c1a14; font-size: .62rem; font-weight: 700;
+}
+body[data-view]:not([data-view="mushaf"]) .toolbar,
+body[data-view]:not([data-view="mushaf"]) .site-footer,
+body[data-view]:not([data-view="mushaf"]) #ayatSheet { display: none; }
+body[data-view]:not([data-view="mushaf"]) #wrap {
+  position: absolute; left: 0; right: 0; height: 0; overflow: hidden; visibility: hidden; pointer-events: none;
+}
+
+/* ---------- Ruang program tahfidz ---------- */
+#tahfidz {
+  width: min(var(--w), calc(100% - 24px)); margin: 12px auto 0;
+  padding-bottom: calc(var(--player-h) + 28px + env(safe-area-inset-bottom));
+}
+#thBody { display: flex; flex-direction: column; gap: 12px; }
+#thBody > * { animation: muncul .3s ease both; }
+.thclock {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 12px;
+  padding: 0 4px 10px; font-size: .74rem; color: var(--redup);
+}
+.thclock b { font-size: 1.15rem; font-weight: 700; color: var(--teks); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+.thclock #thCdn { font-weight: 700; color: var(--putar-teks); font-variant-numeric: tabular-nums; }
+.thclock #thCdn.dekat { color: var(--bahaya); }
+
+.thc {
+  display: flex; flex-direction: column; gap: 12px; padding: 16px 18px;
+  background: var(--kaca); border: 1px solid var(--tepi); border-radius: 14px; box-shadow: var(--bayang);
+}
+.thc.emas { border-color: color-mix(in srgb, var(--emas) 45%, transparent); }
+.thc.moti { background: linear-gradient(135deg, color-mix(in srgb, var(--g1) 14%, var(--kaca)), color-mix(in srgb, var(--emas) 12%, var(--kaca))); }
+.thh { margin: 0; font-size: 1.02rem; font-weight: 700; color: var(--teks); letter-spacing: -.005em; }
+.thh.besar { font-size: 1.45rem; letter-spacing: -.02em; }
+.thhead { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.thp { margin: 0; font-size: .82rem; line-height: 1.6; color: var(--teks-lembut); }
+.thp.kecil { font-size: .72rem; color: var(--redup); }
+.thp.ok { color: var(--ok); font-weight: 600; } .thp.warn { color: var(--putar-teks); font-weight: 600; } .thp.err { color: var(--bahaya); font-weight: 600; }
+.thquote { margin: 0; font-size: 1.02rem; line-height: 1.65; font-weight: 600; color: var(--teks); }
+.thsrc { font-size: .72rem; color: var(--emas); font-weight: 600; letter-spacing: .04em; }
+.thc details > summary { cursor: pointer; font-size: .82rem; font-weight: 600; color: var(--aksen); }
+.thc ul, .thc ol { margin: 8px 0 0; padding-inline-start: 20px; display: flex; flex-direction: column; gap: 6px; font-size: .82rem; line-height: 1.55; color: var(--teks-lembut); }
+
+.thbtn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 42px; padding: 9px 16px;
+  border: 1px solid transparent; border-radius: 10px; cursor: pointer; font: 600 .84rem var(--f-ui);
+  background: linear-gradient(135deg, var(--g1), var(--g2)); color: #fff; box-shadow: 0 3px 10px var(--glow-aksen);
+  transition: transform .12s, box-shadow .2s, filter .2s;
+}
+.thbtn:hover { filter: brightness(1.08); } .thbtn:active { transform: scale(.97); }
+.thbtn.sec { background: var(--kaca-halus); color: var(--teks); border-color: var(--tepi); box-shadow: none; }
+.thbtn.emas { background: linear-gradient(135deg, var(--emas), color-mix(in srgb, var(--emas) 70%, #000)); color: #1c1a14; }
+.thbtn.kecil { min-height: 32px; padding: 5px 11px; font-size: .74rem; }
+.thbtn.penuh { width: 100%; } .thbtn:disabled { opacity: .45; }
+.throw { display: flex; flex-wrap: wrap; gap: 8px; } .throw > .thbtn.lebar { flex: 1; }
+.thchip { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--tepi-aksen); background: none; color: var(--aksen); font: 600 .74rem var(--f-ui); cursor: pointer; }
+.thchip:hover { background: var(--kaca-halus); }
+
+.thsteps { display: flex; gap: 4px; }
+.thsteps span { flex: 1; text-align: center; padding: 6px 2px; border-radius: 8px; font-size: .66rem; font-weight: 600; background: var(--kaca-halus); color: var(--redup); }
+.thsteps span.sel { background: linear-gradient(135deg, var(--g1), var(--g2)); color: #fff; }
+.thsteps span.lalu { background: color-mix(in srgb, var(--g1) 18%, transparent); color: var(--aksen); }
+
+.thbl { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: .74rem; color: var(--redup); }
+.thc .bar i.em { background: linear-gradient(90deg, var(--emas), #e2c27a); }
+.thc .bar i.ok { background: linear-gradient(90deg, #1f8a5f, #6fd0a4); }
+.thgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.thgrid > div { padding: 12px 8px; text-align: center; border: 1px solid var(--tepi); border-radius: 12px; background: var(--kaca-halus); }
+.thgrid small { display: block; font-size: .68rem; color: var(--redup); }
+.thgrid b { font-size: 1.25rem; font-weight: 700; color: var(--teks); }
+.thchart { display: flex; align-items: flex-end; gap: 6px; height: 72px; }
+.thchart > div { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; font-size: .62rem; color: var(--redup); }
+.thchart i { width: 100%; border-radius: 5px 5px 0 0; background: color-mix(in srgb, var(--g1) 30%, transparent); min-height: 3px; }
+.thchart i.hari { background: linear-gradient(180deg, var(--emas), var(--g1)); }
+
+.thf { display: flex; flex-direction: column; gap: 5px; font-size: .74rem; font-weight: 600; color: var(--redup); }
+.thf select, .thf input[type="number"], .thf input[type="date"] {
+  width: 100%; min-height: 44px; padding: 9px 12px; border: 1px solid var(--tepi); border-radius: 10px;
+  background: var(--opt-bg); color: var(--opt-fg); font: 500 .9rem var(--f-ui);
+}
+.thf select:focus, .thf input:focus { outline: 2px solid var(--aksen); outline-offset: 1px; }
+.thg2 { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; align-items: end; }
+.thck { display: flex; align-items: center; gap: 10px; font-size: .86rem; color: var(--teks-lembut); cursor: pointer; }
+.thck input { width: 18px; height: 18px; accent-color: var(--g1); }
+.thform { display: flex; flex-direction: column; gap: 14px; }
+
+.thtask { display: flex; gap: 10px; align-items: flex-start; width: 100%; padding: 10px 12px; text-align: start; border: 1px solid var(--tepi); border-radius: 10px; background: none; color: var(--teks); font: 500 .84rem/1.5 var(--f-ui); cursor: pointer; }
+.thtask.selesai { color: var(--redup); text-decoration: line-through; background: var(--kaca-halus); }
+.thtask i { font-style: normal; font-size: 1.05rem; line-height: 1.3; }
+
+.thayat { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; border: 1px solid var(--tepi); border-radius: 12px; background: var(--kaca-halus); }
+.thayat .no { font-size: .7rem; font-weight: 700; color: var(--aksen); letter-spacing: .06em; }
+.thar { direction: rtl; text-align: right; font-family: "Amiri Quran", "Amiri", "Traditional Arabic", serif; font-size: clamp(1.45rem, 5.2vw, 2rem); line-height: 2.2; color: var(--teks); transition: filter .25s; }
+.thar.blur:not(.show) { filter: blur(9px); cursor: pointer; user-select: none; }
+.tht { margin: 0; font-size: .82rem; line-height: 1.6; color: var(--teks-lembut); }
+.thq { display: block; width: 100%; padding: 10px 14px; border: 1px solid var(--tepi); border-radius: 12px; background: var(--kaca-halus); cursor: pointer; text-align: right; }
+.thq:hover { border-color: var(--aksen); }
+.thq.benar { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 16%, transparent); }
+.thq.salah { border-color: var(--bahaya); background: color-mix(in srgb, var(--bahaya) 14%, transparent); }
+.thrate { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.thrate button { padding: 10px 4px; border-radius: 10px; border: 1px solid var(--tepi); background: var(--kaca-halus); color: var(--teks); font: 600 .78rem var(--f-ui); cursor: pointer; }
+.thrate button small { display: block; font-weight: 500; opacity: .7; }
+.thrate .r0 { color: var(--bahaya); } .thrate .r2 { color: var(--ok); border-color: var(--ok); }
+.skor { font-size: 3rem; font-weight: 700; text-align: center; color: var(--aksen); letter-spacing: -.03em; }
+
+@media (max-width: 420px) { .viewbar button { font-size: .6rem; } .thc { padding: 14px; } }
+@media (prefers-reduced-motion: reduce) { #thBody > * { animation: none; } }
