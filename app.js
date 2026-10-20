@@ -1126,7 +1126,7 @@ function bindPlayerSettings() {
    Tema, pengaturan, wake lock
    ============================================================ */
 const mq = window.matchMedia("(prefers-color-scheme: dark)");
-const THEME_COLOR = { light: "#f5f6f2", dark: "#0b1210", sepia: "#e5dac5" };
+const THEME_COLOR = { light: "#f5f6f2", dark: "#060d0b", sepia: "#e5dac5" };
 function applyTheme() {
   const pref = S.settings.theme;
   const eff2 = pref === "auto" ? (mq.matches ? "dark" : "light") : pref;

@@ -162,3 +162,82 @@ body[data-view]:not([data-view="mushaf"]) #wrap {
 
 @media (max-width: 420px) { .viewbar button { font-size: .6rem; } .thc { padding: 14px; } }
 @media (prefers-reduced-motion: reduce) { #thBody > * { animation: none; } }
+
+/* ============================================================
+   Tema Futuristik "Aurora Zamrud": kaca, cahaya halus, garis emas
+   ============================================================ */
+:root { --f-display: "Sora", "Inter", system-ui, sans-serif; --emas-tepi: rgba(184, 146, 74, .45); }
+html[data-theme="dark"] {
+  --aksen: #4fe3c1; --g1: #119e82; --g2: #0a6657; --putar-teks: #f0d48e; --emas-tepi: rgba(226, 194, 122, .42);
+  --latar-solid: #060d0b; --latar: linear-gradient(165deg, #0a1512 0%, #060d0b 55%, #08130f 100%);
+  --kaca: rgba(10, 20, 17, .86); --modal-bg: #0c1714; --tepi-aksen: rgba(79, 227, 193, .3);
+  --glow-aksen: rgba(79, 227, 193, .34); --sorot-pilih: rgba(79, 227, 193, .2); --splash-grid: rgba(79, 227, 193, .07);
+  --banner-grad: linear-gradient(105deg, #119e82, #0a6657);
+}
+html { background: var(--latar-solid); }
+body { background: none !important; }
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(55% 40% at 12% 0%, color-mix(in srgb, var(--g1) 26%, transparent), transparent 70%),
+    radial-gradient(45% 35% at 95% 12%, color-mix(in srgb, var(--emas) 14%, transparent), transparent 70%),
+    radial-gradient(60% 45% at 50% 105%, color-mix(in srgb, var(--g2) 30%, transparent), transparent 70%), var(--latar);
+}
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .55;
+  background-image: linear-gradient(var(--splash-grid) 1px, transparent 1px), linear-gradient(90deg, var(--splash-grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 0%, #000 0%, transparent 72%); mask-image: radial-gradient(ellipse at 50% 0%, #000 0%, transparent 72%);
+}
+* { scrollbar-width: thin; scrollbar-color: var(--tepi-aksen) transparent; }
+::selection { background: var(--sorot-pilih); }
+
+.topbar {
+  background: linear-gradient(115deg, color-mix(in srgb, var(--g1) 94%, #000), color-mix(in srgb, var(--g2) 96%, #000));
+  border: 1px solid rgba(255, 255, 255, .14);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, .22), inset 0 1px 0 rgba(255, 255, 255, .14);
+}
+.topbar::after { content: ""; position: absolute; left: 12%; right: 12%; top: 0; height: 1px; background: linear-gradient(90deg, transparent, #f5e3b0, transparent); opacity: .85; pointer-events: none; }
+.brand .arab { background: linear-gradient(90deg, #fff, #f6e6b6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.brand small { font-family: var(--f-display); letter-spacing: .22em; }
+
+.thc, .viewbar {
+  border: 1px solid transparent !important; backdrop-filter: blur(14px);
+  background: linear-gradient(var(--kaca), var(--kaca)) padding-box, linear-gradient(140deg, var(--tepi-aksen), transparent 38%, transparent 62%, var(--emas-tepi)) border-box !important;
+}
+.modal-box { border: 1px solid transparent !important; background: linear-gradient(var(--modal-bg), var(--modal-bg)) padding-box, linear-gradient(140deg, var(--tepi-aksen), transparent 40%, var(--emas-tepi)) border-box !important; }
+.frame { box-shadow: var(--bayang), 0 0 0 1px color-mix(in srgb, var(--tepi-aksen) 70%, transparent); }
+.player { box-shadow: 0 -10px 40px rgba(0, 0, 0, .18), 0 -1px 0 var(--tepi-aksen); }
+.thh, .thclock b, .skor, .viewbar button, .thbtn, .thsteps span { font-family: var(--f-display); }
+.thbtn:not(.sec) { box-shadow: 0 6px 22px var(--glow-aksen), inset 0 1px 0 rgba(255, 255, 255, .22); }
+.viewbar button[aria-current="page"]::after { content: ""; position: absolute; bottom: 2px; width: 18px; height: 2px; border-radius: 2px; background: #f2dc9b; box-shadow: 0 0 8px #f2dc9b; }
+
+/* ---------- Layar pembuka (splash) ---------- */
+.splash {
+  background:
+    radial-gradient(60% 50% at 50% 36%, color-mix(in srgb, var(--g1) 40%, transparent), transparent 70%),
+    radial-gradient(40% 35% at 82% 92%, color-mix(in srgb, var(--emas) 22%, transparent), transparent 70%), var(--latar-solid);
+}
+.splash::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(var(--splash-grid) 1px, transparent 1px), linear-gradient(90deg, var(--splash-grid) 1px, transparent 1px);
+  background-size: 44px 44px; -webkit-mask-image: radial-gradient(circle at 50% 40%, #000 8%, transparent 68%); mask-image: radial-gradient(circle at 50% 40%, #000 8%, transparent 68%);
+}
+.splash-content { position: relative; gap: 14px; animation: splash-in .7s cubic-bezier(.2, .8, .2, 1) both; }
+.splash-emblem { position: relative; width: 120px; height: 120px; display: grid; place-items: center; margin-bottom: 6px; }
+.splash-emblem img { width: 86px; height: 86px; border-radius: 24px; box-shadow: 0 0 44px var(--glow-aksen), 0 10px 30px rgba(0, 0, 0, .35); }
+.splash-emblem .ring {
+  position: absolute; inset: 0; border-radius: 50%; animation: splash-spin 2.6s linear infinite;
+  background: conic-gradient(from 0deg, transparent 0 55%, var(--aksen) 82%, var(--emas) 100%);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px)); mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
+}
+.splash-emblem .ring.r2 { inset: -12px; opacity: .4; animation-duration: 4.6s; animation-direction: reverse; }
+.splash-arab { font-size: 2rem; background: var(--grad-judul); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.splash-content strong { font-family: var(--f-display); font-size: .78rem; font-weight: 600; letter-spacing: .34em; color: var(--teks); }
+.splash-status { font-size: .74rem; letter-spacing: .04em; }
+.splash-line { width: 190px; height: 3px; border-radius: 3px; }
+.splash-line i { background: linear-gradient(90deg, transparent, var(--aksen), var(--emas)); box-shadow: 0 0 14px var(--glow-aksen); }
+.splash-tag { margin-top: 4px; font-size: .64rem; letter-spacing: .2em; text-transform: uppercase; color: var(--redup); }
+@keyframes splash-spin { to { transform: rotate(360deg); } }
+@keyframes splash-in { from { opacity: 0; transform: translateY(14px) scale(.97); } }
+@media (prefers-reduced-motion: reduce) { .splash-emblem .ring, .splash-content { animation: none !important; } }
