@@ -1,6 +1,6 @@
 "use strict";
 /* ============================================================
-   Mushaf Tahfidz Pro — app.js
+   MutqinLab — app.js
    Sumber data (gratis):
    • Teks & font mushaf Madinah QCF v4  → github.com/MohamadHajjRabee/quran-qcf4
    • Peta ayat→halaman, terjemahan Kemenag → api.quran.com (v4)
@@ -310,7 +310,7 @@ window.addEventListener("appinstalled", () => {
   appInstalled = true;
   deferredInstallPrompt = null;
   syncInstallButton();
-  toast("Mushaf Tahfidz Pro berhasil diinstal");
+  toast("MutqinLab berhasil diinstal");
 });
 
 async function installApp() {
@@ -566,7 +566,7 @@ function updateChrome() {
   els.btnBookmark.setAttribute("aria-pressed", String(S.bookmarks.some(b => b.page === p)));
   els.btnMemo.setAttribute("aria-pressed", String(!!S.memorized[p]));
   els.btnMemo.title = S.memorized[p] ? "Batalkan tanda hafal (M)" : "Tandai halaman ini sudah hafal (M)";
-  document.title = `Hal. ${p} · ${names[0] || "Mushaf"} — Mushaf Tahfidz Pro`;
+  document.title = `Hal. ${p} · ${names[0] || "Mushaf"} — MutqinLab`;
 }
 
 /* ============================================================
@@ -1061,7 +1061,7 @@ function mediaMeta(key) {
   if (!("mediaSession" in navigator) || typeof MediaMetadata === "undefined") return;
   try {
     navigator.mediaSession.metadata = new MediaMetadata({
-      title: labelKey(key), artist: qariName(), album: "Mushaf Tahfidz Pro",
+      title: labelKey(key), artist: qariName(), album: "MutqinLab",
       artwork: [{ src: "icon.svg", sizes: "any", type: "image/svg+xml" }]
     });
   } catch { /* abaikan */ }

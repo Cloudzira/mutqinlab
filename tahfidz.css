@@ -291,3 +291,20 @@ html[data-theme="goldblack"] .thbtn:not(.sec) { background: linear-gradient(135d
 html[data-theme="goldblack"] .thsteps span.sel, html[data-theme="goldblack"] .viewbar button[aria-current="page"] { background: linear-gradient(135deg, #ecd078, #c29a35); }
 html[data-theme="goldwhite"] .viewbar button[aria-current="page"]::after { background: #fff3cc; box-shadow: 0 0 8px #fff3cc; }
 .radio-row { flex-wrap: wrap; }
+
+/* ============================================================
+   Identitas merek: MutqinLab (logo + nama di header dan splash)
+   ============================================================ */
+.brand { flex-direction: row; align-items: center; gap: 10px; }
+.brand-logo { width: 38px; height: 38px; flex: none; border-radius: 11px; box-shadow: 0 0 0 1px rgba(255, 255, 255, .2), 0 4px 16px rgba(0, 0, 0, .35); }
+.brand-txt { display: flex; flex-direction: column; line-height: 1.1; }
+.brand-name {
+  font: 700 1.28rem/1.1 var(--f-display); letter-spacing: .01em;
+  background: linear-gradient(90deg, #fff, #f6e6b6); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.brand small { margin-top: 3px; padding: 0; font-family: var(--f-arab, "Reem Kufi", serif); font-size: .74rem; letter-spacing: .04em; text-transform: none; }
+.splash-content strong.splash-name {
+  font: 700 2.3rem/1.1 var(--f-display); letter-spacing: .03em;
+  background: var(--grad-judul); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.splash-content .splash-arab { font-size: 1.2rem; background: none; -webkit-background-clip: initial; background-clip: initial; color: var(--teks-lembut); }

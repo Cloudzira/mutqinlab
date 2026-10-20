@@ -1,9 +1,9 @@
-/* Mushaf Tahfidz Pro — service worker
+/* MutqinLab — service worker
   • Cangkang aplikasi (HTML/CSS/JS): JARINGAN DULU, cache hanya sebagai cadangan luring.
      Dengan begitu pembaruan kode selalu langsung terpakai (tidak ada versi lama yang "menempel").
    • Data halaman, font, terjemahan: cache-first (tidak berubah) → bisa dibaca luring setelah dibuka sekali
    • Audio (everyayah.com) & Firebase: tidak disentuh */
-const VERSION = "v9";
+const VERSION = "v10";
 const SHELL_CACHE = "mushaf-shell-" + VERSION;
 const DATA_CACHE = "mushaf-data-" + VERSION;
 const SHELL = ["./", "index.html", "style.css", "app.js", "tahfidz.js", "tahfidz.css", "manifest.webmanifest", "icon.svg"];

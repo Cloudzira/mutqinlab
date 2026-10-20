@@ -1,5 +1,5 @@
 /* ============================================================
-   Mushaf Tahfidz Pro — tahfidz.js
+   MutqinLab — tahfidz.js
    Program hafalan terpandu: Rencana · Ziyadah · Murojaah · Tes
    Terhubung ke mesin mushaf/audio lewat window.MP (dibuat di app.js).
    Data tersimpan di S.tahfidz → ikut tersinkron lewat Firebase.
