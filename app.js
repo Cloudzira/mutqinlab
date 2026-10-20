@@ -157,7 +157,7 @@ const LS = {
    State & penyimpanan
    ============================================================ */
 const OPT = {
-  theme: ["auto", "light", "dark", "sepia"],
+  theme: ["auto", "light", "dark", "sepia", "goldblack", "goldwhite"],
   hideMode: ["normal", "blur", "first"],
   audioMode: ["page", "ayah", "range", "surah"],
   repeatAyah: [1, 2, 3, 5, 7, 10, 0],
@@ -1126,15 +1126,15 @@ function bindPlayerSettings() {
    Tema, pengaturan, wake lock
    ============================================================ */
 const mq = window.matchMedia("(prefers-color-scheme: dark)");
-const THEME_COLOR = { light: "#f5f6f2", dark: "#060d0b", sepia: "#e5dac5" };
+const THEME_COLOR = { light: "#f5f6f2", dark: "#060d0b", sepia: "#e5dac5", goldblack: "#070604", goldwhite: "#fbf8f1" };
 function applyTheme() {
   const pref = S.settings.theme;
   const eff2 = pref === "auto" ? (mq.matches ? "dark" : "light") : pref;
   document.documentElement.dataset.theme = eff2;
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.setAttribute("content", THEME_COLOR[eff2]);
-  els.themeIcon.setAttribute("href", { auto: "#i-auto", light: "#i-sun", dark: "#i-moon", sepia: "#i-leaf" }[pref]);
-  els.btnTheme.title = "Tema: " + { auto: "otomatis", light: "terang", dark: "gelap", sepia: "sepia" }[pref] + " (ketuk untuk mengganti)";
+  els.themeIcon.setAttribute("href", { auto: "#i-auto", light: "#i-sun", dark: "#i-moon", sepia: "#i-leaf", goldblack: "#i-moon", goldwhite: "#i-sun" }[pref]);
+  els.btnTheme.title = "Tema: " + { auto: "otomatis", light: "terang", dark: "gelap", sepia: "sepia", goldblack: "emas hitam", goldwhite: "emas putih" }[pref] + " (ketuk untuk mengganti)";
   $$('input[name="theme"]').forEach(r => { r.checked = r.value === pref; });
 }
 mq.addEventListener && mq.addEventListener("change", () => { if (S.settings.theme === "auto") applyTheme(); });
@@ -1354,7 +1354,7 @@ function bindUI() {
   els.btnInstall.addEventListener("click", installApp);
   els.authBtn.addEventListener("click", toggleAuth);
   els.btnTheme.addEventListener("click", () => {
-    const order = ["light", "dark", "sepia", "auto"];
+    const order = ["light", "dark", "goldblack", "goldwhite", "sepia", "auto"];
     S.settings.theme = order[(order.indexOf(S.settings.theme) + 1) % order.length];
     persist(); applyTheme();
   });

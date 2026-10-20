@@ -241,3 +241,53 @@ body::after {
 @keyframes splash-spin { to { transform: rotate(360deg); } }
 @keyframes splash-in { from { opacity: 0; transform: translateY(14px) scale(.97); } }
 @media (prefers-reduced-motion: reduce) { .splash-emblem .ring, .splash-content { animation: none !important; } }
+
+/* ============================================================
+   Tema Emas: "Emas Hitam" (gelap) dan "Emas Putih" (terang)
+   ============================================================ */
+html[data-theme="goldblack"] {
+  color-scheme: dark;
+  --emas: #e8c96a; --g1: #d1ad45; --g2: #a67c22; --aksen: #e0bb55; --on-aksen: #14100a;
+  --teks: #f4ecd6; --teks-lembut: #d6c9a4; --redup: rgba(214, 201, 164, .72);
+  --kaca: rgba(18, 15, 8, .88); --kaca-halus: rgba(232, 201, 106, .06);
+  --tepi: rgba(232, 201, 106, .12); --tepi-aksen: rgba(224, 187, 85, .34); --garis-baris: rgba(232, 201, 106, .1);
+  --latar: linear-gradient(165deg, #100d06 0%, #070604 55%, #0e0b05 100%); --latar-solid: #070604;
+  --bayang: 0 14px 38px rgba(0, 0, 0, .55); --grad-judul: linear-gradient(90deg, #fbeab8, #e0bb55, #b8892a);
+  --sorot-putar: rgba(232, 201, 106, .3); --putar-teks: #f0d48e; --glow-aksen: rgba(224, 187, 85, .32);
+  --banner-grad: linear-gradient(105deg, #a67c22, #6d4f12); --banner-shadow: 0 4px 16px rgba(224, 187, 85, .2);
+  --toast-bg: #f4ecd6; --toast-fg: #14100a; --toast-action: #8a6516;
+  --modal-bg: #100d06; --sorot-pilih: rgba(224, 187, 85, .2);
+  --ok: #8fd19e; --bahaya: #e2877f; --opt-bg: #1b160a; --opt-fg: #f4ecd6;
+  --footer-muted: #b8aa84; --footer-heart: #e08fa3; --footer-author: #e0bb55; --footer-glow: rgba(224, 187, 85, .2);
+  --splash-grid: rgba(224, 187, 85, .07); --emas-tepi: rgba(232, 201, 106, .5);
+}
+html[data-theme="goldwhite"] {
+  color-scheme: light;
+  --emas: #b8892a; --g1: #a97d1f; --g2: #7d5a12; --aksen: #8f6a17; --on-aksen: #fff;
+  --teks: #241d0f; --teks-lembut: #5a4d33; --redup: rgba(90, 77, 51, .78);
+  --kaca: rgba(255, 255, 255, .95); --kaca-halus: rgba(169, 125, 31, .06);
+  --tepi: rgba(60, 46, 16, .1); --tepi-aksen: rgba(169, 125, 31, .34); --garis-baris: rgba(169, 125, 31, .16);
+  --latar: linear-gradient(160deg, #fbf8f0 0%, #fffdf8 55%, #f7f2e6 100%); --latar-solid: #fbf8f1;
+  --bayang: 0 12px 32px rgba(70, 52, 14, .1); --grad-judul: linear-gradient(90deg, #7d5a12, #a97d1f, #d1ad45);
+  --sorot-putar: rgba(184, 137, 42, .3); --putar-teks: #8f6a17; --glow-aksen: rgba(169, 125, 31, .28);
+  --banner-grad: linear-gradient(105deg, #a97d1f, #7d5a12); --banner-shadow: 0 4px 16px rgba(169, 125, 31, .22);
+  --toast-bg: #241d0f; --toast-fg: #fbf3dc; --toast-action: #e8c96a;
+  --modal-bg: #fff; --sorot-pilih: rgba(169, 125, 31, .14);
+  --ok: #2e7d4f; --bahaya: #b5483f; --opt-bg: #f8f3e6; --opt-fg: #241d0f;
+  --footer-muted: #7a6c4d; --footer-heart: #c0657a; --footer-author: #8f6a17; --footer-glow: rgba(169, 125, 31, .18);
+  --splash-grid: rgba(169, 125, 31, .06); --emas-tepi: rgba(169, 125, 31, .5);
+}
+/* Emas Hitam: bilah atas hitam berbingkai emas; teks di atas emas dibuat gelap agar tajam */
+html[data-theme="goldblack"] .topbar {
+  background: linear-gradient(115deg, #1c1709, #0b0904); border-color: rgba(232, 201, 106, .38);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, .5), inset 0 1px 0 rgba(232, 201, 106, .2);
+}
+html[data-theme="goldblack"] .thbtn:not(.sec), html[data-theme="goldblack"] .viewbar button[aria-current="page"],
+html[data-theme="goldblack"] .thsteps span.sel, html[data-theme="goldblack"] .seg button[aria-checked="true"],
+html[data-theme="goldblack"] .icon-btn[aria-pressed="true"], html[data-theme="goldblack"] .pl-ctrl .icon-btn.utama,
+html[data-theme="goldblack"] .pl-ctrl .icon-btn.utama:hover, html[data-theme="goldblack"] .btn-utama { color: #14100a; }
+html[data-theme="goldblack"] .viewbar button[aria-current="page"]::after { background: #14100a; box-shadow: none; }
+html[data-theme="goldblack"] .thbtn:not(.sec) { background: linear-gradient(135deg, #ecd078, #c29a35); }
+html[data-theme="goldblack"] .thsteps span.sel, html[data-theme="goldblack"] .viewbar button[aria-current="page"] { background: linear-gradient(135deg, #ecd078, #c29a35); }
+html[data-theme="goldwhite"] .viewbar button[aria-current="page"]::after { background: #fff3cc; box-shadow: 0 0 8px #fff3cc; }
+.radio-row { flex-wrap: wrap; }

@@ -3,7 +3,7 @@
      Dengan begitu pembaruan kode selalu langsung terpakai (tidak ada versi lama yang "menempel").
    • Data halaman, font, terjemahan: cache-first (tidak berubah) → bisa dibaca luring setelah dibuka sekali
    • Audio (everyayah.com) & Firebase: tidak disentuh */
-const VERSION = "v8";
+const VERSION = "v9";
 const SHELL_CACHE = "mushaf-shell-" + VERSION;
 const DATA_CACHE = "mushaf-data-" + VERSION;
 const SHELL = ["./", "index.html", "style.css", "app.js", "tahfidz.js", "tahfidz.css", "manifest.webmanifest", "icon.svg"];
