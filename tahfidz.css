@@ -430,3 +430,14 @@ body[data-view]:not([data-view="mushaf"]) .misi { display: none; }
 /* Tema Emas Hitam: teks pada permukaan emas dibuat gelap */
 html[data-theme="goldblack"] .thrate .r2, html[data-theme="goldblack"] .thbtn.emas, html[data-theme="goldblack"] .viewbar .dot { color: #14100a; }
 html[data-theme="goldblack"] .thrate .r2, html[data-theme="goldblack"] .thbtn.emas { background: linear-gradient(135deg, #ecd078, #c29a35); }
+
+/* ============================================================
+   Tambahan: ikon medsos (fallback teks), mode luring, kartu impor
+   ============================================================ */
+.about-social .lbl { font: 700 .62rem var(--f-ui); letter-spacing: .02em; }
+.fa-ready .about-social .lbl { display: none; }
+.off-bar { margin: 10px 0 2px; }
+.thc details[open] > summary { margin-bottom: 8px; }
+.thc details .thf, .thc details .thg2 { margin-top: 8px; }
+.thc details .throw { margin-top: 12px; }
+.grp .btn-row { margin-top: 10px; }

@@ -1,19 +1,24 @@
 /* MutqinLab — service worker
   • Cangkang aplikasi (HTML/CSS/JS): JARINGAN DULU, cache hanya sebagai cadangan luring.
-     Dengan begitu pembaruan kode selalu langsung terpakai (tidak ada versi lama yang "menempel").
-   • Data halaman, font, terjemahan: cache-first (tidak berubah) → bisa dibaca luring setelah dibuka sekali
-   • Audio (everyayah.com) & Firebase: tidak disentuh */
-const VERSION = "v12";
+    Pembaruan kode langsung terpakai; saat luring aplikasi tetap terbuka dari cache.
+  • Data mushaf, font, terjemahan, ikon: cache-first (tidak berubah) → bisa dibaca luring.
+    Cache data TIDAK diberi nomor versi supaya hasil "Unduh seluruh mushaf" tidak hilang saat aplikasi diperbarui.
+  • Audio (everyayah.com) & Firebase: tidak disentuh. */
+const VERSION = "v13";
 const SHELL_CACHE = "mushaf-shell-" + VERSION;
-const DATA_CACHE = "mushaf-data-" + VERSION;
-const SHELL = ["./", "index.html", "style.css", "app.js", "tahfidz.js", "tahfidz.css", "manifest.webmanifest", "icon.svg"];
+const DATA_CACHE = "mushaf-data";   // harus sama dengan DATA_CACHE di app.js
+const SHELL = [
+  "./", "index.html", "style.css", "app.js", "tahfidz.js", "tahfidz.css", "manifest.webmanifest",
+  "icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"
+];
 
 const DATA_HOSTS = [
   "raw.githubusercontent.com",
   "cdn.jsdelivr.net",
   "api.quran.com",
   "fonts.googleapis.com",
-  "fonts.gstatic.com"
+  "fonts.gstatic.com",
+  "cdnjs.cloudflare.com"
 ];
 
 self.addEventListener("install", e => {
@@ -33,11 +38,11 @@ self.addEventListener("activate", e => {
   );
 });
 
-const cacheable = res => res && (res.ok || res.type === "opaque");
+const cacheable = res => res && (res.status === 200 || res.type === "opaque");
 
 self.addEventListener("fetch", e => {
   const req = e.request;
-  if (req.method !== "GET") return;
+  if (req.method !== "GET" || req.headers.has("range")) return;
   const url = new URL(req.url);
 
   // data eksternal: cache-first
@@ -47,7 +52,7 @@ self.addEventListener("fetch", e => {
         const hit = await cache.match(req);
         if (hit) return hit;
         const res = await fetch(req);
-        if (cacheable(res)) cache.put(req, res.clone());
+        if (cacheable(res)) cache.put(req, res.clone()).catch(() => {});
         return res;
       })
     );
@@ -60,11 +65,12 @@ self.addEventListener("fetch", e => {
       caches.open(SHELL_CACHE).then(async cache => {
         try {
           const res = await fetch(req, { cache: "no-cache" });
-          if (res && res.ok) cache.put(req, res.clone());
+          if (res && res.status === 200) cache.put(req, res.clone()).catch(() => {});
           return res;
         } catch (err) {
           const hit = await cache.match(req, { ignoreSearch: true });
           if (hit) return hit;
+          if (req.mode === "navigate") { const home = await cache.match("index.html"); if (home) return home; }
           throw err;
         }
       })

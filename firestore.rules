@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Progres hafalan: hanya pemilik akun yang boleh membaca/menulis dokumennya sendiri.
+    match /progres_hafalan/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+    // Proyek Firebase ini dipakai bersama aplikasi lain (mushafpro-e80e1):
+    // GABUNGKAN aturan di atas dengan aturan yang sudah ada, jangan menimpanya.
+  }
+}

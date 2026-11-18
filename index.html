@@ -8,19 +8,25 @@
   <meta name="theme-color" content="#060d0b">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Mushaf">
+  <meta name="apple-mobile-web-app-title" content="MutqinLab">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="color-scheme" content="dark light">
+  <meta property="og:title" content="MutqinLab — Hafalan & Murojaah Al-Qur'an">
+  <meta property="og:description" content="Mushaf Madinah 604 halaman, audio per ayat, dan program tahfidz terpandu dengan jadwal murojaah otomatis.">
+  <meta property="og:type" content="website">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Reem+Kufi:wght@400;600;700&family=Amiri+Quran&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="tahfidz.css">
 </head>
 <body>
+  <noscript><p style="padding:24px;font:16px system-ui">MutqinLab membutuhkan JavaScript. Aktifkan JavaScript di peramban Anda.</p></noscript>
 
   <!-- Sprite ikon -->
   <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
@@ -201,10 +207,10 @@
         <section class="about-section">
           <h3 class="sub">Kurniapedia</h3>
           <div class="about-social" aria-label="Media sosial Kurniapedia">
-            <a href="https://instagram.com/kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="Instagram Kurniapedia" title="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
-            <a href="https://tiktok.com/@kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="TikTok Kurniapedia" title="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a>
-            <a href="https://www.youtube.com/@kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="YouTube Kurniapedia" title="YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a>
-            <a href="https://wa.me/+6285870906050" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Kurniapedia" title="WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
+            <a href="https://instagram.com/kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="Instagram Kurniapedia" title="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i><span class="lbl" aria-hidden="true">IG</span></a>
+            <a href="https://tiktok.com/@kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="TikTok Kurniapedia" title="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i><span class="lbl" aria-hidden="true">TT</span></a>
+            <a href="https://www.youtube.com/@kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="YouTube Kurniapedia" title="YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i><span class="lbl" aria-hidden="true">YT</span></a>
+            <a href="https://wa.me/+6285870906050" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Kurniapedia" title="WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span class="lbl" aria-hidden="true">WA</span></a>
           </div>
         </section>
       </div>
@@ -390,6 +396,15 @@
           </div>
           <input id="fileImport" type="file" accept="application/json,.json" hidden>
           <p class="catatan">Masuk dengan Google untuk menyinkronkan progres, penanda, dan pengaturan antar perangkat.</p>
+        </div>
+        <div class="grp">
+          <h3 class="sub">Mode luring</h3>
+          <p class="catatan" id="offInfo">Unduh seluruh mushaf (604 halaman beserta fontnya) agar bisa dibaca tanpa internet. Ukuran sekitar puluhan MB, sebaiknya lewat Wi-Fi.</p>
+          <div class="bar off-bar" id="offBarWrap" hidden><i id="offBar"></i></div>
+          <div class="btn-row">
+            <button id="btnOffline" type="button" class="btn"><svg class="ik" aria-hidden="true"><use href="#i-download"/></svg><span id="offLabel">Unduh seluruh mushaf</span></button>
+            <button id="btnOfflineClear" type="button" class="btn" hidden><svg class="ik" aria-hidden="true"><use href="#i-trash"/></svg>Hapus unduhan</button>
+          </div>
         </div>
         <div class="grp sumber">
           <h3 class="sub">Sumber data</h3>

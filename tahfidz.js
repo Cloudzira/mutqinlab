@@ -13,13 +13,13 @@ const SU = M.SURAH, nm = s => SU[s - 1][0], nAy = s => SU[s - 1][2], K = (s, a) 
 const TD = () => M.S.tahfidz, today = () => Math.floor((Date.now() - new Date().getTimezoneOffset() * 6e4) / DAY);
 const live = k => { const i = TD().items[k]; return !!i && !i.x; };
 const mine = () => Object.values(TD().items).filter(i => !i.x);
-const dueList = () => Object.entries(TD().items).filter(([, i]) => !i.x && i.d <= today()).sort((a, b) => a[1].d - b[1].d);
+const dueList = () => Object.entries(TD().items).filter(([, i]) => !i.x && i.d <= today()).sort((a, b) => a[1].d - b[1].d || a[1].u - b[1].u);
 const shuf = a => [...a].sort(() => Math.random() - .5), rg = (a, b) => Array.from({ length: Math.max(0, b - a + 1) }, (_, i) => a + i);
 const DN = d => new Date(d * DAY).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
 function save() { const t = TD(), keep = today() - 14; for (const f of ["cl", "md"]) for (const d in t[f]) if (+d < keep) delete t[f][d]; M.persist(); renderMisi(); }
 const act = () => { const L = TD().log, t = today(); L[t] = (L[t] || 0) + 1; };
 const streak = () => { const L = TD().log; let d = today(), c = 0; if (!L[d]) d--; while (L[d]) { c++; d--; } return c; };
-const mk = (s, a) => ({ s, a, r: 0, i: 1, e: 2.3, d: today() + 1, l: 0, u: Date.now() });
+const mk = (s, a) => ({ s, a, r: 0, i: 1, e: 2.3, d: today() + 1, l: 0, u: Date.now(), c: today() });
 
 /* ---------- SRS (SM-2 yang disederhanakan) ---------- */
 function nx(it, q) {
@@ -27,7 +27,7 @@ function nx(it, q) {
   if (q == 0) { n.l++; n.r = 0; n.i = 1; n.e = Math.max(1.3, n.e - .2); }
   else if (q == 1) { n.i = Math.max(1, Math.round(n.i * 1.2)); n.e = Math.max(1.3, n.e - .05); n.r++; }
   else { n.i = n.r == 0 ? 3 : n.r == 1 ? 7 : Math.round(n.i * n.e); n.e = Math.min(3, n.e + .05); n.r++; }
-  n.d = today() + n.i; n.u = Date.now(); return n;
+  n.i = Math.min(365, n.i); n.d = q == 0 ? today() : today() + n.i; n.u = Date.now(); return n;
 }
 
 /* ---------- Rencana: unit ayat, cakupan, kalkulasi ---------- */
@@ -83,7 +83,7 @@ const chip = (d, t, x = "") => `<button type="button" class="thchip" data-do="${
 const SO = SU.map((x, i) => [i + 1, (i + 1) + ". " + x[0]]);
 
 /* ---------- Wizard Rencana (4 langkah) ---------- */
-let view = "mushaf", W = null, editing = false, zs = -1, zStart = 0, zMin = 20, mi = today(), rev = false, Q = null;
+let view = "mushaf", W = null, zBonus = false, IM = { f: 78, t: 114, pace: 20, o: false }, editing = false, zs = -1, zStart = 0, zMin = 20, mi = today(), rev = false, Q = null;
 function wInit() { W = { st: 1, P: { f: 78, fa: 1, t: 114, ta: nAy(114), o: "b", dl: today() + 90, mins: 30, lv: 2, off: 1, tm: "s", gu: 0, te: 0, ti: 1, ...(TD().plan || {}) } }; }
 function wset(k, v) {
   const P = W.P;
@@ -154,7 +154,8 @@ function vG() {
     L = TD().log, l7 = rg(0, 6).filter(o => L[t - o]).length, Z = Math.round(P.mins * .6), R = P.mins - Z, cl = TD().cl[t] || [],
     tm = { s: "Setelah Subuh", p: "Pagi/siang", m: "Malam" }[P.tm], w = Math.max(1, P.pd * (7 - P.off)),
     lab = u => nm(u.s) + " " + u.a, g = new Date().getHours(),
-    sal = g < 4 ? "Selamat malam" : g < 11 ? "Selamat pagi" : g < 15 ? "Selamat siang" : g < 18 ? "Selamat sore" : "Selamat malam", D = [];
+    sal = g < 4 ? "Selamat malam" : g < 11 ? "Selamat pagi" : g < 15 ? "Selamat siang" : g < 18 ? "Selamat sore" : "Selamat malam", zdone = mine().filter(i => i.c == t).length,
+    fc = rg(0, 6).map(o => mine().filter(i => o == 0 ? i.d <= t : i.d == t + o).length), D = [];
   if (st) {
     if (l7 < 7 - P.off - 1) D.push(`Konsistensi turun (${l7} dari ${7 - P.off} hari aktif pekan ini). Tetapkan "kapan-di mana-apa", tempel pada rutinitas tetap (${tm.toLowerCase()}), dan pakai aturan 5 menit minimal agar rantai tidak putus.`);
     if (due > 10 && due > done * .2) D.push(`Murojaah menumpuk (${due} ayat). Hentikan ziyadah baru sampai antrean < 10: ingatan yang tidak diulang meluruh.`);
@@ -164,11 +165,11 @@ function vG() {
     if (!P.gu) D.push("Setorkan hafalan ke ustaz/ustazah agar tajwid & makhraj terkoreksi.");
   }
   const tasks = [`${tm}: niat ikhlas, wudhu, doa memohon kemudahan; baca target hari ini 3× dari mushaf (talqin) — ±${Math.round(Z * .25)} mnt`,
-    td.length ? `Ziyadah ${td.length} ayat (${lab(td[0])}${td.length > 1 ? " → " + lab(td[td.length - 1]) : ""}): pahami arti, dengar, tikrar, lalu uji — ±${Math.round(Z * .75)} mnt` : `Fase Mutqin: sambung antar-ayat & antar-surat tanpa melihat, lalu kerjakan Tes — ±${Z} mnt`,
+    td.length && zdone >= P.pd ? "Ziyadah hari ini selesai ✓ — lanjutkan dengan murojaah agar hafalan baru terkunci" : td.length ? `Ziyadah ${td.length} ayat (${lab(td[0])}${td.length > 1 ? " → " + lab(td[td.length - 1]) : ""}): pahami arti, dengar, tikrar, lalu uji — ±${Math.round(Z * .75)} mnt` : `Fase Mutqin: sambung antar-ayat & antar-surat tanpa melihat, lalu kerjakan Tes — ±${Z} mnt`,
     `Murojaah antrean SRS: ${due} ayat — ±${R} mnt`, "Sebelum tidur: ulang ayat baru 3× tanpa melihat"];
   const wk = []; for (let k = 0; k < 6 && k * w < UL.length; k++) wk.push(`Pekan ${k + 1}: ${lab(UL[k * w])} → ${lab(UL[Math.min((k + 1) * w, UL.length) - 1])}`);
   const goal = TD().goal || 5, tl = L[t] || 0, wkv = rg(0, 6).map(o => L[t - 6 + o] || 0), mxv = Math.max(goal, ...wkv);
-  const zdone = mine().filter(i => i.r == 0 && i.i == 1 && i.d == t + 1).length, pct = c.total ? Math.round(done / c.total * 100) : 0,
+  const pct = c.total ? Math.round(done / c.total * 100) : 0,
     zok = !td.length || zdone >= P.pd, mok = due == 0,
     stTxt = done >= c.total && c.total ? "Semua ayat sudah masuk — fokus Mutqin" : ["Sesuai rencana", "Sedikit tertinggal", "Tertinggal"][st];
   return `<div class="thhead"><div><p class="thp kecil">${sal} · ${ic("flame")} ${streak()} hari berturut-turut</p><h2 class="thh besar">Misi hari ini</h2></div>${B("edit", ic("sliders"), "sec kecil", 'aria-label="Ubah rencana"')}</div>` +
@@ -184,6 +185,7 @@ function vG() {
     C(`<h3 class="thh">${ic("list")} Panduan Hari Ini</h3>${tasks.map((x, i) => `<button type="button" class="thtask${cl[i] ? " selesai" : ""}" data-do="chk" data-i="${i}"><i>${ic(cl[i] ? "check" : "circle")}</i><span>${x}</span></button>`).join("")}`) +
     (st ? C(`<h3 class="thh">${ic("search")} Evaluasi: terlambat ${gap} ayat</h3>${D.map(x => `<p class="thp">• ${x}</p>`).join("")}${B("replan", "@refresh Susun ulang dari hari ini", "emas")}`) : "") + moti() +
     C(`<h3 class="thh">${ic("chart")} Aktivitas</h3>${bar("Target hari ini", Math.min(tl, goal), goal, "ok")}${bar("Seharusnya hari ini", exp, c.total, "em")}${bar("Mutqin (interval ≥7 hari)", mt, c.total, "ok")}<div class="thchart">${wkv.map((n, i) => `<div title="${n}"><i class="${i == 6 ? "hari" : ""}" style="height:${n / mxv * 100}%"></i>${new Date((t - 6 + i) * DAY).toLocaleDateString("id-ID", { weekday: "narrow", timeZone: "UTC" })}</div>`).join("")}</div>
+      <p class="thp kecil">Beban murojaah 7 hari ke depan (ayat)</p><div class="thchart">${fc.map((n, i) => `<div title="${n} ayat"><i class="${i == 0 ? "hari" : ""}" style="height:${n / Math.max(1, ...fc) * 100}%"></i>${n}</div>`).join("")}</div>
       <div class="thgrid"><div><small>Ayat dalam SRS</small><b>${mine().length}</b></div><div><small>Antrean murojaah</small><b>${due}</b></div></div>`) +
     C(`<details><summary>${ic("map")} Peta Jalan</summary>${wk.map(x => `<p class="thp">${x}</p>`).join("")}${UL.length > 6 * w ? `<p class="thp kecil">… ±${Math.ceil(UL.length / w)} pekan ziyadah</p>` : ""}<p class="thp ok">${ic("flag")} Fase Mutqin (±${c.m} hari terakhir): tanpa ayat baru — sambung surat, tes, dan murojaah. Mutqin = semua ayat interval ≥7 hari dan skor tes ≥90%.</p></details>`) +
     C(`<details><summary>${ic("bulb")} Ilmu di balik rencana ini</summary><ul><li><b>Syar'i:</b> niat ikhlas, wudhu, doa, satu mushaf tetap, tajwid benar, setoran ke ustaz/ustazah.</li><li><b>Kognitif:</b> spaced repetition, retrieval practice, chunking per ayat, memahami arti, tidur untuk konsolidasi.</li><li><b>Psikologi:</b> target kecil harian, implementation intention, streak, akuntabilitas teman.</li><li><b>Teknologi:</b> jadwal SRS, audio berulang, pengukuran kemajuan, penyusunan ulang rencana otomatis.</li></ul></details>`);
@@ -199,6 +201,10 @@ function vZ() {
   const P = TD().plan;
   if (!P) return C(`<h3 class="thh">Susun rencana dulu</h3><p class="thp">Ziyadah dipandu dari target hariannya. Isi 4 langkah singkat di tab Beranda.</p>${B("gog", "Buka Beranda")}`);
   const ks = targetKeys(); zMin = Math.round(P.mins * .6);
+  const zd = mine().filter(i => i.c == today()).length;
+  if (ks.length && zs < 0 && !zBonus && zd >= P.pd) return C(`<h3 class="thh">${ic("cap")} Ziyadah</h3><p class="thp ok">${ic("check")} Target ziyadah hari ini tercapai (${zd} ayat). Barakallahu fiik!</p>
+    <p class="thp kecil">Hafalan baru paling kuat bila langsung diulang. Fokuskan sisa waktu pada murojaah; menambah ayat lagi boleh bila tenaga dan waktumu memang cukup.</p>
+    <div class="throw">${B("gom", "@repeat Ke Murojaah", "lebar")}${B("zmore", "Tambah ayat lagi", "sec")}</div>`);
   if (!ks.length) return C(`<h3 class="thh">${ic("cap")} Ziyadah</h3><p class="thp ok">Semua ayat dalam target sudah masuk jadwal murojaah. Fokuskan waktu pada Murojaah dan Tes.</p>${B("gom", "Ke Murojaah")}`);
   const f = ks[0].split(":").map(Number), l = ks[ks.length - 1].split(":").map(Number);
   return C(`<div class="thhead"><h3 class="thh">${ic("cap")} Sesi Ziyadah</h3><span id="thTimer" class="thp kecil"></span></div>
@@ -217,12 +223,12 @@ function zact() {
   else if (zs == 3) M.startPlayback(ks, { repeatAyah: 3, repeatRange: 1, gap: -1 });
   else {
     ks.forEach(k => { if (!live(k)) { const [s, a] = k.split(":").map(Number); TD().items[k] = mk(s, a); } });
-    M.hardStop && M.hardStop(true); act(); zs = -1; zStart = 0; save(); render(); badge(); M.toast("Alhamdulillah! Murojaah pertama besok (setelah tidur).");
+    M.hardStop && M.hardStop(true); act(); zs = -1; zStart = 0; zBonus = false; save(); render(); badge(); M.toast("Alhamdulillah! Murojaah pertama besok (setelah tidur).");
   }
 }
 
 /* ---------- Murojaah: sambung ayat + SRS ---------- */
-function vM() {
+function vM0() {
   const due = dueList(), t = today(), dn = TD().md[t] || 0;
   const guide = C(`<div class="thhead"><h3 class="thh">${ic("repeat")} Sesi Murojaah</h3><span class="thp kecil">sisa ${due.length} ayat · ±${Math.ceil(due.length * .4)} mnt</span></div>${bar("Selesai hari ini", dn, due.length + dn, "ok")}
     <ol><li><b>Murojaah dulu</b>, baru ziyadah: otak segar dan antrean tidak menumpuk.</li><li><b>Lantunkan dulu</b> lanjutan ayat dengan suara, baru ketuk "Tampilkan".</li><li><b>Nilai jujur:</b> Mutqin bila lancar tanpa ragu, Ragu bila sempat tersendat, Lupa bila gagal — baca ayatnya, ulang 3×, lalu nilai.</li><li>Antrean di atas 20? Cicil ±20 ayat per sesi dan tunda ziyadah.</li></ol><p class="thp kecil">⌨️ Pintasan: <b>Spasi</b> tampilkan · <b>1 / 2 / 3</b> nilai</p>`);
@@ -232,8 +238,23 @@ function vM() {
     <p class="thp kecil">Lanjutkan ayat setelah ini:</p>${pk ? `<div class="thar" data-txt="${pk}"><i class="skl"></i></div>` : `<p class="thp">(Awal surat)</p>`}
     ${!rev ? B("rv", "Tampilkan Jawaban", "penuh") : `<div class="thar" data-txt="${k}"><i class="skl"></i></div><p class="tht" data-tr="${k}"><i class="skl" style="width:60%"></i></p>
       <div class="throw">${B("ply", "@volume Dengar", "sec kecil", `data-k="${k}"`)}${B("opn", "@book Buka di mushaf", "sec kecil", `data-k="${k}"`)}</div>
-      <div class="thrate">${[0, 1, 2].map(q => `<button type="button" class="r${q}" data-do="rate" data-k="${k}" data-q="${q}">${["Lupa", "Ragu", "Mutqin"][q]}<small>${nx(it, q).i} hari</small></button>`).join("")}</div>`}`);
+      <div class="thrate">${[0, 1, 2].map(q => `<button type="button" class="r${q}" data-do="rate" data-k="${k}" data-q="${q}">${["Lupa", "Ragu", "Mutqin"][q]}<small>${q == 0 ? "ulang lagi" : nx(it, q).i + " hari"}</small></button>`).join("")}</div>`}`);
 }
+
+/* ---------- Masukkan hafalan lama ke jadwal murojaah ---------- */
+const selI = (k, o, v) => `<select data-imp="${k}">${o.map(([a, b]) => `<option value="${a}"${a == v ? " selected" : ""}>${b}</option>`).join("")}</select>`;
+const impRange = () => [Math.min(IM.f, IM.t), Math.max(IM.f, IM.t)];
+const impCount = () => { const [f, t] = impRange(); let c = 0; for (let s = f; s <= t; s++) c += nAy(s); return c; };
+function vImp() {
+  const n = impCount();
+  return C(`<details${IM.o ? " open" : ""}><summary>${ic("upload")} Sudah punya hafalan? Masukkan ke jadwal</summary>
+    <p class="thp kecil">Untuk hafalan yang sudah kamu miliki sebelum memakai aplikasi ini. Ayat dimasukkan bertahap supaya antrean murojaah tidak langsung menumpuk.</p>
+    <div class="thg2">${fl("Dari surat", selI("f", SO, IM.f))}${fl("Ayat per hari", selI("pace", [10, 20, 40, 80].map(x => [x, x]), IM.pace))}</div>
+    ${fl("Sampai surat", selI("t", SO, IM.t))}
+    <p class="thp kecil">${n} ayat dipilih · putaran pertama ±${Math.ceil(n / IM.pace)} hari</p>
+    <div class="throw">${B("imp", "@check Masukkan ke jadwal", "lebar")}${B("unimp", "@trash Keluarkan dari jadwal", "sec")}</div></details>`);
+}
+function vM() { return vM0() + vImp(); }
 
 /* ---------- Tes sambung ayat ---------- */
 function vT() {
@@ -251,7 +272,7 @@ function vT() {
 const R = { g: vG, z: vZ, m: vM, t: vT };
 function render() { if (view === "mushaf") return; $("thBody").innerHTML = R[view](); hydrate(); }
 function setView(v) {
-  view = v; rev = false; document.body.dataset.view = v; try { localStorage.setItem("mp_view", v); } catch (e) {} renderMisi(); $("tahfidz").hidden = v === "mushaf";
+  view = v; rev = false; if (v !== "z") zBonus = false; document.body.dataset.view = v; try { localStorage.setItem("mp_view", v); } catch (e) {} renderMisi(); $("tahfidz").hidden = v === "mushaf";
   document.querySelectorAll("#viewbar [data-view]").forEach(b => { if (b.dataset.view === v) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
   if (v !== "mushaf") { render(); window.scrollTo(0, 0); }
 }
@@ -268,10 +289,31 @@ const A = {
   goz: () => setView("z"), got: () => setView("t"), gom: () => setView("m"), gog: () => setView("g"), mnext: () => { mi++; render(); },
   zstep: d => { zs = Math.max(0, Math.min(4, zs + +d.d)); if (!zStart) zStart = Date.now(); render(); }, zact,
   zopen: () => { const [s, a] = targetKeys()[0].split(":").map(Number); M.setHideMode("blur"); setView("mushaf"); M.jumpToVerse(s, a); },
+  zmore: () => { zBonus = true; render(); },
+  imp: () => {
+    const [f, t] = impRange(), pace = IM.pace || 20, t0 = today(), now = Date.now(), added = []; let k = 0;
+    for (let s = f; s <= t; s++) for (let a = 1; a <= nAy(s); a++) {
+      const key = K(s, a); if (live(key)) continue;
+      TD().items[key] = { s, a, r: 1, i: 3, e: 2.3, d: t0 + 1 + Math.floor(k / pace), l: 0, u: now }; added.push(key); k++;
+    }
+    if (!added.length) return M.toast("Semua ayat di rentang ini sudah ada di jadwal");
+    IM.o = false; save(); render(); badge();
+    M.toast(`${added.length} ayat masuk jadwal · putaran pertama ±${Math.ceil(added.length / pace)} hari`, { ms: 9000, action: { label: "Urungkan", fn: () => {
+      const u = Date.now(); added.forEach(key => { const it = TD().items[key]; if (it) TD().items[key] = { ...it, x: 1, u }; }); save(); render(); badge();
+    } } });
+  },
+  unimp: () => {
+    const [f, t] = impRange(), keys = [];
+    for (let s = f; s <= t; s++) for (let a = 1; a <= nAy(s); a++) if (live(K(s, a))) keys.push(K(s, a));
+    if (!keys.length) return M.toast("Tidak ada ayat di rentang ini pada jadwal");
+    if (!confirm(`Keluarkan ${keys.length} ayat dari jadwal murojaah? Riwayat ulangannya ikut dihapus.`)) return;
+    const u = Date.now(); keys.forEach(key => { TD().items[key] = { ...TD().items[key], x: 1, u }; });
+    IM.o = false; save(); render(); badge(); M.toast(`${keys.length} ayat dikeluarkan dari jadwal`);
+  },
   rv: () => { rev = true; render(); },
   ply: d => M.startPlayback([d.k], { repeatAyah: 1, repeatRange: 1, gap: 0 }),
   opn: d => { const [s, a] = d.k.split(":").map(Number); setView("mushaf"); M.jumpToVerse(s, a); },
-  rate: d => { navigator.vibrate && navigator.vibrate(12); const it = TD().items[d.k]; if (!it) return; TD().items[d.k] = nx(it, +d.q); TD().md[today()] = (TD().md[today()] || 0) + 1; act(); rev = false; save(); render(); badge(); M.toast("Tercatat · berikutnya " + TD().items[d.k].i + " hari lagi"); },
+  rate: d => { navigator.vibrate && navigator.vibrate(12); const it = TD().items[d.k]; if (!it) return; TD().items[d.k] = nx(it, +d.q); TD().md[today()] = (TD().md[today()] || 0) + 1; act(); rev = false; save(); render(); badge(); { const r = TD().items[d.k]; M.toast(r.d <= today() ? "Tercatat · diulang lagi di sesi ini" : "Tercatat · berikutnya " + r.i + " hari lagi"); } },
   tstart: () => { const pool = shuf(mine().filter(i => i.a > 1)).slice(0, 10);
     Q = { i: 0, sc: 0, a: null, q: pool.map(it => ({ s: it.s, a: it.a, o: shuf([it.a, ...shuf(rg(1, nAy(it.s)).filter(x => x != it.a && x != it.a - 1)).slice(0, 3)]) })) }; render(); },
   tans: d => { if (Q.a !== null) return; navigator.vibrate && navigator.vibrate(12); const q = Q.q[Q.i]; Q.a = +d.x;
@@ -292,6 +334,11 @@ document.addEventListener("change", e => {
   wset(el.dataset.k, v);
 });
 
+document.addEventListener("change", e => {
+  const el = e.target.closest("#thBody [data-imp]"); if (!el) return;
+  IM[el.dataset.imp] = +el.value; IM.o = true; render();
+});
+
 /* ---------- Misi hari ini di halaman Mushaf (jembatan ke program) ---------- */
 function renderMisi() {
   const e = $("misi"); if (!e) return; const P = TD().plan;
@@ -309,7 +356,7 @@ document.addEventListener("keydown", e => {
 /* ---------- Jam, tanggal Hijriah, hitung mundur target ---------- */
 let hj = "", hjd = -1;
 function tick() {
-  if ($("tahfidz").hidden) return;
+  if ($("tahfidz").hidden || document.hidden) return;
   const n = new Date(), d = today(); $("thClk").textContent = n.toLocaleTimeString("en-GB");
   if (hjd != d || !hj) { hjd = d; try { hj = n.toLocaleDateString("id-u-ca-islamic-umalqura", { day: "numeric", month: "long", year: "numeric" }); } catch { hj = ""; } }
   $("thHij").textContent = n.toLocaleDateString("id-ID", { weekday: "short", day: "numeric", month: "short" }) + (hj ? " · " + hj : "");
@@ -322,6 +369,8 @@ function tick() {
 }
 
 window.TH = { refresh() { badge(); renderMisi(); render(); } };
-document.body.dataset.view = "mushaf"; badge(); tick(); setInterval(tick, 1000);
-{ let v = "g"; try { v = localStorage.getItem("mp_view") || "g"; } catch (e) {} setView(["mushaf", "g", "z", "m", "t"].includes(v) ? v : "g"); }
+document.body.dataset.view = "mushaf"; badge(); tick(); setInterval(tick, 1000); document.addEventListener("visibilitychange", tick);
+{ let v = "g"; try { v = localStorage.getItem("mp_view") || "g"; } catch (e) {}
+  const qv = new URLSearchParams(location.search).get("v"); if (qv) v = qv;   // pintasan PWA: ?v=m (murojaah), ?v=mushaf
+  setView(["mushaf", "g", "z", "m", "t"].includes(v) ? v : "g"); }
 })();

@@ -45,26 +45,48 @@ const SURAH = [
 const JUZ_START = [1,22,42,62,82,102,122,142,162,182,202,222,242,262,282,302,322,342,362,382,402,422,442,462,482,502,522,542,562,582];
 // Nama folder qari di everyayah.com (sudah diverifikasi dari recitations.js)
 const QARI = [
-  { id: "Alafasy_128kbps",                 nama: "Mishary Rashid Alafasy" },
-  { id: "Husary_128kbps",                  nama: "Mahmoud Khalil Al-Husary" },
+  { id: "Alafasy_128kbps",                 nama: "Mishary Rashid Alafasy", alt: "ar.alafasy" },
+  { id: "Husary_128kbps",                  nama: "Mahmoud Khalil Al-Husary", alt: "ar.husary" },
   { id: "Husary_Muallim_128kbps",          nama: "Al-Husary (Mu'allim, untuk belajar)" },
-  { id: "Minshawy_Murattal_128kbps",       nama: "Muhammad Siddiq Al-Minshawi" },
-  { id: "Abdul_Basit_Murattal_192kbps",    nama: "Abdul Basit (Murattal)" },
-  { id: "Abdurrahmaan_As-Sudais_192kbps",  nama: "Abdurrahman As-Sudais" },
-  { id: "Saood_ash-Shuraym_128kbps",       nama: "Saud Asy-Syuraim" },
-  { id: "MaherAlMuaiqly128kbps",           nama: "Maher Al-Muaiqly" },
-  { id: "Hudhaify_128kbps",                nama: "Ali Al-Hudzaifi" },
-  { id: "Abu_Bakr_Ash-Shaatree_128kbps",   nama: "Abu Bakr Asy-Syatiri" },
-  { id: "Muhammad_Ayyoub_128kbps",         nama: "Muhammad Ayyub" },
+  { id: "Minshawy_Murattal_128kbps",       nama: "Muhammad Siddiq Al-Minshawi", alt: "ar.minshawi" },
+  { id: "Abdul_Basit_Murattal_192kbps",    nama: "Abdul Basit (Murattal)", alt: "ar.abdulbasitmurattal" },
+  { id: "Abdurrahmaan_As-Sudais_192kbps",  nama: "Abdurrahman As-Sudais", alt: "ar.abdurrahmaansudais" },
+  { id: "Saood_ash-Shuraym_128kbps",       nama: "Saud Asy-Syuraim", alt: "ar.saoodshuraym" },
+  { id: "MaherAlMuaiqly128kbps",           nama: "Maher Al-Muaiqly", alt: "ar.mahermuaiqly" },
+  { id: "Hudhaify_128kbps",                nama: "Ali Al-Hudzaifi", alt: "ar.hudhaify" },
+  { id: "Abu_Bakr_Ash-Shaatree_128kbps",   nama: "Abu Bakr Asy-Syatiri", alt: "ar.shaatree" },
+  { id: "Muhammad_Ayyoub_128kbps",         nama: "Muhammad Ayyub", alt: "ar.muhammadayyoub" },
   { id: "Yasser_Ad-Dussary_128kbps",       nama: "Yasser Ad-Dausari" },
   { id: "Nasser_Alqatami_128kbps",         nama: "Nasser Al-Qatami" },
   { id: "Salah_Al_Budair_128kbps",         nama: "Salah Al-Budair" },
   { id: "Abdullah_Matroud_128kbps",        nama: "Abdullah Matroud" },
-  { id: "Ahmed_ibn_Ali_al-Ajamy_128kbps_ketaballah.net", nama: "Ahmad Al-Ajmi" }
+  { id: "Ahmed_ibn_Ali_al-Ajamy_128kbps_ketaballah.net", nama: "Ahmad Al-Ajmi", alt: "ar.ahmedajamy" },
+  { id: "Hani_Rifai_192kbps", nama: "Hani Ar-Rifai", alt: "ar.hanirifai" },
+  { id: "Muhammad_Jibreel_128kbps", nama: "Muhammad Jibril", alt: "ar.muhammadjibreel" },
+  { id: "Abdullah_Basfar_192kbps", nama: "Abdullah Basfar" },
+  { id: "Ghamadi_40kbps", nama: "Said Al-Ghamidi" },
+  { id: "Husary_128kbps_Mujawwad", nama: "Al-Husary (Mujawwad)" },
+  { id: "Minshawy_Mujawwad_192kbps", nama: "Al-Minshawi (Mujawwad)" },
+  { id: "Abdul_Basit_Mujawwad_128kbps", nama: "Abdul Basit (Mujawwad)" },
+  { id: "Khaalid_Abdullaah_al-Qahtaanee_192kbps", nama: "Khalid Al-Qahtani" },
+  { id: "Salaah_AbdulRahman_Bukhatir_128kbps", nama: "Salah Bukhatir" },
+  { id: "Mohammad_al_Tablaway_128kbps", nama: "Muhammad At-Tablawi" },
+  { id: "Muhsin_Al_Qasim_192kbps", nama: "Muhsin Al-Qasim" },
+  { id: "Ali_Hajjaj_AlSuesy_128kbps", nama: "Ali Hajjaj As-Suesy" },
+  { id: "Fares_Abbad_64kbps", nama: "Fares Abbad" },
+  { id: "Ayman_Sowaid_64kbps", nama: "Ayman Suwaid (untuk belajar)" },
+  { id: "Yaser_Salamah_128kbps", nama: "Yasser Salamah" },
+  { id: "Sahl_Yassin_128kbps", nama: "Sahl Yassin" },
+  { id: "Mustafa_Ismail_48kbps", nama: "Mustafa Ismail" },
+  { id: "Karim_Mansoori_40kbps", nama: "Karim Mansoori" },
+  { id: "Ibrahim_Akhdar_32kbps", nama: "Ibrahim Al-Akhdar" }
 ];
 /*DATA-END*/
 
 const PAGES = 604;
+const ALT_URL = "https://cdn.islamic.network/quran/audio/128/";   // cadangan 1 & 2 (gratis, nomor ayat global)
+const ALT_DEFAULT = "ar.alafasy";                                  // cadangan terakhir: ayat tetap berbunyi
+const AYAH_BASE = []; { let c = 0; SURAH.forEach(x => { AYAH_BASE.push(c); c += x[2]; }); }
 const JSON_URL  = "https://raw.githubusercontent.com/MohamadHajjRabee/quran-qcf4/main/pages/";
 const FONT_URL  = "https://cdn.jsdelivr.net/gh/MohamadHajjRabee/quran-qcf4@main/fonts-woff2/";
 const AUDIO_URL = "https://everyayah.com/data/";
@@ -189,7 +211,7 @@ function sanT(t) {
   if (t.items && typeof t.items === "object") for (const [k, v] of Object.entries(t.items)) {
     const [s, a] = k.split(":").map(Number);
     if (!(s >= 1 && s <= 114 && a >= 1 && a <= SURAH[s - 1][2]) || !v || typeof v !== "object") continue;
-    o.items[k] = { s, a, r: nn(v.r), i: nn(v.i, 1), e: clamp(nn(v.e, 2.3), 1.3, 3), d: nn(v.d), l: nn(v.l), u: nn(v.u), ...(v.x ? { x: 1 } : {}) };
+    o.items[k] = { s, a, r: nn(v.r), i: nn(v.i, 1), e: clamp(nn(v.e, 2.3), 1.3, 3), d: nn(v.d), l: nn(v.l), u: nn(v.u), ...(v.x ? { x: 1 } : {}), ...(nn(v.c) ? { c: nn(v.c) } : {}) };
   }
   for (const f of ["log", "md"]) if (t[f] && typeof t[f] === "object") for (const [d, n] of Object.entries(t[f])) if (nn(n) > 0) o[f][d] = nn(n);
   if (t.cl && typeof t.cl === "object") for (const [d, a] of Object.entries(t.cl)) if (Array.isArray(a)) o.cl[d] = a.slice(0, 6).map(Boolean);
@@ -271,11 +293,13 @@ let userNavigated = false;
 let deferredInstallPrompt = null;
 let appInstalled = false;
 
-const cloudQueue = debounce(() => cloudPushNow(), 2000);
-function persist() {
+const cloudQueue = debounce(() => cloudPushNow(), 2500);
+const cloudQueueSlow = debounce(() => cloudPushNow(), 20000);   // perpindahan halaman saja: tidak perlu langsung ke awan
+let lastCloudSig = "";
+function persist(opt) {
   S.updatedAt = Date.now();
   LS.set(KEY, S);
-  cloudQueue();
+  (opt && opt.slow ? cloudQueueSlow : cloudQueue)();
 }
 
 /* ============================================================
@@ -289,7 +313,7 @@ const els = {};
  "selQari","selMode","rngWrap","rngSurah","rngFrom","rngTo","selRepAyat","selRepRange","selSpeed","selGap",
  "dlgNav","tabSurat","tabJuz","tabAyat","panSurat","panJuz","panAyat","navSearch","listSurat","gridJuz","ayatSurah","ayatNo","ayatGo",
  "dlgBm","bmList","bmAdd","dlgPrg","prgText","prgBar","prgPct","prgJuz","prgMark",
- "dlgSet","setWidth","setWidthVal","setReveal","setTrans","setWake","btnExport","btnImport","btnReset","btnDiag","fileImport","toasts","frame"
+ "dlgSet","offInfo","offBarWrap","offBar","btnOffline","offLabel","btnOfflineClear","setWidth","setWidthVal","setReveal","setTrans","setWake","btnExport","btnImport","btnReset","btnDiag","fileImport","toasts","frame"
 ].forEach(id => { els[id] = $(id); });
 
 function isStandalone() {
@@ -539,7 +563,7 @@ async function goto(no, opts = {}) {
   if (!opts.auto) userNavigated = true;
   if (!opts.keepAudio) hardStop(true);
   S.page = no;
-  persist();
+  persist({ slow: true });
   const ok = await render(no, tk);
   if (ok && tk === token) prefetchNeighbours(no);
   return ok;
@@ -872,9 +896,29 @@ const pre = new Audio();     // elemen cadangan untuk memuat ayat berikutnya leb
 pre.preload = "auto"; pre.muted = true;
 
 const P = { queue: [], i: 0, ra: 0, rr: 0, tk: 0, active: false, paused: false, inGap: false,
-            startPage: 1, ov: {}, gapTimer: null, resume: null };
+            startPage: 1, ov: {}, gapTimer: null, resume: null, tier: 0, warned: false };
 const eff = k => (P.ov[k] !== undefined ? P.ov[k] : S.settings[k]);
-const audioUrl = key => { const [s, a] = parseKey(key); return `${AUDIO_URL}${S.settings.reciter}/${pad3(s)}${pad3(a)}.mp3`; };
+const audioUrls = key => {
+  const [s, a] = parseKey(key), q = QARI.find(x => x.id === S.settings.reciter) || QARI[0], n = AYAH_BASE[s - 1] + a;
+  const list = [`${AUDIO_URL}${q.id}/${pad3(s)}${pad3(a)}.mp3`];
+  if (q.alt) list.push(`${ALT_URL}${q.alt}/${n}.mp3`);
+  if (q.alt !== ALT_DEFAULT) list.push(`${ALT_URL}${ALT_DEFAULT}/${n}.mp3`);
+  return list;
+};
+const audioUrl = key => audioUrls(key)[0];
+// Dipanggil saat sumber audio gagal: pindah ke sumber cadangan berikutnya. true = masih ada yang dicoba.
+function tryFallback() {
+  if (!P.active || !P.queue.length) return false;
+  const urls = audioUrls(P.queue[P.i]);
+  if (au.src !== urls[P.tier]) return true;          // kegagalan ini sudah ditangani
+  if (P.tier + 1 >= urls.length) return false;
+  P.tier++;
+  if (P.tier === urls.length - 1 && urls.length > 1 && !P.warned) { P.warned = true; toast("Sumber audio utama bermasalah, memakai cadangan."); }
+  au.src = urls[P.tier];
+  au.play().catch(e => { if (!e || e.name !== "AbortError") { if (!tryFallback()) giveUp(); } });
+  return true;
+}
+function giveUp() { toast("Audio tidak dapat diputar. Periksa koneksi internet atau ganti qari."); hardStop(true); }
 
 function buildQueue() {
   const mode = S.settings.audioMode;
@@ -921,6 +965,7 @@ async function startPlayback(queue, ov = {}) {
   if (!queue.length) { toast("Tidak ada ayat untuk diputar."); return; }
   unlockAudio();
   hardStop(false);
+  P.warned = false;
   P.queue = queue; P.ov = ov; P.active = true; P.startPage = cur.page;
   const my = ++P.tk;
   setSessionHandlers();
@@ -936,6 +981,7 @@ async function playCurrent(my) {
   if (S.settings.autoReveal) revealVerse(key);
   clearGap();
   const rate = Number(S.settings.speed) || 1;
+  P.tier = 0;
   au.src = audioUrl(key);
   au.defaultPlaybackRate = rate; au.playbackRate = rate;
   au.preservesPitch = true;
@@ -944,8 +990,8 @@ async function playCurrent(my) {
   } catch (err) {
     if (my !== P.tk) return;
     if (err && err.name === "AbortError") return;
-    toast("Audio tidak dapat diputar. Periksa koneksi internet atau ganti qari.");
-    hardStop(true);
+    if (tryFallback()) { ui(); mediaMeta(key); return; }
+    giveUp();
     return;
   }
   if (my !== P.tk) return;
@@ -954,6 +1000,7 @@ async function playCurrent(my) {
 
 async function ensureVisible(key, my) {
   if (cur.verseSet.has(key)) return;
+  if (document.body.dataset.view && document.body.dataset.view !== "mushaf") return;   // diputar dari panel tahfidz: tak perlu memuat halaman mushaf
   let p = null;
   try { p = await versePage(key); } catch { /* lanjut ke langkah manual */ }
   if (my !== P.tk) return;
@@ -1012,8 +1059,7 @@ au.addEventListener("timeupdate", () => {
 });
 au.addEventListener("error", () => {
   if (!P.active || isSilent()) return;
-  toast("Audio gagal dimuat. Periksa koneksi internet atau ganti qari.");
-  hardStop(true);
+  if (!tryFallback()) giveUp();
 });
 
 function finish() { hardStop(true); toast("Pemutaran selesai"); }
@@ -1154,7 +1200,10 @@ async function syncWake() {
     } else if (wl) { await wl.release(); wl = null; }
   } catch { /* tidak didukung / ditolak */ }
 }
-document.addEventListener("visibilitychange", syncWake);
+document.addEventListener("visibilitychange", () => {
+  syncWake();
+  if (document.visibilityState === "hidden") cloudPushNow();   // kirim sisa perubahan saat aplikasi ditutup/disembunyikan
+});
 
 function syncControls() {
   const st = S.settings;
@@ -1179,7 +1228,7 @@ async function copyDiag() {
   let brave = false;
   try { brave = !!(navigator.brave && await navigator.brave.isBrave()); } catch { /* abaikan */ }
   const info = {
-    app: "Mushaf Tahfidz Pro v5",
+    app: "MutqinLab",
     ua: navigator.userAgent, brave, dpr: window.devicePixelRatio, viewport: `${innerWidth}x${innerHeight}`,
     page: cur.page, kolomW: els.teks.clientWidth, fs: els.teks.style.getPropertyValue("--fs"), pitch: els.teks.style.getPropertyValue("--pitch"),
     barisMeluber: rows.filter(r => r.scrollWidth > r.clientWidth + 1).length,
@@ -1194,10 +1243,10 @@ async function copyDiag() {
 }
 
 function exportData() {
-  const blob = new Blob([JSON.stringify({ app: "mushaf-tahfidz-pro", version: 2, exportedAt: new Date().toISOString(), ...S }, null, 2)], { type: "application/json" });
+  const blob = new Blob([JSON.stringify({ app: "mutqinlab", version: 2, exportedAt: new Date().toISOString(), ...S }, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "mushaf-tahfidz-cadangan-" + new Date().toISOString().slice(0, 10) + ".json";
+  a.download = "mutqinlab-cadangan-" + new Date().toISOString().slice(0, 10) + ".json";
   document.body.append(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 }
@@ -1215,6 +1264,97 @@ function importData(file) {
     } catch { toast("Berkas cadangan tidak valid"); }
   };
   rd.readAsText(file);
+}
+
+/* Font Awesome hanya dimuat saat dialog "Tentang" dibuka (ikon medsos). Jika gagal, singkatan teks tetap tampil. */
+let faRequested = false;
+function loadIconFont() {
+  if (faRequested) return;
+  faRequested = true;
+  const l = document.createElement("link");
+  l.rel = "stylesheet";
+  l.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css";
+  l.onload = () => {
+    if (!document.fonts || !document.fonts.load) return;
+    document.fonts.load('400 1em "Font Awesome 6 Brands"').then(f => { if (f && f.length) document.documentElement.classList.add("fa-ready"); }).catch(() => {});
+  };
+  document.head.append(l);
+}
+
+/* ============================================================
+   Mode luring: unduh seluruh mushaf ke Cache Storage (dipakai service worker)
+   ============================================================ */
+const DATA_CACHE = "mushaf-data";   // harus sama dengan sw.js
+const OFF = { running: false, abort: false };
+const fontFile = f => FONT_URL + (f === "QCF4_QBSML" ? "QCF4_QBSML.woff2" : f + "_W.woff2");
+const fmtMB = b => (b / 1048576).toFixed(b < 1e7 ? 1 : 0).replace(".", ",") + " MB";
+
+async function offlineRefresh() {
+  if (!("caches" in window)) { els.offInfo.textContent = "Peramban ini tidak mendukung penyimpanan luring."; els.btnOffline.disabled = true; return; }
+  let n = 0;
+  try { n = (await (await caches.open(DATA_CACHE)).keys()).filter(r => r.url.startsWith(JSON_URL)).length; } catch { /* abaikan */ }
+  let usage = "";
+  try { if (navigator.storage && navigator.storage.estimate) { const e = await navigator.storage.estimate(); if (e.usage) usage = " · terpakai " + fmtMB(e.usage); } } catch { /* abaikan */ }
+  if (!OFF.running) {
+    els.offInfo.textContent = n >= PAGES ? `Seluruh mushaf (${PAGES} halaman) sudah tersimpan untuk dibaca luring${usage}.`
+      : n > 0 ? `${n} dari ${PAGES} halaman tersimpan${usage}. Lanjutkan unduhan agar lengkap.`
+      : "Unduh seluruh mushaf (604 halaman beserta fontnya) agar bisa dibaca tanpa internet. Ukuran puluhan MB, sebaiknya lewat Wi-Fi.";
+    els.offLabel.textContent = n >= PAGES ? "Periksa ulang unduhan" : n > 0 ? "Lanjutkan unduhan" : "Unduh seluruh mushaf";
+  }
+  els.btnOfflineClear.hidden = n === 0;
+}
+
+async function offlineDownload() {
+  if (!("caches" in window)) return;
+  if (OFF.running) { OFF.abort = true; return; }
+  OFF.running = true; OFF.abort = false;
+  els.offLabel.textContent = "Batalkan";
+  els.offBarWrap.hidden = false; els.offBar.style.width = "0%";
+  try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch { /* abaikan */ }
+  const cache = await caches.open(DATA_CACHE);
+  const grab = async url => {                       // ambil dari cache; bila belum ada, unduh lalu simpan
+    const hit = await cache.match(url);
+    if (hit) return hit;
+    let err;
+    for (let i = 0; i < 3; i++) {
+      try {
+        const r = await fetch(url);
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        await cache.put(url, r.clone());
+        return r;
+      } catch (e) { err = e; await sleep(400 * (i + 1)); }
+    }
+    throw err;
+  };
+  const todo = Array.from({ length: PAGES }, (_, i) => i + 1);
+  let done = 0, fail = 0;
+  const worker = async () => {
+    while (!OFF.abort) {
+      const n = todo.shift();
+      if (!n) return;
+      try {
+        const d = await (await grab(JSON_URL + pad3(n) + ".json")).json();
+        for (const f of fontsOf(d)) await grab(fontFile(f));
+      } catch (e) { fail++; logDiag("offline", `hal ${n}: ${e && e.message}`); }
+      done++;
+      els.offBar.style.width = (done / PAGES * 100) + "%";
+      els.offInfo.textContent = `Mengunduh… ${done} / ${PAGES} halaman`;
+    }
+  };
+  await Promise.all([worker(), worker(), worker(), worker()]);
+  const aborted = OFF.abort;
+  OFF.running = false; OFF.abort = false;
+  els.offBarWrap.hidden = true;
+  await offlineRefresh();
+  toast(aborted ? "Unduhan dihentikan" : fail ? `Selesai, ${fail} halaman gagal. Ketuk lagi untuk melanjutkan.` : "Mushaf siap dibaca tanpa internet");
+}
+
+async function offlineClear() {
+  if (OFF.running) return;
+  if (!confirm("Hapus mushaf yang sudah diunduh? Halaman akan diunduh lagi saat dibuka dengan internet.")) return;
+  try { await caches.delete(DATA_CACHE); } catch { /* abaikan */ }
+  await offlineRefresh();
+  toast("Unduhan luring dihapus");
 }
 
 /* ============================================================
@@ -1280,11 +1420,12 @@ function cloudRef() { return Cloud.C.doc(Cloud.db, "progres_hafalan", Cloud.user
 
 async function cloudPushNow() {
   if (!Cloud.ok || !Cloud.user) return;
+  const body = { halaman_terakhir: S.page, page: S.page, bookmarks: S.bookmarks, memorized: S.memorized, settings: S.settings, tahfidz: S.tahfidz };
+  const sig = Cloud.user.uid + JSON.stringify(body);
+  if (sig === lastCloudSig) return;          // tidak ada yang berubah → hemat kuota tulis Firestore
   try {
-    await Cloud.C.setDoc(cloudRef(), {
-      halaman_terakhir: S.page, page: S.page, bookmarks: S.bookmarks, memorized: S.memorized,
-      settings: S.settings, tahfidz: S.tahfidz, updatedAt: S.updatedAt, updated_at: new Date(S.updatedAt || Date.now()).toISOString()
-    }, { merge: true });
+    await Cloud.C.setDoc(cloudRef(), { ...body, updatedAt: S.updatedAt, updated_at: new Date(S.updatedAt || Date.now()).toISOString() }, { merge: true });
+    lastCloudSig = sig;
   } catch (e) { console.warn("Gagal sinkron:", e); }
 }
 
@@ -1348,8 +1489,10 @@ function bindUI() {
   els.btnMemo.addEventListener("click", toggleMemo);
   els.btnProgress.addEventListener("click", () => { renderProgress(); els.dlgPrg.showModal(); });
   els.prgMark.addEventListener("click", toggleMemo);
-  els.btnSettings.addEventListener("click", () => els.dlgSet.showModal());
-  els.btnAbout.addEventListener("click", () => els.dlgAbout.showModal());
+  els.btnSettings.addEventListener("click", () => { els.dlgSet.showModal(); offlineRefresh(); });
+  els.btnOffline.addEventListener("click", offlineDownload);
+  els.btnOfflineClear.addEventListener("click", offlineClear);
+  els.btnAbout.addEventListener("click", () => { loadIconFont(); els.dlgAbout.showModal(); });
   els.btnNavOpen.addEventListener("click", () => openNav("surat"));
   els.btnInstall.addEventListener("click", installApp);
   els.authBtn.addEventListener("click", toggleAuth);
@@ -1410,6 +1553,7 @@ function bindUI() {
   document.addEventListener("keydown", e => {
     if (e.key === "Escape" && !els.actionItems.hidden) { closeActions(); return; }
     if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (document.body.dataset.view && document.body.dataset.view !== "mushaf") return;   // tab Beranda/Ziyadah/Murojaah/Tes punya pintasan sendiri
     const tag = (e.target.tagName || "").toLowerCase();
     if (["input", "select", "textarea"].includes(tag) || document.querySelector("dialog[open]")) return;
     if (tag === "button" && (e.key === " " || e.key === "Enter")) return;
@@ -1458,6 +1602,10 @@ async function init() {
   syncWake();
   cloudInit();
   if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
+    const hadController = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (hadController) toast("Versi baru MutqinLab siap dipakai.", { ms: 15000, action: { label: "Muat ulang", fn: () => location.reload() } });
+    });
     window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
   }
   try { await goto(S.page, { auto: true }); }
