@@ -166,7 +166,7 @@ body[data-view]:not([data-view="mushaf"]) #wrap {
 /* ============================================================
    Tema Futuristik "Aurora Zamrud": kaca, cahaya halus, garis emas
    ============================================================ */
-:root { --f-display: "Sora", "Inter", system-ui, sans-serif; --emas-tepi: rgba(184, 146, 74, .45); }
+:root { --f-display: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif; --emas-tepi: rgba(184, 146, 74, .45); }
 html[data-theme="dark"] {
   --aksen: #4fe3c1; --g1: #119e82; --g2: #0a6657; --putar-teks: #f0d48e; --emas-tepi: rgba(226, 194, 122, .42);
   --latar-solid: #060d0b; --latar: linear-gradient(165deg, #0a1512 0%, #060d0b 55%, #08130f 100%);
@@ -441,3 +441,43 @@ html[data-theme="goldblack"] .thrate .r2, html[data-theme="goldblack"] .thbtn.em
 .thc details .thf, .thc details .thg2 { margin-top: 8px; }
 .thc details .throw { margin-top: 12px; }
 .grp .btn-row { margin-top: 10px; }
+
+/* ============================================================
+   Polesan tampilan profesional: tipografi Poppins, header ringkas
+   ============================================================ */
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+body { letter-spacing: -.003em; }
+.topbar { padding: 8px 10px; border-radius: 14px; box-shadow: 0 8px 24px rgba(0, 0, 0, .18), inset 0 1px 0 rgba(255, 255, 255, .1); }
+.topbar::after { display: none; }
+.brand-logo { width: 36px; height: 36px; border-radius: 10px; }
+.brand-name { font: 600 1.12rem/1.1 var(--f-display); letter-spacing: -.01em; background: none; -webkit-text-fill-color: #fff; color: #fff; }
+.header-actions { gap: 6px; }
+.about-btn { width: 34px; height: 34px; cursor: pointer; }
+.about-btn .ik { width: 17px; height: 17px; }
+.about-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.auth-box { padding: 3px 4px 3px 12px; font-weight: 500; }
+.auth-box button { padding: 6px 14px; cursor: pointer; }
+.thh, .thhead .thh { font-weight: 600; letter-spacing: -.01em; }
+.viewbar button { font-weight: 500; letter-spacing: 0; }
+.thbtn { font-weight: 600; }
+.thbtn:not(.sec) { box-shadow: 0 4px 14px var(--glow-aksen), inset 0 1px 0 rgba(255, 255, 255, .2); }
+.thring { box-shadow: 0 0 18px var(--glow-aksen); }
+.thc, .modal-box { box-shadow: 0 10px 30px rgba(0, 0, 0, .14); }
+.modal-head h2 { font-weight: 600; letter-spacing: -.01em; }
+@media (max-width: 520px) {
+  .header-actions { gap: 4px; }
+  .about-btn { width: 32px; height: 32px; }
+  .auth-box { padding: 0; background: none; border: 0; box-shadow: none; backdrop-filter: none; }
+  .auth-box .ik, #userStatus { display: none; }
+  .auth-box button { height: 32px; padding: 0 12px; background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .24); }
+  .brand-name { font-size: 1.02rem; }
+  .brand-logo { width: 32px; height: 32px; }
+  .brand { gap: 8px; }
+}
+@media (max-width: 360px) {
+  .topbar { padding-inline: 6px; gap: 6px; }
+  .brand { gap: 6px; } .brand-logo { width: 28px; height: 28px; } .brand-name { font-size: .92rem; }
+  .header-actions { gap: 3px; }
+  .about-btn { width: 29px; height: 29px; } .about-btn .ik { width: 15px; height: 15px; }
+  .auth-box button { height: 29px; padding: 0 9px; font-size: .68rem; }
+}

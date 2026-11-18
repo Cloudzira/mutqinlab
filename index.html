@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Reem+Kufi:wght@400;600;700&family=Amiri+Quran&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Reem+Kufi:wght@400;600;700&family=Amiri+Quran&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="tahfidz.css">
 </head>
@@ -92,12 +92,15 @@
   <header class="topbar">
     <div class="brand">
       <img class="brand-logo" src="icon.svg" alt="" width="38" height="38">
-      <span class="brand-txt"><span class="brand-name">MutqinLab</span><small lang="ar" dir="rtl">معمل الإتقان</small></span>
+      <span class="brand-txt"><span class="brand-name">MutqinLab</span></span>
     </div>
     <div class="header-actions">
       <button id="btnAbout" class="about-btn" type="button" aria-label="Tentang aplikasi" title="Tentang aplikasi">
         <svg class="ik" aria-hidden="true"><use href="#i-info"/></svg>
       </button>
+      <button id="btnTheme" class="about-btn" type="button" title="Ganti tema"><svg class="ik" aria-hidden="true"><use id="themeIcon" href="#i-moon"/></svg><span class="sr">Ganti tema</span></button>
+      <button id="btnInstall" class="about-btn" type="button" aria-label="Instal aplikasi" title="Instal aplikasi"><svg class="ik" aria-hidden="true"><use href="#i-download"/></svg></button>
+      <button id="btnSettings" class="about-btn" type="button" title="Pengaturan" aria-label="Pengaturan"><svg class="ik" aria-hidden="true"><use href="#i-sliders"/></svg></button>
       <div class="auth-box">
         <svg class="ik" aria-hidden="true"><use href="#i-user"/></svg>
         <span id="userStatus">Tamu</span>
@@ -144,9 +147,6 @@
       <button id="btnBookmarks" class="icon-btn" type="button" title="Daftar penanda"><svg class="ik" aria-hidden="true"><use href="#i-list"/></svg><span class="sr">Daftar penanda</span></button>
       <button id="btnMemo" class="icon-btn" type="button" aria-pressed="false" title="Tandai halaman ini sudah hafal (M)"><svg class="ik" aria-hidden="true"><use href="#i-check"/></svg><span class="sr">Tandai hafal</span></button>
       <button id="btnProgress" class="icon-btn" type="button" title="Progres hafalan"><svg class="ik" aria-hidden="true"><use href="#i-chart"/></svg><span class="sr">Progres hafalan</span></button>
-      <button id="btnInstall" class="icon-btn" type="button" aria-label="Instal aplikasi" title="Instal aplikasi"><svg class="ik" aria-hidden="true"><use href="#i-download"/></svg><span class="sr">Instal aplikasi</span></button>
-      <button id="btnTheme" class="icon-btn" type="button" title="Ganti tema"><svg class="ik" aria-hidden="true"><use id="themeIcon" href="#i-moon"/></svg><span class="sr">Ganti tema</span></button>
-      <button id="btnSettings" class="icon-btn" type="button" title="Pengaturan"><svg class="ik" aria-hidden="true"><use href="#i-sliders"/></svg><span class="sr">Pengaturan</span></button>
       </div>
     </div>
   </nav>
@@ -210,7 +210,6 @@
             <a href="https://instagram.com/kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="Instagram Kurniapedia" title="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i><span class="lbl" aria-hidden="true">IG</span></a>
             <a href="https://tiktok.com/@kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="TikTok Kurniapedia" title="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i><span class="lbl" aria-hidden="true">TT</span></a>
             <a href="https://www.youtube.com/@kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="YouTube Kurniapedia" title="YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i><span class="lbl" aria-hidden="true">YT</span></a>
-            <a href="https://wa.me/+6285870906050" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Kurniapedia" title="WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span class="lbl" aria-hidden="true">WA</span></a>
           </div>
         </section>
       </div>
