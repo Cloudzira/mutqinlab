@@ -354,12 +354,25 @@ document.addEventListener("keydown", e => {
 });
 
 /* ---------- Jam, tanggal Hijriah, hitung mundur target ---------- */
+const HM = ["Muharram", "Safar", "Rabiulawal", "Rabiulakhir", "Jumadilawal", "Jumadilakhir", "Rajab", "Syaban", "Ramadhan", "Syawal", "Zulkaidah", "Zulhijjah"];
+/* Tanggal Hijriah: ambil ANGKA bulan dari Intl lalu pakai nama bulan sendiri. Nama bulan/era bawaan peramban
+   sering salah di ponsel (mis. "8 Juni 1448 SM"). Bila kalender tidak didukung, tanggal Hijriah disembunyikan. */
+function hijri(d) {
+  try {
+    const f = new Intl.DateTimeFormat("en-u-ca-islamic-umalqura-nu-latn", { day: "numeric", month: "numeric", year: "numeric" });
+    if (!/islamic/.test(f.resolvedOptions().calendar || "")) return "";
+    const p = Object.fromEntries(f.formatToParts(d).filter(x => x.type !== "literal").map(x => [x.type, x.value]));
+    const m = +p.month, y = parseInt(p.year, 10);
+    if (!(m >= 1 && m <= 12) || !(y > 1000)) return "";
+    return `${+p.day} ${HM[m - 1]} ${y} H`;
+  } catch { return ""; }
+}
 let hj = "", hjd = -1;
 function tick() {
   if ($("tahfidz").hidden || document.hidden) return;
   const n = new Date(), d = today(); $("thClk").textContent = n.toLocaleTimeString("en-GB");
-  if (hjd != d || !hj) { hjd = d; try { hj = n.toLocaleDateString("id-u-ca-islamic-umalqura", { day: "numeric", month: "long", year: "numeric" }); } catch { hj = ""; } }
-  $("thHij").textContent = n.toLocaleDateString("id-ID", { weekday: "short", day: "numeric", month: "short" }) + (hj ? " · " + hj : "");
+  if (hjd != d || !hj) { hjd = d; hj = hijri(n); }
+  $("thHij").textContent = n.toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" }) + (hj ? " · " + hj : "");
   const P = TD().plan, c = $("thCdn");
   if (P) { const ms = (P.dl + 1) * DAY + n.getTimezoneOffset() * 6e4 - n.getTime();
     if (ms <= 0) c.textContent = "Deadline terlewat";

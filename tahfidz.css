@@ -481,3 +481,6 @@ body { letter-spacing: -.003em; }
   .about-btn { width: 29px; height: 29px; } .about-btn .ik { width: 15px; height: 15px; }
   .auth-box button { height: 29px; padding: 0 9px; font-size: .68rem; }
 }
+.thclock { flex-wrap: wrap; row-gap: 4px; }
+.thclock #thHij { flex: 1 1 220px; text-align: end; }
+@media (max-width: 520px) { .thclock #thHij { text-align: start; flex-basis: 100%; } }
