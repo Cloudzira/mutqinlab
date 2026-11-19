@@ -307,7 +307,7 @@ function persist(opt) {
    ============================================================ */
 const els = {};
 ["teks","kSurah","kJuz","kNo","kaki","navLabel","userStatus","authBtn","themeIcon",
- "btnAbout","dlgAbout","splash","btnBookmark","btnBookmarks","btnMemo","btnProgress","btnTheme","btnSettings","btnNavOpen","btnMoreActions","actionItems","btnInstall","modeGroup",
+ "btnAbout","splash","btnBookmark","btnBookmarks","btnMemo","btnProgress","btnTheme","btnSettings","btnNavOpen","btnMoreActions","actionItems","btnInstall","modeGroup",
  "ayatSheet","asKey","asText","asPlay","asDrill","asFrom","asClose",
  "player","plBar","plPrev","plPlay","plPlayIcon","plNext","plStop","plTitle","plSub","plMore","plPanel",
  "selQari","selMode","rngWrap","rngSurah","rngFrom","rngTo","selRepAyat","selRepRange","selSpeed","selGap",
@@ -1492,7 +1492,7 @@ function bindUI() {
   els.btnSettings.addEventListener("click", () => { els.dlgSet.showModal(); offlineRefresh(); });
   els.btnOffline.addEventListener("click", offlineDownload);
   els.btnOfflineClear.addEventListener("click", offlineClear);
-  els.btnAbout.addEventListener("click", () => { loadIconFont(); els.dlgAbout.showModal(); });
+  els.btnAbout.addEventListener("click", loadIconFont);   // dialog panduan & informasi dibuka oleh panduan.js
   els.btnNavOpen.addEventListener("click", () => openNav("surat"));
   els.btnInstall.addEventListener("click", installApp);
   els.authBtn.addEventListener("click", toggleAuth);

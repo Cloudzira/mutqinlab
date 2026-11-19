@@ -82,7 +82,6 @@
     <div class="splash-content">
       <div class="splash-emblem"><span class="ring" aria-hidden="true"></span><span class="ring r2" aria-hidden="true"></span><img src="icon.svg" alt="" width="86" height="86"></div>
       <strong class="splash-name">MutqinLab</strong>
-      <span class="splash-arab" lang="ar" dir="rtl">معمل الإتقان</span>
       <span class="splash-status">Menyiapkan mushaf</span>
       <span class="splash-line" aria-hidden="true"><i></i></span>
       <small class="splash-tag">Menghafal · Mengulang · Mengokohkan</small>
@@ -96,10 +95,7 @@
       <span class="brand-txt"><span class="brand-name">MutqinLab</span></span>
     </div>
     <div class="header-actions">
-      <button id="btnGuide" class="about-btn" type="button" data-guide="auto" aria-label="Panduan penggunaan" title="Panduan penggunaan">
-        <svg class="ik" aria-hidden="true"><use href="#i-help"/></svg>
-      </button>
-      <button id="btnAbout" class="about-btn" type="button" aria-label="Tentang aplikasi" title="Tentang aplikasi">
+      <button id="btnAbout" class="about-btn" type="button" data-guide="auto" aria-label="Panduan & informasi" title="Panduan & informasi">
         <svg class="ik" aria-hidden="true"><use href="#i-info"/></svg>
       </button>
       <button id="btnTheme" class="about-btn" type="button" title="Ganti tema"><svg class="ik" aria-hidden="true"><use id="themeIcon" href="#i-moon"/></svg><span class="sr">Ganti tema</span></button>
@@ -158,7 +154,7 @@
   <!-- Halaman mushaf -->
   <!-- Program tahfidz: Rencana · Ziyadah · Murojaah · Tes -->
   <section id="tahfidz" hidden aria-label="Program tahfidz">
-    <div class="thclock"><b id="thClk"></b><button type="button" class="pg-open" data-guide="auto" aria-label="Buka panduan untuk tab ini"><svg class="ik" aria-hidden="true"><use href="#i-help"/></svg>Panduan</button><span id="thHij"></span><span id="thCdn"></span></div>
+    <div class="thclock"><b id="thClk"></b><span id="thHij"></span><span id="thCdn"></span></div>
     <div id="thBody"></div>
   </section>
 
@@ -180,46 +176,6 @@
   <footer class="site-footer">
     <p>Crafted with <span class="heart">♥</span> by <span class="creator">Kurniapedia</span> 2026</p>
   </footer>
-
-  <dialog id="dlgAbout" class="modal" aria-labelledby="aboutTitle">
-    <div class="modal-box">
-      <header class="modal-head">
-        <h2 id="aboutTitle">Tentang MutqinLab</h2>
-        <button class="icon-btn kecil" type="button" data-close aria-label="Tutup"><svg class="ik" aria-hidden="true"><use href="#i-x"/></svg></button>
-      </header>
-      <div class="modal-body about-body">
-        <p class="about-intro">Mushaf Madinah 604 halaman untuk membaca, menjaga, dan menguatkan hafalan Al-Qur'an.</p>
-        <section class="about-section">
-          <h3 class="sub">Panduan penggunaan</h3>
-          <ul class="about-list">
-            <li>Geser ke kiri atau kanan pada halaman untuk berpindah halaman.</li>
-            <li>Pilih surat, juz, atau ayat melalui tombol navigasi.</li>
-            <li>Gunakan mode Tutup atau Kata awal untuk latihan hafalan; ketuk ayat untuk membuka dan melihat terjemahan.</li>
-            <li>Ketuk tanda akhir ayat untuk memutar, mengulang, atau melatih lantunan.</li>
-            <li>Simpan penanda dan progres hafalan dari menu Aksi halaman.</li>
-            <li>Buka tab Beranda untuk menyusun target hafalan (surat dan ayat), lalu ikuti panduan Ziyadah (hafalan baru), Murojaah (pengulangan terjadwal), dan Tes.</li>
-          </ul>
-          <button type="button" class="about-guide" data-guide="alur"><svg class="ik" aria-hidden="true"><use href="#i-help"/></svg>Buka panduan lengkap</button>
-        </section>
-        <section class="about-section">
-          <h3 class="sub">Referensi</h3>
-          <ul class="about-list sumber-list">
-            <li>Teks dan font mushaf: QCF v4, Mushaf Madinah.</li>
-            <li>Peta halaman dan terjemahan Indonesia Kemenag: Quran.com API.</li>
-            <li>Audio murattal: EveryAyah.com.</li>
-          </ul>
-        </section>
-        <section class="about-section">
-          <h3 class="sub">Kurniapedia</h3>
-          <div class="about-social" aria-label="Media sosial Kurniapedia">
-            <a href="https://instagram.com/kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="Instagram Kurniapedia" title="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i><span class="lbl" aria-hidden="true">IG</span></a>
-            <a href="https://tiktok.com/@kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="TikTok Kurniapedia" title="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i><span class="lbl" aria-hidden="true">TT</span></a>
-            <a href="https://kurniapedia.my.id" target="_blank" rel="noopener noreferrer" aria-label="Website Kurniapedia" title="kurniapedia.my.id"><i class="fa-solid fa-globe" aria-hidden="true"></i><span class="lbl" aria-hidden="true">WEB</span></a>
-          </div>
-        </section>
-      </div>
-    </div>
-  </dialog>
 
   <!-- Kartu ayat terpilih -->
   <aside id="ayatSheet" class="ayat-sheet" hidden aria-label="Ayat terpilih">

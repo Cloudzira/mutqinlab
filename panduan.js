@@ -33,7 +33,7 @@ const TABS = [
     ]) +
     h("clock", "Urutan terbaik dalam satu hari") +
     ul(["<b>Murojaah dulu</b>, baru ziyadah — otak masih segar dan antrean tidak menumpuk.", "Ziyadah paling kuat <b>setelah Subuh</b>; ulangi ayat baru 3× tanpa melihat <b>sebelum tidur</b> (tidur mengunci memori).", "Hari tersibuk? Pakai <b>aturan 5 menit</b>: kecilkan targetnya, jangan nol. Rantai harian (🔥) jangan putus dua hari berturut-turut."]) +
-    note("tip", "Tombol <b>(?)</b> di bilah atas dan tombol <b>Panduan</b> di tiap tab membuka halaman ini kapan saja. Data tersimpan di perangkatmu; masuk dengan Google untuk menyinkronkan antar perangkat.")
+    note("tip", "Tombol <b>ⓘ</b> di bilah atas membuka panduan ini kapan saja, langsung ke bagian sesuai tab yang sedang aktif. Data tersimpan di perangkatmu; masuk dengan Google untuk menyinkronkan antar perangkat.")
   },
 
   { id: "mushaf", label: "Mushaf", icon: "book", title: "Tab Mushaf — membaca, melatih, dan mendengar", html: () =>
@@ -171,6 +171,18 @@ const TABS = [
       "Ulangi tes sampai skor stabil tinggi; <b>Ulangi Tes</b> mengambil soal acak baru."
     ]) +
     go("t", "Buka Tes")
+  },
+
+  { id: "tentang", label: "Tentang", icon: "info", title: "Tentang MutqinLab", html: () =>
+    p("Mushaf Madinah 604 halaman untuk membaca, menjaga, dan menguatkan hafalan Al-Qur'an, dilengkapi program tahfidz terpandu dengan jadwal murojaah otomatis.") +
+    h("book", "Referensi") +
+    ul(["Teks dan font mushaf: QCF v4, Mushaf Madinah.", "Peta halaman dan terjemahan Indonesia Kemenag: Quran.com API.", "Audio murattal: EveryAyah.com.", "Semua sumber gratis."]) +
+    h("user", "Kurniapedia") +
+    `<div class="about-social" aria-label="Media sosial Kurniapedia">
+      <a href="https://instagram.com/kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="Instagram Kurniapedia" title="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i><span class="lbl" aria-hidden="true">IG</span></a>
+      <a href="https://tiktok.com/@kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="TikTok Kurniapedia" title="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i><span class="lbl" aria-hidden="true">TT</span></a>
+      <a href="https://kurniapedia.my.id" target="_blank" rel="noopener noreferrer" aria-label="Website Kurniapedia" title="kurniapedia.my.id"><i class="fa-solid fa-globe" aria-hidden="true"></i><span class="lbl" aria-hidden="true">WEB</span></a>
+    </div>`
   }
 ];
 
@@ -183,7 +195,7 @@ function build() {
   d.id = "dlgGuide"; d.className = "modal pg-modal"; d.setAttribute("aria-labelledby", "pgTitle");
   d.innerHTML = `<div class="modal-box">
     <header class="modal-head">
-      <h2 id="pgTitle">Panduan Penggunaan</h2>
+      <h2 id="pgTitle">Panduan & Informasi</h2>
       <button class="icon-btn kecil" type="button" data-close aria-label="Tutup">${ic("x")}</button>
     </header>
     <div class="tabs pg-tabs" role="tablist" aria-label="Bagian panduan">
@@ -250,7 +262,6 @@ document.addEventListener("click", e => {
   const b = e.target.closest("[data-guide]");
   if (!b) return;
   const s = b.dataset.guide;
-  const about = document.getElementById("dlgAbout"); if (about && about.open) about.close();
   open(s && s !== "auto" ? s : undefined);
 });
 

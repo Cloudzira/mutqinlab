@@ -1,15 +1,16 @@
 # MutqinLab — catatan perubahan
 
 ## Panduan penggunaan (baru)
-- `panduan.js` + gaya di `tahfidz.css`: popup panduan rinci dengan 6 bagian — Alur · Mushaf · Beranda (perencanaan) · Ziyadah · Murojaah · Tes.
-- Dibuka dari tombol (?) di bilah atas, tombol "Panduan" di tab program (otomatis membuka bagian sesuai tab aktif), dan tombol "Buka panduan lengkap" di dialog Tentang.
+- `panduan.js` + gaya di `tahfidz.css`: popup panduan rinci dengan 7 bagian — Alur · Mushaf · Beranda (perencanaan) · Ziyadah · Murojaah · Tes · Tentang.
+- Satu tombol info (ⓘ) di bilah atas membuka panduan, langsung ke bagian sesuai tab aktif. Dialog "Tentang" digabung menjadi tab terakhir "Tentang" (referensi + medsos Kurniapedia); tombol (?) dan tombol "Panduan" terpisah dihapus.
+- Splash screen: teks Arab di bawah judul MutqinLab dihapus.
 - Pengguna baru melihatnya otomatis satu kali; pengguna lama yang sudah punya rencana/hafalan tidak diganggu.
 - Isi mengikuti rumus aplikasi: pembagian 60% ziyadah / 40% murojaah, fase Mutqin ±15% hari terakhir, 5 langkah ziyadah, interval SRS (3 → 7 hari → ×kemudahan), arti Lupa/Ragu/Mutqin, impor hafalan lama, dan cara kerja Tes.
 - Service worker v14 (panduan.js masuk cache luring).
 
 ## Media sosial
 - Ikon YouTube diganti tautan situs https://kurniapedia.my.id (ikon globe) di dialog Tentang.
-- Bilah atas pada layar ≤480px menyembunyikan teks nama merek agar tombol panduan muat.
+- Bilah atas pada layar ≤480px menyembunyikan teks nama merek agar tombol muat.
 
 ## Perbaikan bug
 - Pintasan keyboard mushaf (Spasi, 1/2/3, B, M, panah) tidak lagi aktif di tab Beranda/Ziyadah/Murojaah/Tes (sebelumnya Spasi di Murojaah ikut memutar audio dan B/M menandai halaman tersembunyi).
