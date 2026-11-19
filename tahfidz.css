@@ -554,3 +554,8 @@ body { letter-spacing: -.003em; }
   .header-actions { gap: 5px; }
   .header-actions .about-btn { width: 31px; height: 31px; }
 }
+
+/* jam & hitung mundur: statis, tidak bergeser mengikuti detik */
+.thclock .dg { display: inline-block; width: .66em; text-align: center; font-style: normal; }
+.thclock #thClk { display: inline-block; min-width: 8.3ch; white-space: nowrap; }
+.thclock #thCdn { white-space: nowrap; }

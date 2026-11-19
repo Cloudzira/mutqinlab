@@ -367,17 +367,19 @@ function hijri(d) {
     return `${+p.day} ${HM[m - 1]} ${y} H`;
   } catch { return ""; }
 }
+/* Angka jam/hitung mundur dibungkus lebar tetap per digit supaya baris tidak bergeser tiap detik */
+function setFx(el, t) { if (el.dataset.t === t) return; el.dataset.t = t; el.innerHTML = t.replace(/\d/g, d => `<i class="dg">${d}</i>`); el.setAttribute("aria-label", t); }
 let hj = "", hjd = -1;
 function tick() {
   if ($("tahfidz").hidden || document.hidden) return;
-  const n = new Date(), d = today(); $("thClk").textContent = n.toLocaleTimeString("en-GB");
+  const n = new Date(), d = today(); setFx($("thClk"), n.toLocaleTimeString("en-GB"));
   if (hjd != d || !hj) { hjd = d; hj = hijri(n); }
   $("thHij").textContent = n.toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" }) + (hj ? " · " + hj : "");
   const P = TD().plan, c = $("thCdn");
   if (P) { const ms = (P.dl + 1) * DAY + n.getTimezoneOffset() * 6e4 - n.getTime();
-    if (ms <= 0) c.textContent = "Deadline terlewat";
-    else { const dd = Math.floor(ms / DAY), r = ms % DAY; c.textContent = `Target ${dd} hari ${pad(Math.floor(r / 36e5))}:${pad(Math.floor(r / 6e4) % 60)}:${pad(Math.floor(r / 1e3) % 60)}`; c.classList.toggle("dekat", dd < 7); } }
-  else c.textContent = "";
+    if (ms <= 0) setFx(c, "Deadline terlewat");
+    else { const dd = Math.floor(ms / DAY), r = ms % DAY; setFx(c, `Target ${dd} hari ${pad(Math.floor(r / 36e5))}:${pad(Math.floor(r / 6e4) % 60)}:${pad(Math.floor(r / 1e3) % 60)}`); c.classList.toggle("dekat", dd < 7); } }
+  else setFx(c, "");
   const z = $("thTimer"); if (z && zStart) { const q = Math.floor((Date.now() - zStart) / 1e3); z.textContent = `${pad(Math.floor(q / 60))}:${pad(q % 60)} / ${zMin} mnt`; }
 }
 

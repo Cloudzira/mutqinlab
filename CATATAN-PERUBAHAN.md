@@ -8,6 +8,9 @@
 - Isi mengikuti rumus aplikasi: pembagian 60% ziyadah / 40% murojaah, fase Mutqin ±15% hari terakhir, 5 langkah ziyadah, interval SRS (3 → 7 hari → ×kemudahan), arti Lupa/Ragu/Mutqin, impor hafalan lama, dan cara kerja Tes.
 - Service worker v14 (panduan.js masuk cache luring).
 
+## Bar jam
+- Jam, tanggal, dan hitung mundur target kini statis: tiap digit berlebar tetap sehingga baris tidak bergeser mengikuti detik.
+
 ## Media sosial
 - Ikon YouTube diganti tautan situs https://kurniapedia.my.id (ikon globe) di dialog Tentang.
 - Bilah atas pada layar ≤480px menyembunyikan teks nama merek agar tombol muat.
