@@ -4,11 +4,11 @@
   • Data mushaf, font, terjemahan, ikon: cache-first (tidak berubah) → bisa dibaca luring.
     Cache data TIDAK diberi nomor versi supaya hasil "Unduh seluruh mushaf" tidak hilang saat aplikasi diperbarui.
   • Audio (everyayah.com) & Firebase: tidak disentuh. */
-const VERSION = "v13";
+const VERSION = "v14";
 const SHELL_CACHE = "mushaf-shell-" + VERSION;
 const DATA_CACHE = "mushaf-data";   // harus sama dengan DATA_CACHE di app.js
 const SHELL = [
-  "./", "index.html", "style.css", "app.js", "tahfidz.js", "tahfidz.css", "manifest.webmanifest",
+  "./", "index.html", "style.css", "app.js", "tahfidz.js", "panduan.js", "tahfidz.css", "manifest.webmanifest",
   "icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"
 ];
 

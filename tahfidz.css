@@ -484,3 +484,73 @@ body { letter-spacing: -.003em; }
 .thclock { flex-wrap: wrap; row-gap: 4px; }
 .thclock #thHij { flex: 1 1 220px; text-align: end; }
 @media (max-width: 520px) { .thclock #thHij { text-align: start; flex-basis: 100%; } }
+
+/* ============================================================
+   Popup Panduan Penggunaan (panduan.js)
+   ============================================================ */
+.pg-modal { width: min(660px, calc(100% - 16px)); max-height: min(92vh, 860px); }
+.pg-modal .modal-box { max-height: min(92vh, 860px); }
+.pg-tabs { overflow-x: auto; scrollbar-width: none; padding-inline: 10px; flex: none; }
+.pg-tabs::-webkit-scrollbar { display: none; }
+.pg-tabs button { flex: 1 0 auto; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 12px; white-space: nowrap; font-family: var(--f-display, inherit); }
+.pg-tabs .ik { width: 16px; height: 16px; }
+.pg-body { padding: 16px 18px 20px; font-size: .84rem; line-height: 1.65; color: var(--teks-lembut); outline: none; overscroll-behavior: contain; }
+.pg-body p { margin: 0 0 10px; }
+.pg-body b { color: var(--teks); font-weight: 600; }
+.pg-title { margin: 0 0 12px; font-size: 1.15rem; line-height: 1.3; font-weight: 700; letter-spacing: -.01em; color: var(--teks); font-family: var(--f-display, inherit); }
+.pg-h { display: flex; align-items: center; gap: 8px; margin: 20px 0 8px; padding-top: 14px; border-top: 1px dashed var(--tepi); font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--aksen); }
+.pg-h .ik { width: 17px; height: 17px; flex: none; color: var(--emas); }
+.pg-list { margin: 0 0 10px; padding-inline-start: 20px; display: flex; flex-direction: column; gap: 6px; }
+.pg-list li::marker { color: var(--emas); }
+.pg-steps { list-style: none; margin: 0 0 12px; padding: 0; display: flex; flex-direction: column; gap: 8px; counter-reset: none; }
+.pg-steps li { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; background: var(--kaca-halus); border: 1px solid var(--tepi); border-inline-start: 3px solid var(--emas); border-radius: 10px; }
+.pg-steps li b { font-size: .86rem; color: var(--aksen); }
+.pg-steps li span { font-size: .82rem; }
+.pg-note { display: flex; gap: 10px; align-items: flex-start; margin: 12px 0; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--tepi); background: var(--kaca-halus); font-size: .8rem; line-height: 1.55; }
+.pg-note .pg-ni { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: color-mix(in srgb, var(--emas) 22%, transparent); color: var(--emas); }
+.pg-note .pg-ni .ik { width: 14px; height: 14px; }
+.pg-note.warn { border-color: color-mix(in srgb, var(--bahaya) 40%, transparent); background: color-mix(in srgb, var(--bahaya) 8%, transparent); }
+.pg-note.warn .pg-ni { background: color-mix(in srgb, var(--bahaya) 18%, transparent); color: var(--bahaya); }
+.pg-note.ok { border-color: color-mix(in srgb, var(--ok) 40%, transparent); background: color-mix(in srgb, var(--ok) 8%, transparent); }
+.pg-note.ok .pg-ni { background: color-mix(in srgb, var(--ok) 18%, transparent); color: var(--ok); }
+.pg-tbl { overflow-x: auto; margin: 0 0 12px; border: 1px solid var(--tepi); border-radius: 10px; }
+.pg-tbl table { width: 100%; border-collapse: collapse; font-size: .78rem; line-height: 1.5; }
+.pg-tbl th { text-align: start; padding: 8px 10px; background: var(--kaca-halus); color: var(--teks); font-weight: 700; white-space: nowrap; }
+.pg-tbl td { padding: 8px 10px; vertical-align: top; border-top: 1px solid var(--tepi); }
+.pg-go { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; margin-top: 14px; min-height: 44px; padding: 10px 14px; border: 0; border-radius: 12px; cursor: pointer; font: 600 .86rem var(--f-display, inherit); color: #fff; background: linear-gradient(135deg, var(--g1), var(--g2)); box-shadow: 0 4px 12px var(--glow-aksen); }
+.pg-go .ik { width: 16px; height: 16px; }
+.pg-go:active { transform: scale(.98); }
+.pg-foot { justify-content: space-between; align-items: center; gap: 8px; }
+.pg-count { font-size: .72rem; color: var(--redup); font-variant-numeric: tabular-nums; }
+.pg-nav { display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 7px 12px; border-radius: 10px; cursor: pointer; font: 600 .78rem var(--f-display, inherit); color: var(--teks); background: var(--kaca-halus); border: 1px solid var(--tepi); }
+.pg-nav.pg-next { color: #fff; background: linear-gradient(135deg, var(--g1), var(--g2)); border-color: transparent; }
+.pg-nav .ik { width: 15px; height: 15px; }
+.pg-nav:disabled { opacity: .4; cursor: default; }
+.pg-tabs button:focus-visible, .pg-nav:focus-visible, .pg-go:focus-visible { outline: 2px solid var(--aksen); outline-offset: 2px; }
+
+/* tombol panduan di bar jam tab program */
+.thclock .pg-open { display: inline-flex; align-items: center; gap: 5px; align-self: center; min-height: 30px; padding: 4px 11px; border-radius: 999px; cursor: pointer; font: 600 .72rem var(--f-display, inherit); color: var(--aksen); background: var(--kaca-halus); border: 1px solid var(--tepi-aksen); }
+.thclock .pg-open .ik { width: 14px; height: 14px; }
+.thclock .pg-open:hover { background: color-mix(in srgb, var(--aksen) 12%, transparent); }
+
+/* tombol di dialog Tentang */
+.about-guide { display: inline-flex; align-items: center; gap: 7px; margin-top: 10px; min-height: 38px; padding: 7px 14px; border-radius: 10px; cursor: pointer; font: 600 .78rem var(--f-display, inherit); color: #fff; background: linear-gradient(135deg, var(--g1), var(--g2)); border: 0; }
+.about-guide .ik { width: 15px; height: 15px; }
+
+@media (max-width: 520px) {
+  .pg-modal { width: calc(100% - 12px); max-height: 94vh; }
+  .pg-modal .modal-box { max-height: 94vh; }
+  .pg-tabs button { padding: 9px 10px; font-size: .76rem; }
+  .pg-tabs button .ik { display: none; }
+  .pg-body { padding: 14px 14px 18px; }
+  .pg-nav span { display: none; }
+  .pg-nav { padding-inline: 14px; }
+}
+
+/* bilah atas: beri ruang untuk tombol panduan di layar sempit */
+@media (max-width: 480px) {
+  .topbar { gap: 6px; }
+  .brand-txt { display: none; }
+  .header-actions { gap: 5px; }
+  .header-actions .about-btn { width: 31px; height: 31px; }
+}

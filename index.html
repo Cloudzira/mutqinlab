@@ -72,6 +72,7 @@
     <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
     <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.8-3.4L23 10M1 14l4.7 4.4A9 9 0 0 0 20.5 15"/></symbol>
     <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></symbol>
     <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 11v5M12 8h.01"/></symbol>
   </svg>
 
@@ -95,6 +96,9 @@
       <span class="brand-txt"><span class="brand-name">MutqinLab</span></span>
     </div>
     <div class="header-actions">
+      <button id="btnGuide" class="about-btn" type="button" data-guide="auto" aria-label="Panduan penggunaan" title="Panduan penggunaan">
+        <svg class="ik" aria-hidden="true"><use href="#i-help"/></svg>
+      </button>
       <button id="btnAbout" class="about-btn" type="button" aria-label="Tentang aplikasi" title="Tentang aplikasi">
         <svg class="ik" aria-hidden="true"><use href="#i-info"/></svg>
       </button>
@@ -154,7 +158,7 @@
   <!-- Halaman mushaf -->
   <!-- Program tahfidz: Rencana · Ziyadah · Murojaah · Tes -->
   <section id="tahfidz" hidden aria-label="Program tahfidz">
-    <div class="thclock"><b id="thClk"></b><span id="thHij"></span><span id="thCdn"></span></div>
+    <div class="thclock"><b id="thClk"></b><button type="button" class="pg-open" data-guide="auto" aria-label="Buka panduan untuk tab ini"><svg class="ik" aria-hidden="true"><use href="#i-help"/></svg>Panduan</button><span id="thHij"></span><span id="thCdn"></span></div>
     <div id="thBody"></div>
   </section>
 
@@ -195,6 +199,7 @@
             <li>Simpan penanda dan progres hafalan dari menu Aksi halaman.</li>
             <li>Buka tab Beranda untuk menyusun target hafalan (surat dan ayat), lalu ikuti panduan Ziyadah (hafalan baru), Murojaah (pengulangan terjadwal), dan Tes.</li>
           </ul>
+          <button type="button" class="about-guide" data-guide="alur"><svg class="ik" aria-hidden="true"><use href="#i-help"/></svg>Buka panduan lengkap</button>
         </section>
         <section class="about-section">
           <h3 class="sub">Referensi</h3>
@@ -209,7 +214,7 @@
           <div class="about-social" aria-label="Media sosial Kurniapedia">
             <a href="https://instagram.com/kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="Instagram Kurniapedia" title="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i><span class="lbl" aria-hidden="true">IG</span></a>
             <a href="https://tiktok.com/@kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="TikTok Kurniapedia" title="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i><span class="lbl" aria-hidden="true">TT</span></a>
-            <a href="https://www.youtube.com/@kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="YouTube Kurniapedia" title="YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i><span class="lbl" aria-hidden="true">YT</span></a>
+            <a href="https://kurniapedia.my.id" target="_blank" rel="noopener noreferrer" aria-label="Website Kurniapedia" title="kurniapedia.my.id"><i class="fa-solid fa-globe" aria-hidden="true"></i><span class="lbl" aria-hidden="true">WEB</span></a>
           </div>
         </section>
       </div>
@@ -417,5 +422,6 @@
 
   <script src="app.js" defer></script>
   <script src="tahfidz.js" defer></script>
+  <script src="panduan.js" defer></script>
 </body>
 </html>
