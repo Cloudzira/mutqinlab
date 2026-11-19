@@ -10,6 +10,7 @@ const M = window.MP; if (!M) return;
 const $ = id => document.getElementById(id);
 const STORE = "mp_ai_chat", MAXLEN = 1200, KEEP = 24;
 const ic = n => `<svg class="ik" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+const ask = o => window.mpConfirm ? window.mpConfirm(o) : Promise.resolve(confirm(o.message || o.title));
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const TABS = { g: "Beranda", z: "Ziyadah", m: "Murojaah", t: "Tes", mushaf: "Mushaf" };
 const CHIPS = [
@@ -97,7 +98,11 @@ function build() {
 
   fab.addEventListener("click", () => open());
   $("aiSend").addEventListener("click", () => (busy ? stop() : send()));
-  $("aiClear").addEventListener("click", () => { if (busy) stop(); if (msgs.length && !confirm("Mulai percakapan baru? Riwayat di perangkat ini akan dihapus.")) return; msgs = []; save(); render(); });
+  $("aiClear").addEventListener("click", async () => {
+    if (busy) stop();
+    if (msgs.length && !(await ask({ title: "Mulai percakapan baru?", message: "Riwayat percakapan di perangkat ini akan dihapus dan tidak bisa dikembalikan.", okText: "Hapus percakapan", cancelText: "Batal", icon: "trash" }))) return;
+    msgs = []; save(); render();
+  });
   const ta = $("aiIn");
   ta.addEventListener("input", () => { grow(); $("aiCnt").textContent = `${ta.value.length}/${MAXLEN}`; });
   ta.addEventListener("keydown", e => {

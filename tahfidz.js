@@ -7,6 +7,7 @@
 (() => {
 "use strict";
 const M = window.MP; if (!M) return;
+const ask = o => window.mpConfirm ? window.mpConfirm(o) : Promise.resolve(confirm(o.message || o.title));
 const $ = id => document.getElementById(id);
 const DAY = 864e5, pad = n => String(n).padStart(2, "0");
 const SU = M.SURAH, nm = s => SU[s - 1][0], nAy = s => SU[s - 1][2], K = (s, a) => s + ":" + a;
@@ -302,11 +303,11 @@ const A = {
       const u = Date.now(); added.forEach(key => { const it = TD().items[key]; if (it) TD().items[key] = { ...it, x: 1, u }; }); save(); render(); badge();
     } } });
   },
-  unimp: () => {
+  unimp: async () => {
     const [f, t] = impRange(), keys = [];
     for (let s = f; s <= t; s++) for (let a = 1; a <= nAy(s); a++) if (live(K(s, a))) keys.push(K(s, a));
     if (!keys.length) return M.toast("Tidak ada ayat di rentang ini pada jadwal");
-    if (!confirm(`Keluarkan ${keys.length} ayat dari jadwal murojaah? Riwayat ulangannya ikut dihapus.`)) return;
+    if (!(await ask({ title: `Keluarkan ${keys.length} ayat?`, message: "Ayat akan dikeluarkan dari jadwal murojaah dan riwayat ulangannya ikut dihapus.", okText: "Keluarkan", icon: "alert" }))) return;
     const u = Date.now(); keys.forEach(key => { TD().items[key] = { ...TD().items[key], x: 1, u }; });
     IM.o = false; save(); render(); badge(); M.toast(`${keys.length} ayat dikeluarkan dari jadwal`);
   },

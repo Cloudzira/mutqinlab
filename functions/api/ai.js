@@ -11,6 +11,8 @@
      FIREBASE_API_KEY      (opsional, default = apiKey publik proyek Firebase MutqinLab)
      AI_DAILY_LIMIT        (opsional, default 30 pertanyaan/pengguna/hari)
      ALLOWED_ORIGINS       (opsional, daftar origin tambahan dipisah koma)
+     AI_THINKING           (opsional, default "low". Tingkat "berpikir" model Gemini 3.x: minimal | low | medium | high.
+                            Makin rendah makin cepat. Isi "off" untuk tidak mengirim pengaturan ini.)
      AI_DEBUG              (opsional, isi "1" untuk menampilkan alasan error dari Google di respons;
                             lihat di DevTools > Network > ai > Response. Matikan/hapus setelah selesai.)
    Binding opsional: AI_KV (Workers KV) untuk penghitung kuota harian yang tahan antar-instans.
@@ -91,13 +93,21 @@ function cleanMessages(raw) {
 }
 
 /* ---------- Gemini ---------- */
-function geminiBody(system, msgs) {
-  // Catatan: model seri 3.x memakai "thinking" yang ikut dihitung sebagai token keluaran,
-  // jadi batasnya dibuat lebih longgar (4096). Suhu/topP dibiarkan default agar cocok untuk 2.5 maupun 3.x.
+const THINK_LEVELS = ["minimal", "low", "medium", "high"];
+function thinkingLevel(model, env) {
+  // Gemini 3.x memakai "thinking" tingkat tinggi secara default -> jawaban sangat lama untuk chat.
+  // Kita turunkan ke "low" (bisa diubah lewat AI_THINKING). Hanya dikirim untuk model seri 3.x/4.x.
+  const v = String(env.AI_THINKING || "low").trim().toLowerCase();
+  if (v === "off" || !THINK_LEVELS.includes(v)) return null;
+  return /^gemini-[3-9]/.test(model) ? v : null;
+}
+function geminiBody(system, msgs, level) {
+  const generationConfig = { maxOutputTokens: 4096 };
+  if (level) generationConfig.thinkingConfig = { thinkingLevel: level };
   return JSON.stringify({
     systemInstruction: { parts: [{ text: system }] },
     contents: msgs.map(x => ({ role: x.role, parts: [{ text: x.text }] })),
-    generationConfig: { maxOutputTokens: 4096 }
+    generationConfig
   });
 }
 
@@ -178,9 +188,26 @@ export async function onRequestPost({ request, env }) {
   const q = await takeQuota(uid, env);
   if (!q.ok) return json({ error: "quota", limit: q.limit }, 429);
 
-  const body = geminiBody(buildSystem(data.ctx), msgs);
+  const system = buildSystem(data.ctx);
   const primary = (env.GEMINI_MODEL || DEFAULT_MODEL).trim();
   const fallback = (env.GEMINI_FALLBACK_MODEL || DEFAULT_FALLBACK).trim();
+
+  // Coba satu model. Bila ditolak (400) padahal memakai pengaturan thinking, ulangi tanpa pengaturan itu.
+  async function tryModel(model, attempts) {
+    const level = thinkingLevel(model, env);
+    try {
+      let r = await callGemini(model, geminiBody(system, msgs, level), env);
+      if (!r.ok && r.status === 400 && level) {
+        attempts.push(await errorInfo(model + " (thinking " + level + ")", r));
+        r = await callGemini(model, geminiBody(system, msgs, null), env);
+      }
+      if (r.ok) return r;
+      attempts.push(await errorInfo(model, r));
+    } catch (e) {
+      attempts.push({ model, status: 0, message: "Gagal menghubungi Google: " + (e && e.message ? e.message : String(e)).slice(0, 200) });
+    }
+    return null;
+  }
 
   // gagal: kembalikan kuota, catat di log Cloudflare, dan (bila AI_DEBUG=1) sertakan alasan
   const fail = async (error, status, details) => {
@@ -190,27 +217,8 @@ export async function onRequestPost({ request, env }) {
   };
 
   const attempts = [];
-  let res = null;
-
-  // percobaan 1: model utama
-  try {
-    const r1 = await callGemini(primary, body, env);
-    if (r1.ok) res = r1;
-    else attempts.push(await errorInfo(primary, r1));
-  } catch (e) {
-    attempts.push({ model: primary, status: 0, message: "Gagal menghubungi Google: " + (e && e.message ? e.message : String(e)).slice(0, 200) });
-  }
-
-  // percobaan 2: model cadangan (untuk error apa pun pada model utama)
-  if (!res && fallback && fallback !== primary) {
-    try {
-      const r2 = await callGemini(fallback, body, env);
-      if (r2.ok) res = r2;
-      else attempts.push(await errorInfo(fallback, r2));
-    } catch (e) {
-      attempts.push({ model: fallback, status: 0, message: "Gagal menghubungi Google: " + (e && e.message ? e.message : String(e)).slice(0, 200) });
-    }
-  }
+  let res = await tryModel(primary, attempts);
+  if (!res && fallback && fallback !== primary) res = await tryModel(fallback, attempts);
 
   if (!res) {
     const s = attempts.map(a => a.status);

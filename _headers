@@ -20,6 +20,10 @@
   Cache-Control: no-cache
 /ai.css
   Cache-Control: no-cache
+/dialog.js
+  Cache-Control: no-cache
+/dialog.css
+  Cache-Control: no-cache
 /privasi.html
   Cache-Control: no-cache
 /og-image.png

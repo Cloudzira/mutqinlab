@@ -1252,11 +1252,11 @@ function exportData() {
 }
 function importData(file) {
   const rd = new FileReader();
-  rd.onload = () => {
+  rd.onload = async () => {
     try {
       const obj = JSON.parse(String(rd.result));
       if (!obj || typeof obj !== "object" || (obj.page == null && obj.bookmarks == null && obj.memorized == null)) throw new Error("bukan berkas cadangan");
-      if (!confirm("Ganti data di perangkat ini dengan isi berkas cadangan?")) return;
+      if (!(await ask({ title: "Ganti data di perangkat ini?", message: "Data saat ini akan diganti dengan isi berkas cadangan.", okText: "Ganti data", icon: "alert" }))) return;
       S = sanitize(obj);
       persist(); syncControls(); updateChrome(); renderBookmarks(); applyHideMode(); window.TH && window.TH.refresh();
       goto(S.page);
@@ -1351,7 +1351,7 @@ async function offlineDownload() {
 
 async function offlineClear() {
   if (OFF.running) return;
-  if (!confirm("Hapus mushaf yang sudah diunduh? Halaman akan diunduh lagi saat dibuka dengan internet.")) return;
+  if (!(await ask({ title: "Hapus mushaf yang diunduh?", message: "Halaman akan diunduh lagi saat dibuka dengan internet.", okText: "Hapus", icon: "trash" }))) return;
   try { await caches.delete(DATA_CACHE); } catch { /* abaikan */ }
   await offlineRefresh();
   toast("Unduhan luring dihapus");
@@ -1360,6 +1360,7 @@ async function offlineClear() {
 /* ============================================================
    Toast
    ============================================================ */
+const ask = o => window.mpConfirm ? window.mpConfirm(o) : Promise.resolve(confirm(o.message || o.title));
 function toast(msg, opt = {}) {
   const t = h("div", "toast");
   t.append(h("span", null, msg));
@@ -1423,7 +1424,7 @@ async function toggleAuth() {
    Urutan: konfirmasi → login ulang Google (wajib Firebase untuk aksi sensitif) → hapus dokumen Firestore → hapus akun. */
 async function deleteAccount() {
   if (!Cloud.ok || !Cloud.user) { toast("Masuk dulu untuk menghapus akun."); return; }
-  if (!confirm("Hapus akun dan semua data cloud Anda secara PERMANEN?\n\n• Progres, rencana, dan penanda di cloud akan dihapus.\n• Akun MutqinLab Anda dihapus.\n• Data di perangkat ini tetap ada (hapus sendiri lewat \"Hapus data lokal\").\n\nTindakan ini tidak bisa dibatalkan.")) return;
+  if (!(await ask({ title: "Hapus akun secara permanen?", message: "• Progres, rencana, dan penanda di cloud akan dihapus.\n• Akun MutqinLab Anda dihapus.\n• Data di perangkat ini tetap ada (hapus sendiri lewat \"Hapus data lokal\").\n\nTindakan ini tidak bisa dibatalkan.", okText: "Hapus akun", icon: "alert" }))) return;
   const user = Cloud.user;
   els.btnDelAcc.disabled = true;
   try {
@@ -1571,8 +1572,8 @@ function bindUI() {
   els.fileImport.addEventListener("change", () => { if (els.fileImport.files[0]) importData(els.fileImport.files[0]); els.fileImport.value = ""; });
   els.btnDiag.addEventListener("click", copyDiag);
   els.btnDelAcc.addEventListener("click", deleteAccount);
-  els.btnReset.addEventListener("click", () => {
-    if (!confirm("Hapus semua penanda, progres hafalan, dan pengaturan di perangkat ini? Data di akun awan tidak ikut terhapus (gunakan \"Hapus akun & data cloud\" bila ingin menghapusnya).")) return;
+  els.btnReset.addEventListener("click", async () => {
+    if (!(await ask({ title: "Hapus data di perangkat ini?", message: "Semua penanda, progres hafalan, dan pengaturan di perangkat ini akan dihapus. Data di akun awan tidak ikut terhapus (gunakan \"Hapus akun & data cloud\" bila ingin menghapusnya).", okText: "Hapus data", icon: "trash" }))) return;
     hardStop(true);
     LS.del(KEY); LS.del("mushaf_uid");
     S = defaults(); S.page = cur.page || 1;
