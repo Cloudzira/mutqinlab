@@ -14,6 +14,18 @@
   <meta property="og:title" content="MutqinLab — Hafalan & Murojaah Al-Qur'an">
   <meta property="og:description" content="Mushaf Madinah 604 halaman, audio per ayat, dan program tahfidz terpandu dengan jadwal murojaah otomatis.">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="MutqinLab">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:url" content="https://mutqinlab.pages.dev/">
+  <meta property="og:image" content="https://mutqinlab.pages.dev/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="MutqinLab — Hafalan &amp; Murojaah Al-Qur'an">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MutqinLab — Hafalan &amp; Murojaah Al-Qur'an">
+  <meta name="twitter:description" content="Rencana hafalan sesuai waktumu, ziyadah terpandu, dan murojaah terjadwal otomatis. Gratis.">
+  <meta name="twitter:image" content="https://mutqinlab.pages.dev/og-image.png">
+  <link rel="canonical" href="https://mutqinlab.pages.dev/">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -24,6 +36,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Reem+Kufi:wght@400;600;700&family=Amiri+Quran&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="tahfidz.css">
+  <link rel="stylesheet" href="ai.css">
 </head>
 <body>
   <noscript><p style="padding:24px;font:16px system-ui">MutqinLab membutuhkan JavaScript. Aktifkan JavaScript di peramban Anda.</p></noscript>
@@ -72,6 +85,9 @@
     <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
     <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.8-3.4L23 10M1 14l4.7 4.4A9 9 0 0 0 20.5 15"/></symbol>
     <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2l1.9 5.6L19.5 9.5l-5.6 1.9L12 17l-1.9-5.6L4.5 9.5l5.6-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></symbol>
     <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></symbol>
     <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 11v5M12 8h.01"/></symbol>
   </svg>
@@ -175,6 +191,7 @@
 
   <footer class="site-footer">
     <p>Crafted with <span class="heart">♥</span> by <span class="creator">Kurniapedia</span> 2026</p>
+    <p class="foot-link"><a href="privasi.html">Kebijakan Privasi</a></p>
   </footer>
 
   <!-- Kartu ayat terpilih -->
@@ -353,9 +370,11 @@
             <button id="btnImport" type="button" class="btn"><svg class="ik" aria-hidden="true"><use href="#i-upload"/></svg>Impor cadangan</button>
             <button id="btnDiag" type="button" class="btn"><svg class="ik" aria-hidden="true"><use href="#i-list"/></svg>Salin info diagnostik</button>
             <button id="btnReset" type="button" class="btn bahaya"><svg class="ik" aria-hidden="true"><use href="#i-trash"/></svg>Hapus data lokal</button>
+            <button id="btnDelAcc" type="button" class="btn bahaya" hidden><svg class="ik" aria-hidden="true"><use href="#i-trash"/></svg>Hapus akun &amp; data cloud</button>
           </div>
           <input id="fileImport" type="file" accept="application/json,.json" hidden>
           <p class="catatan">Masuk dengan Google untuk menyinkronkan progres, penanda, dan pengaturan antar perangkat.</p>
+          <p class="catatan" id="delAccInfo" hidden>“Hapus akun &amp; data cloud” menghapus progres di cloud dan akun MutqinLab-mu secara permanen. Data di perangkat ini tetap ada sampai kamu menghapusnya sendiri.</p>
         </div>
         <div class="grp">
           <h3 class="sub">Mode luring</h3>
@@ -379,5 +398,6 @@
   <script src="app.js" defer></script>
   <script src="tahfidz.js" defer></script>
   <script src="panduan.js" defer></script>
+  <script src="ai.js" defer></script>
 </body>
 </html>

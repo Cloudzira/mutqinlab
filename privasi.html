@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Kebijakan Privasi — MutqinLab</title>
+  <meta name="description" content="Kebijakan privasi MutqinLab: data apa yang disimpan, di mana disimpan, dan layanan pihak ketiga yang digunakan.">
+  <meta name="theme-color" content="#060d0b">
+  <meta name="color-scheme" content="dark light">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <style>
+    :root { --bg:#f6f8f6; --card:#fff; --ink:#15302b; --soft:#4b6760; --line:#d9e5e1; --aksen:#0e6b57; --emas:#a67c1a; }
+    @media (prefers-color-scheme: dark) { :root { --bg:#060d0b; --card:#0d1b18; --ink:#e9f5f1; --soft:#9fbab3; --line:#1d3a34; --aksen:#4fd8b8; --emas:#e2c27a; } }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.7 Poppins, system-ui, -apple-system, "Segoe UI", sans-serif; padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom); }
+    main { max-width: 760px; margin: 0 auto; padding: 24px 18px 56px; }
+    .back { display:inline-flex; align-items:center; gap:6px; margin-bottom:18px; color:var(--aksen); font-weight:600; font-size:.9rem; text-decoration:none; }
+    .back:hover { text-decoration:underline; }
+    h1 { font-size:1.6rem; line-height:1.25; margin:0 0 4px; }
+    .meta { color:var(--soft); font-size:.85rem; margin:0 0 22px; }
+    h2 { font-size:1.05rem; margin:28px 0 8px; color:var(--aksen); }
+    p, li { color:var(--soft); font-size:.95rem; }
+    p { margin:0 0 12px; }
+    ul { padding-inline-start:22px; margin:0 0 12px; }
+    li { margin-bottom:6px; }
+    li::marker { color:var(--emas); }
+    b { color:var(--ink); font-weight:600; }
+    .ringkas { background:var(--card); border:1px solid var(--line); border-inline-start:4px solid var(--emas); border-radius:12px; padding:14px 16px; margin-bottom:8px; }
+    .ringkas p { margin:0; color:var(--ink); }
+    table { width:100%; border-collapse:collapse; font-size:.85rem; background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+    th, td { text-align:start; padding:9px 11px; border-top:1px solid var(--line); vertical-align:top; color:var(--soft); }
+    th { background:color-mix(in srgb, var(--aksen) 8%, transparent); color:var(--ink); border-top:0; }
+    .tw { overflow-x:auto; margin-bottom:12px; }
+    a { color:var(--aksen); }
+    footer { margin-top:36px; padding-top:16px; border-top:1px dashed var(--line); font-size:.82rem; color:var(--soft); }
+  </style>
+</head>
+<body>
+<main>
+  <a class="back" href="./">← Kembali ke MutqinLab</a>
+  <h1>Kebijakan Privasi</h1>
+  <p class="meta">Diperbarui 19 November 2026 · MutqinLab oleh Kurniapedia</p>
+
+  <div class="ringkas"><p><b>Ringkasnya:</b> MutqinLab gratis, tanpa iklan, dan tidak menjual data. Progres hafalanmu tersimpan di perangkatmu. Jika kamu memilih masuk dengan Google, progres itu juga disimpan di akunmu sendiri agar bisa disinkronkan antar perangkat.</p></div>
+
+  <h2>1. Data yang disimpan di perangkatmu</h2>
+  <p>Selama kamu memakai aplikasi, data berikut disimpan di penyimpanan browser (localStorage) di perangkatmu sendiri:</p>
+  <ul>
+    <li>rencana hafalan (target, batas waktu, waktu harian, dan kondisimu);</li>
+    <li>jadwal dan riwayat ziyadah, murojaah, serta hasil tes;</li>
+    <li>penanda, progres halaman, dan pengaturan tampilan;</li>
+    <li>salinan mushaf untuk mode luring, jika kamu mengunduhnya.</li>
+    <li>riwayat percakapan Mutqin AI (maksimal 24 pesan terakhir); hapus dengan tombol tempat sampah di jendela Mutqin AI.</li>
+  </ul>
+  <p>Menghapus data situs di browser, atau mencopot aplikasi, akan menghapus data ini. Gunakan fitur ekspor cadangan di Pengaturan bila ingin menyimpannya.</p>
+
+  <h2>2. Masuk dengan Google (opsional)</h2>
+  <p>Kamu dapat memakai aplikasi tanpa akun (sebagai Tamu). Bila memilih <b>Masuk</b>, autentikasi dilakukan oleh <b>Google Firebase Authentication</b>. Aplikasi menerima identitas akun yang diperlukan untuk masuk (nama, alamat email, dan foto profil Google).</p>
+  <p>Setelah masuk, progres hafalanmu disimpan di <b>Cloud Firestore</b> pada satu dokumen milikmu sendiri. Aturan keamanan database hanya mengizinkan pemilik akun membaca dan menulis dokumen tersebut. Pengembang tidak menggunakan data ini untuk iklan, profil, atau dibagikan ke pihak lain.</p>
+
+  <h2>3. Mutqin AI</h2>
+  <p>Mutqin AI adalah asisten berbasis AI yang hanya dapat dipakai setelah masuk dengan Google. Saat kamu mengirim pertanyaan:</p>
+  <ul>
+    <li><b>Yang dikirim:</b> pertanyaanmu, beberapa pesan sebelumnya dalam percakapan, dan <b>ringkasan angka</b> dari rencana hafalanmu (mis. target surat, sisa ayat, jumlah antrean murojaah). Nama, alamat email, dan foto profilmu <b>tidak</b> dikirim.</li>
+    <li><b>Siapa yang memprosesnya:</b> permintaan melewati server MutqinLab (Cloudflare) lalu diteruskan ke <b>Gemini API (Google AI Studio)</b>. Kunci API tersimpan di server, tidak di browser.</li>
+    <li><b>Penggunaan oleh Google:</b> pada tingkat gratis Gemini API, Google dapat memakai masukan dan keluaran untuk meningkatkan produknya sesuai ketentuan layanannya. Karena itu <b>jangan menuliskan data pribadi atau rahasia</b> di percakapan.</li>
+    <li><b>Yang kami simpan:</b> hanya penghitung jumlah pertanyaan harian per akun (untuk batas pemakaian) yang otomatis kedaluwarsa dalam beberapa hari. Isi percakapan tidak disimpan di server kami.</li>
+    <li><b>Batas jawaban:</b> AI dapat keliru dan bukan pengganti guru bersanad. Untuk bacaan, tajwid, dan hukum, rujuklah guru.</li>
+  </ul>
+
+  <h2>4. Layanan pihak ketiga</h2>
+  <p>Agar berfungsi, aplikasi memuat sumber daya dari layanan berikut. Saat memuatnya, penyedia layanan tersebut menerima data teknis standar seperti alamat IP dan jenis browser, sesuai kebijakan masing-masing.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Layanan</th><th>Dipakai untuk</th></tr></thead>
+    <tbody>
+      <tr><td>Google Firebase (Authentication, Firestore)</td><td>Masuk dan sinkronisasi progres</td></tr>
+      <tr><td>Google Gemini API (Google AI Studio)</td><td>Menjawab pertanyaan di Mutqin AI</td></tr>
+      <tr><td>Google Fonts</td><td>Huruf tampilan</td></tr>
+      <tr><td>EveryAyah.com, cdn.islamic.network</td><td>Audio murattal per ayat</td></tr>
+      <tr><td>Quran.com API</td><td>Teks, peta halaman, dan terjemahan</td></tr>
+      <tr><td>jsDelivr, cdnjs (Cloudflare), GitHub</td><td>Font mushaf dan pustaka ikon</td></tr>
+      <tr><td>Cloudflare Pages &amp; Functions</td><td>Hosting situs dan penerus permintaan Mutqin AI; dapat mencatat log standar</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>5. Yang tidak kami lakukan</h2>
+  <ul>
+    <li>Tidak menampilkan iklan dan tidak memasang pelacak iklan.</li>
+    <li>Tidak menjual atau menyewakan data pengguna.</li>
+    <li>Tidak mengakses kamera, mikrofon, atau lokasi.</li>
+    <li>Tidak menyimpan isi percakapan Mutqin AI di server kami.</li>
+  </ul>
+
+  <h2>6. Kendali dan penghapusan data</h2>
+  <ul>
+    <li><b>Data di perangkat:</b> hapus melalui pengaturan browser (hapus data situs) atau fitur reset di aplikasi.</li>
+    <li><b>Data di akun:</b> saat masuk, buka <b>Pengaturan → Data → Hapus akun &amp; data cloud</b>. Setelah verifikasi ulang akun Google, progres di cloud dan akun MutqinLab-mu dihapus secara permanen. Data di perangkat tidak ikut terhapus; hapus lewat <b>Hapus data lokal</b>. Jika mengalami kendala, hubungi kami lewat <a href="https://kurniapedia.my.id" rel="noopener noreferrer">kurniapedia.my.id</a>.</li>
+    <li>Kamu dapat berhenti masuk kapan saja dan tetap memakai aplikasi sebagai Tamu.</li>
+  </ul>
+
+  <h2>7. Anak-anak</h2>
+  <p>Aplikasi ini boleh dipakai pelajar. Bagi anak di bawah umur, kami menyarankan pendampingan orang tua atau guru saat memakai fitur masuk dengan Google.</p>
+
+  <h2>8. Catatan penggunaan</h2>
+  <p>MutqinLab adalah alat bantu mengatur hafalan dan murojaah. Aplikasi ini <b>tidak menggantikan talaqqi</b> (belajar langsung) kepada guru yang bersanad. Pastikan bacaan dan tajwidmu dikoreksi oleh guru.</p>
+
+  <h2>9. Perubahan kebijakan</h2>
+  <p>Kebijakan ini dapat diperbarui seiring perkembangan aplikasi. Tanggal berlaku di bagian atas halaman akan menyesuaikan.</p>
+
+  <footer>© 2026 Kurniapedia · <a href="https://kurniapedia.my.id" rel="noopener noreferrer">kurniapedia.my.id</a></footer>
+</main>
+</body>
+</html>

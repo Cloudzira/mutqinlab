@@ -1,5 +1,14 @@
 # MutqinLab — catatan perubahan
 
+## Mutqin AI (baru)
+- Tombol mengambang **Mutqin AI** + jendela percakapan (`ai.js`, `ai.css`). Wajib masuk Google; jawaban di-stream; riwayat 24 pesan terakhir tersimpan lokal.
+- Backend: `functions/api/ai.js` (Cloudflare Pages Function) — API key Google AI Studio sebagai Secret `GEMINI_API_KEY`, verifikasi Firebase ID token, batas harian per akun (KV `AI_KV`), model utama + cadangan.
+- Otak asisten: `functions/_lib/prompt.js` — pengetahuan lengkap fitur MutqinLab (akurat sesuai kode), rujukan terbatas yang boleh dikutip (ayat, hadis berikut nomor, karya ulama, riset belajar), praktik tradisi tahfidz yang diberi label "bukan dalil", aturan anti-karang dalil, batas fatwa/tajwid, dan penanganan pengguna tertekan.
+- Konteks pengguna: `TH.aiContext()` di `tahfidz.js` mengirim ringkasan ANGKA rencana (tanpa nama/email).
+- Penanda interaktif di jawaban: `[QS 54:17]` membuka ayat di mushaf; `[[tab:m]]` pindah tab.
+- Panduan: tab baru "Mutqin AI". Privasi: bagian Mutqin AI (termasuk catatan bahwa tingkat gratis Gemini dapat dipakai Google untuk meningkatkan produk). Service worker v17.
+- Setup: lihat `SETUP-MUTQIN-AI.md` (di luar zip).
+
 ## Panduan penggunaan (baru)
 - `panduan.js` + gaya di `tahfidz.css`: popup panduan rinci dengan 7 bagian — Alur · Mushaf · Beranda (perencanaan) · Ziyadah · Murojaah · Tes · Tentang.
 - Satu tombol info (ⓘ) di bilah atas membuka panduan, langsung ke bagian sesuai tab aktif. Dialog "Tentang" digabung menjadi tab terakhir "Tentang" (referensi + medsos Kurniapedia); tombol (?) dan tombol "Panduan" terpisah dihapus.
@@ -7,6 +16,13 @@
 - Pengguna baru melihatnya otomatis satu kali; pengguna lama yang sudah punya rencana/hafalan tidak diganggu.
 - Isi mengikuti rumus aplikasi: pembagian 60% ziyadah / 40% murojaah, fase Mutqin ±15% hari terakhir, 5 langkah ziyadah, interval SRS (3 → 7 hari → ×kemudahan), arti Lupa/Ragu/Mutqin, impor hafalan lama, dan cara kerja Tes.
 - Service worker v14 (panduan.js masuk cache luring).
+
+## Persiapan launching
+- `og-image.png` (1200×630) + meta Open Graph/Twitter/canonical di `index.html` agar link tampil rapi saat dibagikan ke WhatsApp dll.
+  **PENTING:** ganti `https://mutqinlab.pages.dev` di `index.html` (og:url, og:image, twitter:image, canonical) dengan domain produksi sebenarnya.
+- `privasi.html`: kebijakan privasi (tertaut dari footer dan tab Tentang). Service worker v15.
+- **Hapus akun & data cloud** (Pengaturan → Data; hanya tampil saat sudah masuk): konfirmasi → verifikasi ulang Google → hapus dokumen `progres_hafalan/{uid}` → hapus akun Firebase Auth. Sinkronisasi dijeda selama proses agar dokumen tidak tertulis ulang. Data lokal tidak ikut terhapus. Service worker v16.
+- Tab Tentang: ringkasan privasi + catatan bahwa aplikasi tidak menggantikan talaqqi.
 
 ## Bar jam
 - Jam, tanggal, dan hitung mundur target kini statis: tiap digit berlebar tetap sehingga baris tidak bergeser mengikuti detik.

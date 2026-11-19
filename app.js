@@ -313,7 +313,7 @@ const els = {};
  "selQari","selMode","rngWrap","rngSurah","rngFrom","rngTo","selRepAyat","selRepRange","selSpeed","selGap",
  "dlgNav","tabSurat","tabJuz","tabAyat","panSurat","panJuz","panAyat","navSearch","listSurat","gridJuz","ayatSurah","ayatNo","ayatGo",
  "dlgBm","bmList","bmAdd","dlgPrg","prgText","prgBar","prgPct","prgJuz","prgMark",
- "dlgSet","offInfo","offBarWrap","offBar","btnOffline","offLabel","btnOfflineClear","setWidth","setWidthVal","setReveal","setTrans","setWake","btnExport","btnImport","btnReset","btnDiag","fileImport","toasts","frame"
+ "dlgSet","offInfo","offBarWrap","offBar","btnOffline","offLabel","btnOfflineClear","setWidth","setWidthVal","setReveal","setTrans","setWake","btnExport","btnImport","btnReset","btnDelAcc","delAccInfo","btnDiag","fileImport","toasts","frame"
 ].forEach(id => { els[id] = $(id); });
 
 function isStandalone() {
@@ -1395,13 +1395,16 @@ async function cloudInit() {
 
 function onAuth(user) {
   Cloud.user = user;
+  document.dispatchEvent(new CustomEvent("mp-auth", { detail: { signedIn: !!user } }));
   if (user) {
     els.userStatus.textContent = (user.displayName || user.email || "Akun").split(" ")[0];
     els.authBtn.textContent = "Keluar";
+    els.btnDelAcc.hidden = els.delAccInfo.hidden = false;
     cloudPull();
   } else {
     els.userStatus.textContent = "Tamu";
     els.authBtn.textContent = "Masuk";
+    els.btnDelAcc.hidden = els.delAccInfo.hidden = true;
   }
 }
 
@@ -1416,10 +1419,38 @@ async function toggleAuth() {
   }
 }
 
+/* Hapus akun + data cloud secara permanen (syarat privasi / Play Store).
+   Urutan: konfirmasi → login ulang Google (wajib Firebase untuk aksi sensitif) → hapus dokumen Firestore → hapus akun. */
+async function deleteAccount() {
+  if (!Cloud.ok || !Cloud.user) { toast("Masuk dulu untuk menghapus akun."); return; }
+  if (!confirm("Hapus akun dan semua data cloud Anda secara PERMANEN?\n\n• Progres, rencana, dan penanda di cloud akan dihapus.\n• Akun MutqinLab Anda dihapus.\n• Data di perangkat ini tetap ada (hapus sendiri lewat \"Hapus data lokal\").\n\nTindakan ini tidak bisa dibatalkan.")) return;
+  const user = Cloud.user;
+  els.btnDelAcc.disabled = true;
+  try {
+    toast("Verifikasi ulang akun Google…");
+    await Cloud.B.reauthenticateWithPopup(user, Cloud.provider);
+    Cloud.deleting = true;                                   // cegah sinkronisasi menulis ulang dokumen
+    await Cloud.C.deleteDoc(Cloud.C.doc(Cloud.db, "progres_hafalan", user.uid));
+    try { await Cloud.B.deleteUser(user); }
+    catch (e) { toast("Data cloud terhapus, tetapi akun belum bisa dihapus. Coba lagi."); console.warn(e); Cloud.deleting = false; lastCloudSig = ""; return; }
+    LS.del("mushaf_uid"); lastCloudSig = "";
+    els.dlgSet.close();
+    toast("Akun dan data cloud telah dihapus.");
+  } catch (e) {
+    Cloud.deleting = false;
+    if (e && (e.code === "auth/popup-closed-by-user" || e.code === "auth/cancelled-popup-request")) toast("Penghapusan dibatalkan.");
+    else if (e && e.code === "auth/popup-blocked") toast("Popup diblokir. Izinkan popup lalu coba lagi.");
+    else if (e && e.code === "auth/user-mismatch") toast("Gunakan akun Google yang sama dengan yang sedang masuk.");
+    else if (e && e.code === "permission-denied") toast("Penghapusan ditolak oleh aturan database. Periksa firestore.rules.");
+    else toast("Gagal menghapus akun. Coba lagi.");
+    console.warn("deleteAccount:", e);
+  } finally { Cloud.deleting = false; els.btnDelAcc.disabled = false; }
+}
+
 function cloudRef() { return Cloud.C.doc(Cloud.db, "progres_hafalan", Cloud.user.uid); }
 
 async function cloudPushNow() {
-  if (!Cloud.ok || !Cloud.user) return;
+  if (!Cloud.ok || !Cloud.user || Cloud.deleting) return;
   const body = { halaman_terakhir: S.page, page: S.page, bookmarks: S.bookmarks, memorized: S.memorized, settings: S.settings, tahfidz: S.tahfidz };
   const sig = Cloud.user.uid + JSON.stringify(body);
   if (sig === lastCloudSig) return;          // tidak ada yang berubah → hemat kuota tulis Firestore
@@ -1539,8 +1570,9 @@ function bindUI() {
   els.btnImport.addEventListener("click", () => els.fileImport.click());
   els.fileImport.addEventListener("change", () => { if (els.fileImport.files[0]) importData(els.fileImport.files[0]); els.fileImport.value = ""; });
   els.btnDiag.addEventListener("click", copyDiag);
+  els.btnDelAcc.addEventListener("click", deleteAccount);
   els.btnReset.addEventListener("click", () => {
-    if (!confirm("Hapus semua penanda, progres hafalan, dan pengaturan di perangkat ini? Data di akun awan (jika ada) tidak ikut terhapus.")) return;
+    if (!confirm("Hapus semua penanda, progres hafalan, dan pengaturan di perangkat ini? Data di akun awan tidak ikut terhapus (gunakan \"Hapus akun & data cloud\" bila ingin menghapusnya).")) return;
     hardStop(true);
     LS.del(KEY); LS.del("mushaf_uid");
     S = defaults(); S.page = cur.page || 1;
@@ -1615,7 +1647,7 @@ async function init() {
   }
 }
 /* Jembatan untuk program tahfidz (tahfidz.js) */
-window.MP = { get S() { return S; }, SURAH, API, QARI, persist, toast, fetchJson, getTranslation, jumpToVerse, setHideMode, startPlayback, hardStop, parseKey };
+window.MP = { get S() { return S; }, user: () => Cloud.user, idToken: () => (Cloud.user ? Cloud.user.getIdToken() : Promise.resolve(null)), signIn: () => (Cloud.user ? Promise.resolve() : toggleAuth()), SURAH, API, QARI, persist, toast, fetchJson, getTranslation, jumpToVerse, setHideMode, startPlayback, hardStop, parseKey };
 
 init();
 

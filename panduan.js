@@ -29,7 +29,8 @@ const TABS = [
       ["2. Ziyadah — hafal ayat baru (tab Ziyadah)", "Ikuti 5 langkah: Talqin → Pahami → Tikrar → Uji → Sambung. Setelah lancar, tandai hafal."],
       ["3. Murojaah — ulang terjadwal (tab Murojaah)", "Setiap ayat yang ditandai hafal masuk jadwal ulang otomatis (besok, 3 hari, 7 hari, dst.). Nilai dirimu dengan jujur."],
       ["4. Tes — ukur kekuatan hafalan (tab Tes)", "Soal sambung ayat dari hafalanmu sendiri. Jawaban salah otomatis dijadwalkan murojaah hari itu juga."],
-      ["5. Fase Mutqin", "Beberapa hari terakhir sebelum deadline tanpa ayat baru: fokus menyambung, tes, dan murojaah."]
+      ["5. Fase Mutqin", "Beberapa hari terakhir sebelum deadline tanpa ayat baru: fokus menyambung, tes, dan murojaah."],
+      ["Bingung? Tanya Mutqin AI", "Tombol <b>Mutqin AI</b> di pojok kanan bawah siap menjelaskan fitur, rencana, dan teknik menghafal."]
     ]) +
     h("clock", "Urutan terbaik dalam satu hari") +
     ul(["<b>Murojaah dulu</b>, baru ziyadah — otak masih segar dan antrean tidak menumpuk.", "Ziyadah paling kuat <b>setelah Subuh</b>; ulangi ayat baru 3× tanpa melihat <b>sebelum tidur</b> (tidur mengunci memori).", "Hari tersibuk? Pakai <b>aturan 5 menit</b>: kecilkan targetnya, jangan nol. Rantai harian (🔥) jangan putus dua hari berturut-turut."]) +
@@ -173,10 +174,25 @@ const TABS = [
     go("t", "Buka Tes")
   },
 
+  { id: "ai", label: "Mutqin AI", icon: "spark", title: "Mutqin AI — asisten hafalanmu", html: () =>
+    p("Mutqin AI menjawab pertanyaan seputar <b>cara memakai MutqinLab</b>, <b>membaca rencana dan kemajuanmu</b>, serta <b>teknik menghafal dan murojaah</b>. Buka lewat tombol <b>Mutqin AI</b> di pojok kanan bawah.") +
+    h("user", "Syarat & batas") +
+    ul(["Perlu <b>masuk dengan Google</b> agar kuota gratis adil untuk semua pengguna.", "Ada <b>batas pertanyaan per hari</b>; sisanya tampil di bawah kolom ketik. Bila habis, lanjutkan besok.", "Satu pesan maksimal 1.200 karakter. Riwayat percakapan tersimpan di perangkatmu; tombol tempat sampah memulai percakapan baru."]) +
+    h("bulb", "Contoh pertanyaan") +
+    ul(["<b>Fitur:</b> “Bagaimana cara memasukkan hafalan lamaku ke jadwal?”, “Apa arti titik merah di tab Murojaah?”", "<b>Rencana:</b> “Jelaskan target harianku”, “Kenapa rencanaku dibilang tidak realistis?”, “Aku tertinggal, apa yang sebaiknya kulakukan?”", "<b>Teknik:</b> “Hafalanku cepat lupa”, “Cara membedakan ayat yang mirip”, “Bagaimana mengatur waktu saat sibuk?”"]) +
+    h("info", "Cara membaca jawabannya") +
+    ul(["Jawaban membedakan <b>dalil</b>, <b>praktik guru/lembaga tahfidz</b>, <b>riset belajar</b>, dan <b>saran praktis</b>.", "Tombol <b>QS …</b> membuka ayat langsung di mushaf; tombol <b>Buka …</b> pindah ke tab yang dimaksud.", "Mutqin AI melihat <b>ringkasan angka</b> rencanamu (target, sisa ayat, antrean murojaah, dsb.) agar saran sesuai kondisimu. Nama dan email tidak ikut dikirim."]) +
+    note("warn", "<b>AI bisa keliru.</b> Mutqin AI bukan ustaz dan tidak memberi fatwa. Untuk <b>bacaan, tajwid, makhraj, dan hukum</b>, selalu rujuk guru yang bersanad. Jangan menulis data pribadi di percakapan.") +
+    note("tip", "Pertanyaanmu diproses oleh layanan Gemini milik Google. Rinciannya ada di <a href=\"privasi.html\" target=\"_blank\" rel=\"noopener\">kebijakan privasi</a>.")
+  },
+
   { id: "tentang", label: "Tentang", icon: "info", title: "Tentang MutqinLab", html: () =>
     p("Mushaf Madinah 604 halaman untuk membaca, menjaga, dan menguatkan hafalan Al-Qur'an, dilengkapi program tahfidz terpandu dengan jadwal murojaah otomatis.") +
     h("book", "Referensi") +
     ul(["Teks dan font mushaf: QCF v4, Mushaf Madinah.", "Peta halaman dan terjemahan Indonesia Kemenag: Quran.com API.", "Audio murattal: EveryAyah.com.", "Semua sumber gratis."]) +
+    h("shield", "Privasi") +
+    p("Data hafalanmu tersimpan di perangkat. Jika masuk dengan Google, progres disinkronkan ke akunmu sendiri. Tidak ada iklan dan data tidak dijual. <a href=\"privasi.html\" target=\"_blank\" rel=\"noopener\">Baca kebijakan privasi lengkap</a>. Ingin menghapus akun? Buka <b>Pengaturan → Data → Hapus akun &amp; data cloud</b> (tampil saat kamu sudah masuk).") +
+    note("tip", "MutqinLab adalah alat bantu. Ia <b>tidak menggantikan talaqqi</b> kepada guru yang bersanad; mintalah guru mengoreksi bacaan dan tajwidmu.") +
     h("user", "Kurniapedia") +
     `<div class="about-social" aria-label="Media sosial Kurniapedia">
       <a href="https://instagram.com/kurniapedia" target="_blank" rel="noopener noreferrer" aria-label="Instagram Kurniapedia" title="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i><span class="lbl" aria-hidden="true">IG</span></a>

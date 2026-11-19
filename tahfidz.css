@@ -559,3 +559,8 @@ body { letter-spacing: -.003em; }
 .thclock .dg { display: inline-block; width: .66em; text-align: center; font-style: normal; }
 .thclock #thClk { display: inline-block; min-width: 8.3ch; white-space: nowrap; }
 .thclock #thCdn { white-space: nowrap; }
+
+.site-footer .foot-link { margin: 4px 0 0; font-size: .74rem; }
+.site-footer .foot-link a { color: var(--redup, inherit); text-decoration: underline; text-underline-offset: 3px; }
+.site-footer .foot-link a:hover { color: var(--aksen); }
+.pg-body a { color: var(--aksen); }

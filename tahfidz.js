@@ -383,7 +383,23 @@ function tick() {
   const z = $("thTimer"); if (z && zStart) { const q = Math.floor((Date.now() - zStart) / 1e3); z.textContent = `${pad(Math.floor(q / 60))}:${pad(q % 60)} / ${zMin} mnt`; }
 }
 
-window.TH = { refresh() { badge(); renderMisi(); render(); } };
+/* Ringkasan ANGKA saja untuk Mutqin AI (tanpa nama/email/identitas). Dikirim bersama pertanyaan. */
+function aiContext() {
+  const P = TD().plan, t = today(), o = { tab: document.body.dataset.view || "mushaf", masuk: !!(M.user && M.user()), due: dueList().length, jadwal: mine().length, streak: streak() };
+  if (!P) { o.rencana = null; return o; }
+  const sc = scope(P), done = sc.length, c = calc(P, done), mt = sc.filter(i => i.i >= 7).length,
+    el = Math.floor(Math.max(0, t - P.st) * (7 - P.off) / 7), exp = Math.min(c.total, P.base + el * P.pd), gap = exp - done,
+    L = TD().log, l7 = rg(0, 6).filter(d => L[t - d]).length;
+  o.rencana = {
+    target: rng(P), urutan: P.o == "b" ? "mundur" : "maju", total: c.total, sisa: c.rem,
+    hariSisa: Math.max(0, P.dl - t), menit: P.mins, libur: P.off, waktu: { s: "Setelah Subuh", p: "Pagi/siang", m: "Malam" }[P.tm] || "",
+    level: { 1: "belum lancar", 2: "lancar", 3: "berpengalaman" }[P.lv] || "", guru: !!P.gu, teman: !!P.te, tidur: !!P.ti,
+    targetHarian: P.pd, kapasitas: c.mx, realistis: c.ok, hariMutqin: c.m, masukJadwal: done, stabil: mt,
+    ziyadahHariIni: mine().filter(i => i.c == t).length, aktif7: l7, status: gap <= 0 ? 0 : gap / Math.max(1, exp) <= .2 ? 1 : 2, selisih: Math.max(0, gap)
+  };
+  return o;
+}
+window.TH = { refresh() { badge(); renderMisi(); render(); }, aiContext };
 document.body.dataset.view = "mushaf"; badge(); tick(); setInterval(tick, 1000); document.addEventListener("visibilitychange", tick);
 { let v = "g"; try { v = localStorage.getItem("mp_view") || "g"; } catch (e) {}
   const qv = new URLSearchParams(location.search).get("v"); if (qv) v = qv;   // pintasan PWA: ?v=m (murojaah), ?v=mushaf

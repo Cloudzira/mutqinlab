@@ -14,6 +14,16 @@
   Cache-Control: no-cache
 /tahfidz.js
   Cache-Control: no-cache
+/panduan.js
+  Cache-Control: no-cache
+/ai.js
+  Cache-Control: no-cache
+/ai.css
+  Cache-Control: no-cache
+/privasi.html
+  Cache-Control: no-cache
+/og-image.png
+  Cache-Control: public, max-age=86400
 /style.css
   Cache-Control: no-cache
 /tahfidz.css
