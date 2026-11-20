@@ -105,6 +105,8 @@ function build() {
     if (!pos) { const o = JSON.parse(localStorage.getItem(OLDPOS) || "null"); if (o && typeof o.x === "number" && typeof o.y === "number") pos = { side: o.x < .5 ? "l" : "r", y: o.y }; }
   } catch (e) {}
   if (!pos || (pos.side !== "l" && pos.side !== "r") || typeof pos.y !== "number") pos = null;
+  const VW = () => document.documentElement.clientWidth || innerWidth;     // lebar area tampak TANPA scrollbar (innerWidth ikut menghitung scrollbar di laptop)
+  const VH = () => document.documentElement.clientHeight || innerHeight;
   const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), Math.max(lo, hi));
   const probe = document.createElement("div");            // pembaca safe-area (notch / gesture bar)
   probe.setAttribute("aria-hidden", "true");
@@ -113,15 +115,15 @@ function build() {
   const bounds = () => {
     const c = getComputedStyle(probe), w = fab.offsetWidth, h = fab.offsetHeight;
     return {
-      minX: GAP + (parseFloat(c.paddingLeft) || 0), maxX: innerWidth - w - GAP - (parseFloat(c.paddingRight) || 0),
-      minY: GAP + (parseFloat(c.paddingTop) || 0), maxY: innerHeight - h - GAP - (parseFloat(c.paddingBottom) || 0)
+      minX: GAP + (parseFloat(c.paddingLeft) || 0), maxX: VW() - w - GAP - (parseFloat(c.paddingRight) || 0),
+      minY: GAP + (parseFloat(c.paddingTop) || 0), maxY: VH() - h - GAP - (parseFloat(c.paddingBottom) || 0)
     };
   };
   const put = (x, y) => { fab.style.right = "auto"; fab.style.bottom = "auto"; fab.style.left = x + "px"; fab.style.top = y + "px"; };
   const dock = (side, cy, animate) => {
     const bd = bounds(), h = fab.offsetHeight;
     if (animate) { fab.classList.add("snap"); clearTimeout(dock.t); dock.t = setTimeout(() => fab.classList.remove("snap"), 320); }
-    put(side === "l" ? bd.minX : bd.maxX, clamp(cy * innerHeight - h / 2, bd.minY, bd.maxY));
+    put(side === "l" ? bd.minX : bd.maxX, clamp(cy * VH() - h / 2, bd.minY, bd.maxY));
   };
   const placeSaved = () => {
     if (!pos || !fab.offsetWidth) return;                   // belum pernah digeser: pakai posisi bawaan CSS (kanan bawah) / sedang disembunyikan
@@ -148,7 +150,7 @@ function build() {
     if (!drag || (e && e.pointerId !== drag.id)) return;
     if (moved) {
       const r = fab.getBoundingClientRect();
-      pos = { side: (r.left + r.width / 2) < innerWidth / 2 ? "l" : "r", y: (r.top + r.height / 2) / innerHeight };
+      pos = { side: (r.left + r.width / 2) < VW() / 2 ? "l" : "r", y: (r.top + r.height / 2) / VH() };
       try { localStorage.setItem(POS, JSON.stringify(pos)); } catch (_) {}
       dock(pos.side, pos.y, true);                                               // menempel ke tepi terdekat
       justDragged = true; setTimeout(() => { justDragged = false; }, 60);
