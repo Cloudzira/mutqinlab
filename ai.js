@@ -89,7 +89,7 @@ function build() {
     <div class="ai-log" id="aiLog" role="log" aria-live="polite" tabindex="0"></div>
     <div class="ai-chips" id="aiChips"></div>
     <div class="ai-input">
-      <textarea id="aiIn" rows="1" maxlength="${MAXLEN}" placeholder="Tanya soal hafalan, murojaah, atau fitur…" aria-label="Pertanyaan untuk Mutqin AI"></textarea>
+      <textarea id="aiIn" rows="1" maxlength="${MAXLEN}" aria-label="Pertanyaan untuk Mutqin AI"></textarea>
       <button id="aiSend" class="ai-send" type="button" aria-label="Kirim">${ic("send")}</button>
     </div>
     <div class="ai-foot"><span id="aiLeft"></span><span id="aiCnt">0/${MAXLEN}</span></div>
@@ -226,7 +226,7 @@ function render() {
   $("aiChips").hidden = !li || msgs.length > 0 || busy;
   $("aiChips").innerHTML = CHIPS.map(q => `<button type="button" data-q="${esc(q)}">${esc(q)}</button>`).join("");
   $("aiIn").disabled = !li; $("aiSend").disabled = !li;
-  $("aiIn").placeholder = li ? "Tanya soal hafalan, murojaah, atau fitur…" : "Masuk dulu untuk bertanya";
+  $("aiIn").placeholder = li ? "" : "Masuk dulu untuk bertanya";
   $("aiLeft").textContent = li && left != null ? `Sisa pertanyaan hari ini: ${left}` : "";
   scroll();
 }

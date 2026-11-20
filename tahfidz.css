@@ -94,7 +94,7 @@ body[data-view]:not([data-view="mushaf"]) #wrap {
 .thp.kecil { font-size: .72rem; color: var(--redup); }
 .thp.ok { color: var(--ok); font-weight: 600; } .thp.warn { color: var(--putar-teks); font-weight: 600; } .thp.err { color: var(--bahaya); font-weight: 600; }
 .thquote { margin: 0; font-size: 1.02rem; line-height: 1.65; font-weight: 600; color: var(--teks); }
-.thsrc { font-size: .72rem; color: var(--emas); font-weight: 600; letter-spacing: .04em; }
+.thsrc { font-size: .72rem; color: var(--emas-teks); font-weight: 600; letter-spacing: .04em; }
 .thc details > summary { cursor: pointer; font-size: .82rem; font-weight: 600; color: var(--aksen); }
 .thc ul, .thc ol { margin: 8px 0 0; padding-inline-start: 20px; display: flex; flex-direction: column; gap: 6px; font-size: .82rem; line-height: 1.55; color: var(--teks-lembut); }
 
@@ -172,7 +172,7 @@ html[data-theme="dark"] {
   --latar-solid: #060d0b; --latar: linear-gradient(165deg, #0a1512 0%, #060d0b 55%, #08130f 100%);
   --kaca: rgba(10, 20, 17, .86); --modal-bg: #0c1714; --tepi-aksen: rgba(79, 227, 193, .3);
   --glow-aksen: rgba(79, 227, 193, .34); --sorot-pilih: rgba(79, 227, 193, .2); --splash-grid: rgba(79, 227, 193, .07);
-  --banner-grad: linear-gradient(105deg, #119e82, #0a6657);
+  --banner-grad: linear-gradient(105deg, #0d8570, #0a6657);
 }
 html { background: var(--latar-solid); }
 body { background: none !important; }
@@ -507,7 +507,7 @@ body { letter-spacing: -.003em; }
 .pg-steps li b { font-size: .86rem; color: var(--aksen); }
 .pg-steps li span { font-size: .82rem; }
 .pg-note { display: flex; gap: 10px; align-items: flex-start; margin: 12px 0; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--tepi); background: var(--kaca-halus); font-size: .8rem; line-height: 1.55; }
-.pg-note .pg-ni { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: color-mix(in srgb, var(--emas) 22%, transparent); color: var(--emas); }
+.pg-note .pg-ni { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: color-mix(in srgb, var(--emas) 22%, transparent); color: var(--emas-teks); }
 .pg-note .pg-ni .ik { width: 14px; height: 14px; }
 .pg-note.warn { border-color: color-mix(in srgb, var(--bahaya) 40%, transparent); background: color-mix(in srgb, var(--bahaya) 8%, transparent); }
 .pg-note.warn .pg-ni { background: color-mix(in srgb, var(--bahaya) 18%, transparent); color: var(--bahaya); }
@@ -578,3 +578,15 @@ html[data-theme="goldblack"] .topbar { border-top: 0; }
 @media (max-width: 640px) {
   .topbar { width: 100%; border-radius: 0 0 16px 16px; }
 }
+
+/* ============================================================
+   Penyelarasan warna & kontras
+   Semua tema memakai satu keluarga warna (zamrud + emas; sepia = cokelat-zaitun hangat) dan teks memenuhi
+   kontras WCAG AA (≥ 4,5:1). Token --emas-teks = emas versi "teks" (lebih gelap di tema terang).
+   ============================================================ */
+:root { --emas-teks: var(--emas); }
+html[data-theme="light"] { --emas-teks: #8a6a2a; --redup: rgba(74, 90, 85, .9); --putar-teks: #8a6212; --ok: #187a52; }
+html[data-theme="dark"] { --g1: #0d8570; --on-aksen: #04130f; }
+html[data-theme="sepia"] { --emas-teks: #7a5a2e; --redup: rgba(89, 83, 67, .95); --putar-teks: #7d4a35; --ok: #37603f; --bahaya: #9a3d38; }
+html[data-theme="goldwhite"] { --g1: #926810; --emas-teks: #8f6a17; --redup: rgba(90, 77, 51, .9); }
+.set-body select.sel-full { width: 100%; }

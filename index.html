@@ -115,7 +115,6 @@
       <button id="btnAbout" class="about-btn" type="button" data-guide="auto" aria-label="Panduan & informasi" title="Panduan & informasi">
         <svg class="ik" aria-hidden="true"><use href="#i-info"/></svg>
       </button>
-      <button id="btnTheme" class="about-btn" type="button" title="Ganti tema"><svg class="ik" aria-hidden="true"><use id="themeIcon" href="#i-moon"/></svg><span class="sr">Ganti tema</span></button>
       <button id="btnInstall" class="about-btn" type="button" aria-label="Instal aplikasi" title="Instal aplikasi"><svg class="ik" aria-hidden="true"><use href="#i-download"/></svg></button>
       <button id="btnSettings" class="about-btn" type="button" title="Pengaturan" aria-label="Pengaturan"><svg class="ik" aria-hidden="true"><use href="#i-sliders"/></svg></button>
       <div class="auth-box">
@@ -344,17 +343,17 @@
         <button class="icon-btn kecil" type="button" data-close aria-label="Tutup"><svg class="ik" aria-hidden="true"><use href="#i-x"/></svg></button>
       </header>
       <div class="modal-body set-body">
-        <fieldset class="grp">
-          <legend>Tema</legend>
-          <div class="radio-row">
-            <label><input type="radio" name="theme" value="auto"><span>Otomatis</span></label>
-            <label><input type="radio" name="theme" value="light"><span>Terang</span></label>
-            <label><input type="radio" name="theme" value="dark"><span>Gelap</span></label>
-            <label><input type="radio" name="theme" value="sepia"><span>Sepia</span></label>
-            <label><input type="radio" name="theme" value="goldblack"><span>Emas Hitam</span></label>
-            <label><input type="radio" name="theme" value="goldwhite"><span>Emas Putih</span></label>
-          </div>
-        </fieldset>
+        <div class="grp">
+          <label class="row" for="setTheme"><span>Tema</span></label>
+          <select id="setTheme" class="sel-full" aria-label="Tema tampilan">
+            <option value="auto">Otomatis (ikut perangkat)</option>
+            <option value="light">Terang</option>
+            <option value="dark">Gelap</option>
+            <option value="sepia">Sepia</option>
+            <option value="goldblack">Emas Hitam</option>
+            <option value="goldwhite">Emas Putih</option>
+          </select>
+        </div>
         <div class="grp">
           <label class="row" for="setWidth"><span>Lebar halaman</span><output id="setWidthVal">700 px</output></label>
           <input id="setWidth" type="range" min="480" max="960" step="20" value="700">

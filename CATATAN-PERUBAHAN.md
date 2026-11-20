@@ -1,5 +1,12 @@
 # MutqinLab — catatan perubahan
 
+## Penyelarasan warna, tema, dan Mutqin AI
+- **Audit warna semua tema** (terang, gelap, sepia, emas hitam, emas putih). Semua teks kini lolos kontras WCAG AA (≥ 4,5:1). Perbaikan: teks emas di tema terang/sepia/emas putih dipakai versi lebih gelap (token baru `--emas-teks`), teks redup & label sekunder dipertegas, warna "berhasil/bahaya" di terang & sepia dipertegas, hijau tombol di tema gelap dan emas tombol di Emas Putih diperdalam agar teks putih terbaca.
+- **Mutqin AI tidak lagi biru-ungu**: tombol, avatar, gelembung pengguna, tombol kirim, dan penanda kini memakai warna tema yang sedang aktif (zamrud di terang/gelap, cokelat-zaitun di sepia, emas di tema emas), sehingga serasi di semua tempat.
+- **Tombol tema di bilah atas dihapus.** Tema diganti lewat Pengaturan, kini berupa **dropdown** (Otomatis, Terang, Gelap, Sepia, Emas Hitam, Emas Putih).
+- Placeholder "Tanya soal hafalan, murojaah, atau fitur…" di kolom ketik Mutqin AI dihapus (petunjuk "Masuk dulu untuk bertanya" tetap tampil hanya saat belum masuk).
+- Komentar header `style.css` diperbarui (palet final ada di akhir `tahfidz.css`). Pengetahuan Mutqin AI (`prompt.js`) disesuaikan: tema kini di Pengaturan. Service worker v23.
+
 ## Mutqin AI: tombol menempel ke tepi & jendela anti-tertutup-keyboard
 - Tombol **Mutqin AI** tetap bisa digeser, tetapi saat dilepas otomatis **menempel ke tepi kiri atau kanan** (mana yang lebih dekat) dengan animasi halus, sehingga tidak menghalangi konten di tengah. Ketinggian dibatasi di dalam layar dan menghormati safe-area (notch/gesture bar). Posisi (sisi + tinggi relatif) diingat per perangkat dan tetap pas saat layar diputar. Posisi lama otomatis dikonversi.
 - Jendela percakapan kini mengikuti **visualViewport**: saat keyboard layar muncul, tinggi jendela menyusut dan menempel di atas keyboard (kolom ketik & jawaban terakhir tetap terlihat); peringatan & saran pertanyaan disembunyikan sementara agar ruang percakapan maksimal.

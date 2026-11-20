@@ -306,8 +306,8 @@ function persist(opt) {
    Elemen & model halaman
    ============================================================ */
 const els = {};
-["teks","kSurah","kJuz","kNo","kaki","navLabel","userStatus","authBtn","themeIcon",
- "btnAbout","splash","btnBookmark","btnBookmarks","btnMemo","btnProgress","btnTheme","btnSettings","btnNavOpen","btnMoreActions","actionItems","btnInstall","modeGroup",
+["teks","kSurah","kJuz","kNo","kaki","navLabel","userStatus","authBtn","setTheme",
+ "btnAbout","splash","btnBookmark","btnBookmarks","btnMemo","btnProgress","btnSettings","btnNavOpen","btnMoreActions","actionItems","btnInstall","modeGroup",
  "ayatSheet","asKey","asText","asPlay","asDrill","asFrom","asClose",
  "player","plBar","plPrev","plPlay","plPlayIcon","plNext","plStop","plTitle","plSub","plMore","plPanel",
  "selQari","selMode","rngWrap","rngSurah","rngFrom","rngTo","selRepAyat","selRepRange","selSpeed","selGap",
@@ -1179,9 +1179,7 @@ function applyTheme() {
   document.documentElement.dataset.theme = eff2;
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.setAttribute("content", THEME_COLOR[eff2]);
-  els.themeIcon.setAttribute("href", { auto: "#i-auto", light: "#i-sun", dark: "#i-moon", sepia: "#i-leaf", goldblack: "#i-moon", goldwhite: "#i-sun" }[pref]);
-  els.btnTheme.title = "Tema: " + { auto: "otomatis", light: "terang", dark: "gelap", sepia: "sepia", goldblack: "emas hitam", goldwhite: "emas putih" }[pref] + " (ketuk untuk mengganti)";
-  $$('input[name="theme"]').forEach(r => { r.checked = r.value === pref; });
+  els.setTheme.value = pref;
 }
 mq.addEventListener && mq.addEventListener("change", () => { if (S.settings.theme === "auto") applyTheme(); });
 
@@ -1528,11 +1526,6 @@ function bindUI() {
   els.btnNavOpen.addEventListener("click", () => openNav("surat"));
   els.btnInstall.addEventListener("click", installApp);
   els.authBtn.addEventListener("click", toggleAuth);
-  els.btnTheme.addEventListener("click", () => {
-    const order = ["light", "dark", "goldblack", "goldwhite", "sepia", "auto"];
-    S.settings.theme = order[(order.indexOf(S.settings.theme) + 1) % order.length];
-    persist(); applyTheme();
-  });
 
   // dialog: tutup & klik latar
   document.addEventListener("click", e => {
@@ -1561,7 +1554,7 @@ function bindUI() {
   els.ayatNo.addEventListener("keydown", e => { if (e.key === "Enter") els.ayatGo.click(); });
 
   // pengaturan
-  $$('input[name="theme"]').forEach(r => r.addEventListener("change", () => { if (r.checked) { S.settings.theme = r.value; persist(); applyTheme(); } }));
+  els.setTheme.addEventListener("change", () => { if (THEME_COLOR[els.setTheme.value] || els.setTheme.value === "auto") { S.settings.theme = els.setTheme.value; persist(); applyTheme(); } });
   els.setWidth.addEventListener("input", () => { S.settings.width = Number(els.setWidth.value); applyWidth(); });
   els.setWidth.addEventListener("change", persist);
   els.setReveal.addEventListener("change", () => { S.settings.autoReveal = els.setReveal.checked; persist(); });

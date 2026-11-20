@@ -1,6 +1,8 @@
 /* ============================================================
-   Mushaf Tahfidz Pro — style.css
-   Tema: terang · gelap · sepia (data-theme pada <html>)
+   MutqinLab — style.css (dasar)
+   Tema: terang · gelap · sepia · emas hitam · emas putih (data-theme pada <html>).
+   CATATAN: tahfidz.css dimuat sesudahnya dan menimpa palet terang/gelap dengan "Zamrud & Emas",
+   serta mendefinisikan tema emas; token warna final & penyesuaian kontras ada di akhir tahfidz.css.
    ============================================================ */
 
 :root {
