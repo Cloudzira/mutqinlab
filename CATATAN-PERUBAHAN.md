@@ -1,5 +1,11 @@
 # MutqinLab — catatan perubahan
 
+## Mutqin AI: tombol menempel ke tepi & jendela anti-tertutup-keyboard
+- Tombol **Mutqin AI** tetap bisa digeser, tetapi saat dilepas otomatis **menempel ke tepi kiri atau kanan** (mana yang lebih dekat) dengan animasi halus, sehingga tidak menghalangi konten di tengah. Ketinggian dibatasi di dalam layar dan menghormati safe-area (notch/gesture bar). Posisi (sisi + tinggi relatif) diingat per perangkat dan tetap pas saat layar diputar. Posisi lama otomatis dikonversi.
+- Jendela percakapan kini mengikuti **visualViewport**: saat keyboard layar muncul, tinggi jendela menyusut dan menempel di atas keyboard (kolom ketik & jawaban terakhir tetap terlihat); peringatan & saran pertanyaan disembunyikan sementara agar ruang percakapan maksimal.
+- Di layar sentuh, keyboard tidak langsung terbuka saat jendela dibuka, dan ditutup otomatis setelah kirim agar jawaban terbaca penuh. Ukuran huruf kolom ketik 16px di layar sentuh agar iOS tidak memperbesar halaman saat difokuskan.
+- Service worker v22.
+
 ## Mutqin AI (baru)
 - Tombol mengambang **Mutqin AI** + jendela percakapan (`ai.js`, `ai.css`). Wajib masuk Google; jawaban di-stream; riwayat 24 pesan terakhir tersimpan lokal.
 - Backend: `functions/api/ai.js` (Cloudflare Pages Function) — API key Google AI Studio sebagai Secret `GEMINI_API_KEY`, verifikasi Firebase ID token, batas harian per akun (KV `AI_KV`), model utama + cadangan.

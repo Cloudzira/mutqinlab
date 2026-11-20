@@ -18,6 +18,7 @@
   touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
 }
 .ai-fab.drag { cursor: grabbing; }
+.ai-fab.snap { transition: left .24s cubic-bezier(.2, .8, .2, 1), top .24s cubic-bezier(.2, .8, .2, 1); }
 .ai-fab .ik { width: 20px; height: 20px; fill: rgba(255, 255, 255, .3); stroke: #fff; }
 .ai-fab:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 body:has(#ayatSheet:not([hidden])) .ai-fab, body:has(dialog[open]) .ai-fab, body:has(#splash:not([hidden])) .ai-fab { display: none; }
@@ -85,4 +86,11 @@ body:has(#ayatSheet:not([hidden])) .ai-fab, body:has(dialog[open]) .ai-fab, body
   .ai-modal { width: calc(100% - 8px); height: calc(100dvh - 16px); }
   .ai-b { max-width: 92%; }
 }
-@media (prefers-reduced-motion: reduce) { .ai-log { scroll-behavior: auto; } .ai-dots i { animation: none; opacity: .7; } }
+@media (prefers-reduced-motion: reduce) { .ai-fab.snap { transition: none; } .ai-log { scroll-behavior: auto; } .ai-dots i { animation: none; opacity: .7; } }
+
+/* ---------- keyboard layar terbuka: beri ruang maksimal untuk percakapan ---------- */
+.ai-modal.kb .ai-warn, .ai-modal.kb .ai-chips { display: none; }
+.ai-modal.kb .ai-head { padding: 8px 14px; }
+.ai-modal.kb .ai-foot { padding-bottom: 6px; }
+.ai-modal.kb .ai-box { border-radius: 14px; }
+@media (pointer: coarse) { .ai-input textarea { font-size: 16px; } }   /* 16px: mencegah iOS memperbesar halaman saat kolom ketik difokuskan */

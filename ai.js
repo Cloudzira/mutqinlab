@@ -96,42 +96,61 @@ function build() {
   </div>`;
   document.body.append(d);
 
-  /* Tombol bisa digeser: seret ke mana saja, posisi diingat di perangkat ini. */
-  const POS = "mutqin.ai.fabpos.v1";
-  let pos = null; try { pos = JSON.parse(localStorage.getItem(POS) || "null"); } catch (e) {}
+  /* Tombol bisa digeser; saat dilepas otomatis menempel ke tepi kiri/kanan agar tidak menghalangi tengah layar.
+     Yang disimpan: sisi (l/r) dan tinggi relatif, jadi tetap pas di ukuran layar/orientasi lain. */
+  const POS = "mutqin.ai.fabpos.v2", OLDPOS = "mutqin.ai.fabpos.v1", GAP = 10;
+  let pos = null;
+  try {
+    pos = JSON.parse(localStorage.getItem(POS) || "null");
+    if (!pos) { const o = JSON.parse(localStorage.getItem(OLDPOS) || "null"); if (o && typeof o.x === "number" && typeof o.y === "number") pos = { side: o.x < .5 ? "l" : "r", y: o.y }; }
+  } catch (e) {}
+  if (!pos || (pos.side !== "l" && pos.side !== "r") || typeof pos.y !== "number") pos = null;
   const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), Math.max(lo, hi));
-  const setXY = (x, y) => {
-    const w = fab.offsetWidth, h = fab.offsetHeight, M = 8;
-    fab.style.right = "auto"; fab.style.bottom = "auto";
-    fab.style.left = clamp(x, M, innerWidth - w - M) + "px";
-    fab.style.top = clamp(y, M, innerHeight - h - M) + "px";
+  const probe = document.createElement("div");            // pembaca safe-area (notch / gesture bar)
+  probe.setAttribute("aria-hidden", "true");
+  probe.style.cssText = "position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)";
+  document.body.append(probe);
+  const bounds = () => {
+    const c = getComputedStyle(probe), w = fab.offsetWidth, h = fab.offsetHeight;
+    return {
+      minX: GAP + (parseFloat(c.paddingLeft) || 0), maxX: innerWidth - w - GAP - (parseFloat(c.paddingRight) || 0),
+      minY: GAP + (parseFloat(c.paddingTop) || 0), maxY: innerHeight - h - GAP - (parseFloat(c.paddingBottom) || 0)
+    };
+  };
+  const put = (x, y) => { fab.style.right = "auto"; fab.style.bottom = "auto"; fab.style.left = x + "px"; fab.style.top = y + "px"; };
+  const dock = (side, cy, animate) => {
+    const bd = bounds(), h = fab.offsetHeight;
+    if (animate) { fab.classList.add("snap"); clearTimeout(dock.t); dock.t = setTimeout(() => fab.classList.remove("snap"), 320); }
+    put(side === "l" ? bd.minX : bd.maxX, clamp(cy * innerHeight - h / 2, bd.minY, bd.maxY));
   };
   const placeSaved = () => {
-    if (!pos || typeof pos.x !== "number" || typeof pos.y !== "number") return;   // belum pernah digeser: pakai posisi bawaan CSS
-    const w = fab.offsetWidth, h = fab.offsetHeight; if (!w) return;            // sedang disembunyikan
-    setXY(pos.x * innerWidth - w / 2, pos.y * innerHeight - h / 2);
+    if (!pos || !fab.offsetWidth) return;                   // belum pernah digeser: pakai posisi bawaan CSS (kanan bawah) / sedang disembunyikan
+    dock(pos.side, pos.y, false);
   };
   let drag = null, moved = false, justDragged = false;
   fab.addEventListener("pointerdown", e => {
     if (e.pointerType === "mouse" && e.button !== 0) return;
     const r = fab.getBoundingClientRect();
     drag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, ox: r.left, oy: r.top }; moved = false;
+    fab.classList.remove("snap"); try { fab.setPointerCapture(e.pointerId); } catch (_) {}   // tangkap sejak awal: seretan cepat tidak terlepas
   });
   fab.addEventListener("pointermove", e => {
     if (!drag || e.pointerId !== drag.id) return;
     const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
     if (!moved) {
       if (Math.hypot(dx, dy) < 8) return;                                        // masih dianggap ketukan biasa
-      moved = true; fab.classList.add("drag"); try { fab.setPointerCapture(e.pointerId); } catch (_) {}
+      moved = true; fab.classList.add("drag");
     }
-    setXY(drag.ox + dx, drag.oy + dy);
+    const bd = bounds();
+    put(clamp(drag.ox + dx, bd.minX, bd.maxX), clamp(drag.oy + dy, bd.minY, bd.maxY));
   });
   const endDrag = e => {
     if (!drag || (e && e.pointerId !== drag.id)) return;
     if (moved) {
       const r = fab.getBoundingClientRect();
-      pos = { x: (r.left + r.width / 2) / innerWidth, y: (r.top + r.height / 2) / innerHeight };
+      pos = { side: (r.left + r.width / 2) < innerWidth / 2 ? "l" : "r", y: (r.top + r.height / 2) / innerHeight };
       try { localStorage.setItem(POS, JSON.stringify(pos)); } catch (_) {}
+      dock(pos.side, pos.y, true);                                               // menempel ke tepi terdekat
       justDragged = true; setTimeout(() => { justDragged = false; }, 60);
     }
     drag = null; moved = false; fab.classList.remove("drag");
@@ -161,7 +180,28 @@ function build() {
     const t = e.target.closest(".ai-tab"); if (t) { go(t.dataset.tab); return; }
     if (e.target.closest("[data-login]")) M.signIn();
   });
-  d.addEventListener("close", () => { if (busy) stop(); });
+  /* Jendela mengikuti area yang benar-benar terlihat (visualViewport): saat keyboard layar muncul, tinggi jendela
+     menyusut dan menempel di atas keyboard sehingga kolom ketik & jawaban tidak tertutup. */
+  const vv = window.visualViewport;
+  let fitRaf = 0;
+  const reset = () => { d.classList.remove("kb"); ["height", "maxHeight", "top", "bottom", "marginTop", "marginBottom"].forEach(k => { d.style[k] = ""; }); };
+  const fit = () => {
+    fitRaf = 0;
+    if (!d.open || !vv) return;
+    const kb = innerHeight - vv.height > 120 && vv.scale < 1.05;    // selisih besar = keyboard (bukan sekadar bilah alamat)
+    const was = d.classList.contains("kb");
+    if (!kb) { if (was) { reset(); scroll(); } return; }
+    const h = Math.max(220, vv.height - 12);
+    d.classList.add("kb");
+    d.style.height = h + "px"; d.style.maxHeight = h + "px";
+    d.style.top = (vv.offsetTop + 6) + "px"; d.style.bottom = "auto"; d.style.marginTop = "0"; d.style.marginBottom = "0";
+    if (!was) scroll();
+  };
+  const queueFit = () => { if (!fitRaf) fitRaf = requestAnimationFrame(fit); };
+  if (vv) { vv.addEventListener("resize", queueFit); vv.addEventListener("scroll", queueFit); }
+  ta.addEventListener("focus", () => { setTimeout(() => { fit(); scroll(); }, 300); });
+  ta.addEventListener("blur", () => setTimeout(queueFit, 150));
+  d.addEventListener("close", () => { if (busy) stop(); reset(); });
   document.addEventListener("mp-auth", () => { if (d.open) render(); });
 }
 function go(tab) {
@@ -192,7 +232,8 @@ function scroll() { const l = $("aiLog"); l.scrollTop = l.scrollHeight; }
 
 function open() {
   build(); const d = $("dlgAI"); if (d.open) return;
-  render(); d.showModal(); if (signedIn()) setTimeout(() => $("aiIn").focus({ preventScroll: true }), 60);
+  render(); d.showModal();
+  if (signedIn() && window.matchMedia("(pointer: fine)").matches) setTimeout(() => $("aiIn").focus({ preventScroll: true }), 60);   // di layar sentuh, jangan langsung membuka keyboard
 }
 
 function setBusy(b) {
@@ -210,6 +251,7 @@ async function send(text) {
   if (!navigator.onLine) { M.toast(ERR.net); return; }
   msgs.push({ r: "u", t: q }); msgs.push({ r: "a", t: "" }); ta.value = ""; grow(); $("aiCnt").textContent = `0/${MAXLEN}`;
   save(); render(); setBusy(true);
+  if (window.matchMedia("(pointer: coarse)").matches) ta.blur();   // tutup keyboard agar jawaban terlihat penuh
   const bot = msgs[msgs.length - 1];
   let ctx = null; try { ctx = window.TH && window.TH.aiContext ? window.TH.aiContext() : null; } catch (e) {}
   const history = [];
