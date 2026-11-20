@@ -217,8 +217,11 @@ export async function onRequestPost({ request, env }) {
   };
 
   const attempts = [];
+  const t0 = Date.now();
+  let used = primary;
   let res = await tryModel(primary, attempts);
-  if (!res && fallback && fallback !== primary) res = await tryModel(fallback, attempts);
+  if (!res && fallback && fallback !== primary) { used = fallback; res = await tryModel(fallback, attempts); }
+  const ttfb = Date.now() - t0;   // waktu sampai Google mulai menjawab
 
   if (!res) {
     const s = attempts.map(a => a.status);
@@ -229,7 +232,7 @@ export async function onRequestPost({ request, env }) {
 
   return new Response(transformStream(res.body, q.left), {
     status: 200,
-    headers: { "Content-Type": "text/event-stream; charset=utf-8", "Cache-Control": "no-store, no-transform", "X-Accel-Buffering": "no", "X-AI-Remaining": String(q.left) }
+    headers: { "Content-Type": "text/event-stream; charset=utf-8", "Cache-Control": "no-store, no-transform", "X-Accel-Buffering": "no", "X-AI-Remaining": String(q.left), "X-AI-Model": used, "Server-Timing": `gemini;dur=${ttfb}` }
   });
 }
 

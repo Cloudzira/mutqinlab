@@ -564,3 +564,17 @@ body { letter-spacing: -.003em; }
 .site-footer .foot-link a { color: var(--redup, inherit); text-decoration: underline; text-underline-offset: 3px; }
 .site-footer .foot-link a:hover { color: var(--aksen); }
 .pg-body a { color: var(--aksen); }
+
+/* ------------------------------------------------------------ bilah atas rapi
+   Menempel penuh ke tepi atas layar (tanpa celah bulat di sudut atas); hanya sudut bawah yang membulat.
+   Isi tetap rata tengah selaras dengan lebar konten. Ditaruh paling akhir agar menang atas aturan sebelumnya. */
+.topbar {
+  width: 100%; margin: 0 0 6px;
+  padding-inline: max(10px, calc((100% - var(--w)) / 2 + 12px));
+  border-radius: 0 0 18px 18px; border-top: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .2), inset 0 -1px 0 rgba(255, 255, 255, .1);
+}
+html[data-theme="goldblack"] .topbar { border-top: 0; }
+@media (max-width: 640px) {
+  .topbar { width: 100%; border-radius: 0 0 16px 16px; }
+}
