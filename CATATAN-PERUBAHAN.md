@@ -1,5 +1,9 @@
 # MutqinLab — catatan perubahan
 
+## Revisi Mutqin AI (v24)
+- Warna **biru-ungu** Mutqin AI dikembalikan dan dipakai di **semua tema** (tombol, avatar, gelembung pengguna, tombol kirim, penanda) agar identitas visual AI jelas dan mudah dibedakan dari komponen aplikasi lain.
+- Placeholder kolom ketik: **"Tanyakan apa saja di sini.."** (saat belum masuk tetap "Masuk dulu untuk bertanya").
+
 ## Penyelarasan warna, tema, dan Mutqin AI
 - **Audit warna semua tema** (terang, gelap, sepia, emas hitam, emas putih). Semua teks kini lolos kontras WCAG AA (≥ 4,5:1). Perbaikan: teks emas di tema terang/sepia/emas putih dipakai versi lebih gelap (token baru `--emas-teks`), teks redup & label sekunder dipertegas, warna "berhasil/bahaya" di terang & sepia dipertegas, hijau tombol di tema gelap dan emas tombol di Emas Putih diperdalam agar teks putih terbaca.
 - **Mutqin AI tidak lagi biru-ungu**: tombol, avatar, gelembung pengguna, tombol kirim, dan penanda kini memakai warna tema yang sedang aktif (zamrud di terang/gelap, cokelat-zaitun di sepia, emas di tema emas), sehingga serasi di semua tempat.

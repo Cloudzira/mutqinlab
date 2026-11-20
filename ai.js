@@ -226,7 +226,7 @@ function render() {
   $("aiChips").hidden = !li || msgs.length > 0 || busy;
   $("aiChips").innerHTML = CHIPS.map(q => `<button type="button" data-q="${esc(q)}">${esc(q)}</button>`).join("");
   $("aiIn").disabled = !li; $("aiSend").disabled = !li;
-  $("aiIn").placeholder = li ? "" : "Masuk dulu untuk bertanya";
+  $("aiIn").placeholder = li ? "Tanyakan apa saja di sini.." : "Masuk dulu untuk bertanya";
   $("aiLeft").textContent = li && left != null ? `Sisa pertanyaan hari ini: ${left}` : "";
   scroll();
 }

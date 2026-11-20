@@ -1,12 +1,12 @@
 /* ============================================================
    Mutqin AI — tombol mengambang & jendela percakapan
    ============================================================ */
-/* ---------- warna Mutqin AI: mengikuti tema aplikasi (zamrud & emas), bukan palet terpisah ---------- */
+/* ---------- warna biru-ungu khas Mutqin AI: tetap sama di SEMUA tema agar identitas visual AI jelas ---------- */
 :root {
-  --ai-grad: linear-gradient(135deg, var(--g1), var(--g2));
-  --ai-fg: #fff;                     /* teks/ikon di atas gradien */
+  --ai-a: #2f6bff; --ai-b: #6f4bff; --ai-c: #b13dff;
+  --ai-grad: linear-gradient(135deg, var(--ai-a) 0%, var(--ai-b) 52%, var(--ai-c) 100%);
+  --ai-fg: #fff;
 }
-html[data-theme="goldblack"] { --ai-grad: linear-gradient(135deg, #ecd078, #c29a35); --ai-fg: #14100a; }   /* sama dengan tombol emas lain */
 
 /* ---------- tombol melayang: selalu paling atas, bisa digeser (lihat ai.js) ---------- */
 .ai-fab {
@@ -21,7 +21,7 @@ html[data-theme="goldblack"] { --ai-grad: linear-gradient(135deg, #ecd078, #c29a
 .ai-fab.drag { cursor: grabbing; }
 .ai-fab.snap { transition: left .24s cubic-bezier(.2, .8, .2, 1), top .24s cubic-bezier(.2, .8, .2, 1); }
 .ai-fab .ik { width: 20px; height: 20px; fill: color-mix(in srgb, var(--ai-fg) 30%, transparent); stroke: var(--ai-fg); }
-.ai-fab:focus-visible { outline: 2px solid var(--emas); outline-offset: 3px; }
+.ai-fab:focus-visible { outline: 2px solid var(--ai-b); outline-offset: 3px; }
 body:has(#ayatSheet:not([hidden])) .ai-fab, body:has(dialog[open]) .ai-fab, body:has(#splash:not([hidden])) .ai-fab { display: none; }
 @media print { .ai-fab, .ai-modal { display: none !important; } }
 
@@ -59,7 +59,7 @@ body:has(#ayatSheet:not([hidden])) .ai-fab, body:has(dialog[open]) .ai-fab, body
 .ai-login { margin-top: 6px; min-height: 38px; padding: 8px 16px; color: var(--ai-fg); background: var(--ai-grad); border: 0; font-size: .8rem; }
 .ai-ref .ik, .ai-tab .ik, .ai-login .ik { width: 13px; height: 13px; }
 .ai-dots { display: inline-flex; gap: 4px; margin-inline-start: 6px; vertical-align: middle; }
-.ai-dots i { width: 5px; height: 5px; border-radius: 50%; background: var(--aksen); opacity: .35; animation: aiDot 1s infinite ease-in-out; }
+.ai-dots i { width: 5px; height: 5px; border-radius: 50%; background: var(--ai-b); opacity: .35; animation: aiDot 1s infinite ease-in-out; }
 .ai-dots i:nth-child(2) { animation-delay: .15s; } .ai-dots i:nth-child(3) { animation-delay: .3s; }
 @keyframes aiDot { 0%, 80%, 100% { opacity: .3; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
 
