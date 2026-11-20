@@ -1,36 +1,25 @@
 /* ============================================================
    Mutqin AI — tombol mengambang & jendela percakapan
    ============================================================ */
-/* ---------- warna neon biru-ungu khas Mutqin AI ---------- */
+/* ---------- warna biru-ungu khas Mutqin AI (polos, tanpa bayangan & animasi) ---------- */
 :root {
   --ai-a: #2f6bff; --ai-b: #6f4bff; --ai-c: #b13dff;
   --ai-grad: linear-gradient(135deg, var(--ai-a) 0%, var(--ai-b) 52%, var(--ai-c) 100%);
-  --ai-glow: rgba(111, 75, 255, .65);
 }
 
-/* ---------- tombol melayang: lebih ke dalam, di atas pemutar, mencolok ---------- */
+/* ---------- tombol melayang: selalu paling atas, bisa digeser (lihat ai.js) ---------- */
 .ai-fab {
-  position: fixed; z-index: 850;
+  position: fixed; z-index: 1200;
   right: max(18px, env(safe-area-inset-right));
   bottom: calc(var(--player-h, 64px) + 20px + env(safe-area-inset-bottom));
   display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 10px 18px 10px 14px;
-  border: 0; border-radius: 999px; cursor: pointer; color: #fff; font: 700 .86rem var(--f-display, inherit); letter-spacing: .015em;
-  text-shadow: 0 1px 2px rgba(20, 8, 60, .45);
-  background: var(--ai-grad); background-size: 160% 160%; animation: aiShift 6s ease-in-out infinite;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, .3) inset, 0 0 16px var(--ai-glow), 0 8px 26px rgba(111, 75, 255, .55);
-  transition: transform .15s ease, box-shadow .15s ease;
+  border: 0; border-radius: 999px; cursor: grab; color: #fff; font: 700 .86rem var(--f-display, inherit); letter-spacing: .015em;
+  background: var(--ai-grad); box-shadow: none; text-shadow: none;
+  touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
 }
-.ai-fab::after {            /* cincin denyut agar menarik perhatian */
-  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-  animation: aiRing 2.4s ease-out infinite;
-}
-.ai-fab .ik { width: 20px; height: 20px; fill: rgba(255, 255, 255, .3); stroke: #fff; filter: drop-shadow(0 0 5px rgba(255, 255, 255, .8)); animation: aiTwinkle 3s ease-in-out infinite; }
-.ai-fab:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(255, 255, 255, .35) inset, 0 0 24px var(--ai-glow), 0 12px 30px rgba(111, 75, 255, .65); }
-.ai-fab:active { transform: scale(.96); }
+.ai-fab.drag { cursor: grabbing; }
+.ai-fab .ik { width: 20px; height: 20px; fill: rgba(255, 255, 255, .3); stroke: #fff; }
 .ai-fab:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
-@keyframes aiShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-@keyframes aiRing { 0% { box-shadow: 0 0 0 0 rgba(111, 75, 255, .6); } 70%, 100% { box-shadow: 0 0 0 16px rgba(111, 75, 255, 0); } }
-@keyframes aiTwinkle { 0%, 100% { transform: scale(1) rotate(0); } 50% { transform: scale(1.18) rotate(12deg); } }
 body:has(#ayatSheet:not([hidden])) .ai-fab, body:has(dialog[open]) .ai-fab, body:has(#splash:not([hidden])) .ai-fab { display: none; }
 @media print { .ai-fab, .ai-modal { display: none !important; } }
 
@@ -40,7 +29,7 @@ body:has(#ayatSheet:not([hidden])) .ai-fab, body:has(dialog[open]) .ai-fab, body
 .ai-ttl { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .ai-ttl h2 { font-size: .98rem !important; color: var(--teks) !important; line-height: 1.2; }
 .ai-ttl small { display: block; font-size: .68rem; color: var(--redup); }
-.ai-logo { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px; color: #fff; background: var(--ai-grad); box-shadow: 0 3px 14px var(--ai-glow); }
+.ai-logo { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px; color: #fff; background: var(--ai-grad); }
 .ai-logo .ik { width: 18px; height: 18px; fill: rgba(255, 255, 255, .25); stroke: #fff; }
 .ai-hact { display: flex; gap: 2px; flex: none; }
 .ai-warn { display: flex; gap: 8px; align-items: flex-start; margin: 0; padding: 8px 16px; font-size: .7rem; line-height: 1.45; color: var(--redup); background: var(--kaca-halus); border-bottom: 1px solid var(--tepi); }
@@ -85,7 +74,7 @@ body:has(#ayatSheet:not([hidden])) .ai-fab, body:has(dialog[open]) .ai-fab, body
 }
 .ai-input textarea:focus { outline: 2px solid color-mix(in srgb, var(--aksen) 55%, transparent); outline-offset: 0; }
 .ai-input textarea:disabled { opacity: .6; }
-.ai-send { flex: none; display: grid; place-items: center; width: 42px; height: 42px; border: 0; border-radius: 14px; cursor: pointer; color: #fff; background: var(--ai-grad); box-shadow: 0 3px 12px var(--ai-glow); }
+.ai-send { flex: none; display: grid; place-items: center; width: 42px; height: 42px; border: 0; border-radius: 14px; cursor: pointer; color: #fff; background: var(--ai-grad); }
 .ai-send .ik { width: 18px; height: 18px; }
 .ai-send.stop { background: var(--bahaya); }
 .ai-send:disabled { opacity: .45; cursor: default; }
@@ -96,4 +85,4 @@ body:has(#ayatSheet:not([hidden])) .ai-fab, body:has(dialog[open]) .ai-fab, body
   .ai-modal { width: calc(100% - 8px); height: calc(100dvh - 16px); }
   .ai-b { max-width: 92%; }
 }
-@media (prefers-reduced-motion: reduce) { .ai-log { scroll-behavior: auto; } .ai-dots i { animation: none; opacity: .7; } .ai-fab { transition: none; animation: none; } .ai-fab::after, .ai-fab .ik { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .ai-log { scroll-behavior: auto; } .ai-dots i { animation: none; opacity: .7; } }

@@ -96,7 +96,53 @@ function build() {
   </div>`;
   document.body.append(d);
 
-  fab.addEventListener("click", () => open());
+  /* Tombol bisa digeser: seret ke mana saja, posisi diingat di perangkat ini. */
+  const POS = "mutqin.ai.fabpos.v1";
+  let pos = null; try { pos = JSON.parse(localStorage.getItem(POS) || "null"); } catch (e) {}
+  const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), Math.max(lo, hi));
+  const setXY = (x, y) => {
+    const w = fab.offsetWidth, h = fab.offsetHeight, M = 8;
+    fab.style.right = "auto"; fab.style.bottom = "auto";
+    fab.style.left = clamp(x, M, innerWidth - w - M) + "px";
+    fab.style.top = clamp(y, M, innerHeight - h - M) + "px";
+  };
+  const placeSaved = () => {
+    if (!pos || typeof pos.x !== "number" || typeof pos.y !== "number") return;   // belum pernah digeser: pakai posisi bawaan CSS
+    const w = fab.offsetWidth, h = fab.offsetHeight; if (!w) return;            // sedang disembunyikan
+    setXY(pos.x * innerWidth - w / 2, pos.y * innerHeight - h / 2);
+  };
+  let drag = null, moved = false, justDragged = false;
+  fab.addEventListener("pointerdown", e => {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    const r = fab.getBoundingClientRect();
+    drag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, ox: r.left, oy: r.top }; moved = false;
+  });
+  fab.addEventListener("pointermove", e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+    if (!moved) {
+      if (Math.hypot(dx, dy) < 8) return;                                        // masih dianggap ketukan biasa
+      moved = true; fab.classList.add("drag"); try { fab.setPointerCapture(e.pointerId); } catch (_) {}
+    }
+    setXY(drag.ox + dx, drag.oy + dy);
+  });
+  const endDrag = e => {
+    if (!drag || (e && e.pointerId !== drag.id)) return;
+    if (moved) {
+      const r = fab.getBoundingClientRect();
+      pos = { x: (r.left + r.width / 2) / innerWidth, y: (r.top + r.height / 2) / innerHeight };
+      try { localStorage.setItem(POS, JSON.stringify(pos)); } catch (_) {}
+      justDragged = true; setTimeout(() => { justDragged = false; }, 60);
+    }
+    drag = null; moved = false; fab.classList.remove("drag");
+  };
+  fab.addEventListener("pointerup", endDrag);
+  fab.addEventListener("pointercancel", endDrag);
+  addEventListener("resize", placeSaved);
+  addEventListener("orientationchange", () => setTimeout(placeSaved, 200));
+  placeSaved();
+  if (window.ResizeObserver) new ResizeObserver(() => { if (!drag) placeSaved(); }).observe(fab);   // saat tombol muncul setelah splash/dialog
+  fab.addEventListener("click", () => { if (justDragged) return; open(); });
   $("aiSend").addEventListener("click", () => (busy ? stop() : send()));
   $("aiClear").addEventListener("click", async () => {
     if (busy) stop();
