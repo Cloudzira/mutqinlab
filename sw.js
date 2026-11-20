@@ -4,7 +4,7 @@
   • Data mushaf, font, terjemahan, ikon: cache-first (tidak berubah) → bisa dibaca luring.
     Cache data TIDAK diberi nomor versi supaya hasil "Unduh seluruh mushaf" tidak hilang saat aplikasi diperbarui.
   • Audio (everyayah.com) & Firebase: tidak disentuh. */
-const VERSION = "v24";
+const VERSION = "v25";
 const SHELL_CACHE = "mushaf-shell-" + VERSION;
 const DATA_CACHE = "mushaf-data";   // harus sama dengan DATA_CACHE di app.js
 const SHELL = [

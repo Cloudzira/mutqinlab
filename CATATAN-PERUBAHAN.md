@@ -1,5 +1,13 @@
 # MutqinLab — catatan perubahan
 
+## Perbaikan audio di HP (v25)
+- **Putar dimulai langsung saat ditekan.** Sebelumnya suara baru dimulai setelah beberapa proses menunggu (mis. memuat halaman mushaf), padahal aturan autoplay peramban HP hanya mengizinkan `play()` yang dipicu langsung oleh sentuhan. Kini sumber audio dimuat dan diputar seketika; tampilan halaman menyusul.
+- **Penjaga macet 7 detik.** Di jaringan seluler, sambungan ke server audio kadang menggantung tanpa galat (tampak "memutar" tetapi senyap). Kini bila 7 dtk belum ada suara, aplikasi otomatis pindah ke sumber cadangan berikutnya.
+- **Sumber cadangan ditambah** (host berbeda, untuk qari Alafasy): `verses.quran.com` dan `verses.quran.foundation`, selain everyayah.com dan cdn.islamic.network. Bila semua gagal, muncul pesan yang menjelaskan kemungkinan jaringan memblokir sumber audio.
+- Perbaikan logika: kegagalan ganda/lama tidak lagi melompati sumber cadangan; penolakan autoplay ditangani terpisah (pesan "Ketuk tombol putar sekali lagi") dan tidak dianggap sumber rusak.
+- Berkas WAV senyap untuk "membuka kunci" audio diganti yang valid (sebelumnya kosong sehingga bisa ditolak peramban HP).
+- "Salin info diagnostik" kini memuat status audio dan riwayat kegagalan sumber.
+
 ## Revisi Mutqin AI (v24)
 - Warna **biru-ungu** Mutqin AI dikembalikan dan dipakai di **semua tema** (tombol, avatar, gelembung pengguna, tombol kirim, penanda) agar identitas visual AI jelas dan mudah dibedakan dari komponen aplikasi lain.
 - Placeholder kolom ketik: **"Tanyakan apa saja di sini.."** (saat belum masuk tetap "Masuk dulu untuk bertanya").

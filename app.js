@@ -85,6 +85,7 @@ const QARI = [
 
 const PAGES = 604;
 const ALT_URL = "https://cdn.islamic.network/quran/audio/128/";   // cadangan 1 & 2 (gratis, nomor ayat global)
+const QCDN = ["https://verses.quran.com/", "https://verses.quran.foundation/"];            // cadangan 3 & 4 (Quran.com)
 const ALT_DEFAULT = "ar.alafasy";                                  // cadangan terakhir: ayat tetap berbunyi
 const AYAH_BASE = []; { let c = 0; SURAH.forEach(x => { AYAH_BASE.push(c); c += x[2]; }); }
 const JSON_URL  = "https://raw.githubusercontent.com/MohamadHajjRabee/quran-qcf4/main/pages/";
@@ -903,22 +904,56 @@ const audioUrls = key => {
   const list = [`${AUDIO_URL}${q.id}/${pad3(s)}${pad3(a)}.mp3`];
   if (q.alt) list.push(`${ALT_URL}${q.alt}/${n}.mp3`);
   if (q.alt !== ALT_DEFAULT) list.push(`${ALT_URL}${ALT_DEFAULT}/${n}.mp3`);
+  // cadangan terakhir: host lain (bila jaringan/operator memblokir host di atas). Hanya tersedia untuk Alafasy.
+  for (const base of QCDN) list.push(`${base}Alafasy/mp3/${pad3(s)}${pad3(a)}.mp3`);
   return list;
 };
 const audioUrl = key => audioUrls(key)[0];
 // Dipanggil saat sumber audio gagal: pindah ke sumber cadangan berikutnya. true = masih ada yang dicoba.
-function tryFallback() {
+function tryFallback(why, failedSrc) {
   if (!P.active || !P.queue.length) return false;
   const urls = audioUrls(P.queue[P.i]);
+  if (failedSrc && au.src !== failedSrc) return true;   // kegagalan sumber lama: sudah berpindah, abaikan
   if (au.src !== urls[P.tier]) return true;          // kegagalan ini sudah ditangani
+  logDiag("audio", `${why || "gagal"} · sumber ${P.tier + 1}/${urls.length} (${new URL(urls[P.tier]).hostname})`);
   if (P.tier + 1 >= urls.length) return false;
   P.tier++;
-  if (P.tier === urls.length - 1 && urls.length > 1 && !P.warned) { P.warned = true; toast("Sumber audio utama bermasalah, memakai cadangan."); }
+  if (P.tier >= 1 && !P.warned) { P.warned = true; toast("Sumber audio utama bermasalah, memakai cadangan."); }
   au.src = urls[P.tier];
-  au.play().catch(e => { if (!e || e.name !== "AbortError") { if (!tryFallback()) giveUp(); } });
+  const mine = au.src;
+  armWatch();
+  au.play().catch(e => {
+    if (e && e.name === "AbortError") return;
+    if (e && e.name === "NotAllowedError") { needTap(); return; }
+    if (!tryFallback("ditolak", mine)) giveUp();
+  });
   return true;
 }
-function giveUp() { toast("Audio tidak dapat diputar. Periksa koneksi internet atau ganti qari."); hardStop(true); }
+// Peramban menolak memulai suara tanpa sentuhan pengguna (bukan masalah sumber audio): minta ketuk ulang.
+function needTap() {
+  logDiag("audio", "autoplay ditolak (butuh ketukan)");
+  toast("Ketuk tombol putar sekali lagi untuk memulai audio.");
+  hardStop(true);
+}
+function giveUp() {
+  clearWatch();
+  toast("Audio tidak dapat diputar. Jaringan Anda mungkin memblokir sumber audio. Coba ganti Wi-Fi/data seluler atau ganti qari.");
+  hardStop(true);
+}
+/* Penjaga macet: di HP, sambungan ke server audio kadang menggantung tanpa galat (UI tampak "memutar" tapi senyap).
+   Bila 7 dtk belum ada suara, pindah otomatis ke sumber cadangan berikutnya. */
+let watch = 0;
+const clearWatch = () => { clearTimeout(watch); watch = 0; };
+function armWatch() {
+  clearWatch();
+  const tk = P.tk, src = au.src;
+  watch = setTimeout(() => {
+    watch = 0;
+    if (tk !== P.tk || !P.active || au.src !== src || isSilent() || au.paused) return;
+    if (au.readyState >= 3) return;                    // data sudah cukup: berjalan normal
+    if (!tryFallback("macet >7 dtk")) giveUp();
+  }, 7000);
+}
 
 function buildQueue() {
   const mode = S.settings.audioMode;
@@ -940,7 +975,7 @@ function buildQueue() {
 
 // iOS/Safari hanya mengizinkan audio bila play() dipicu langsung oleh sentuhan pengguna.
 // Elemen audio "dibuka kuncinya" sekali dengan WAV senyap, lalu bisa dipakai ulang untuk semua ayat.
-const SILENT = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=";
+const SILENT = "data:audio/wav;base64,UklGRkQDAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YSADAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgA==";
 let unlocked = false;
 function unlockAudio() {
   if (unlocked) return;
@@ -954,7 +989,7 @@ function clearGap() { clearTimeout(P.gapTimer); P.gapTimer = null; P.resume = nu
 
 function hardStop(resetUi) {
   P.tk++; P.active = false; P.queue = []; P.i = 0; P.ra = 0; P.rr = 0; P.ov = {};
-  clearGap();
+  clearGap(); clearWatch();
   try { au.pause(); } catch { /* abaikan */ }
   markPlaying(null);
   els.plBar.style.width = "0%";
@@ -975,26 +1010,31 @@ async function startPlayback(queue, ov = {}) {
 async function playCurrent(my) {
   if (my !== P.tk || !P.active) return;
   const key = P.queue[P.i];
-  await ensureVisible(key, my);
-  if (my !== P.tk || !P.active) return;
-  markPlaying(key);
-  if (S.settings.autoReveal) revealVerse(key);
+  // 1) Muat & putar SEKARANG juga (masih di dalam sentuhan pengguna bila dipicu tombol), sebelum ada "await" apa pun.
+  //    Aturan autoplay peramban HP hanya mengizinkan play() yang dipicu langsung oleh sentuhan.
   clearGap();
   const rate = Number(S.settings.speed) || 1;
   P.tier = 0;
   au.src = audioUrl(key);
   au.defaultPlaybackRate = rate; au.playbackRate = rate;
   au.preservesPitch = true;
-  try {
-    await au.play();
-  } catch (err) {
-    if (my !== P.tk) return;
-    if (err && err.name === "AbortError") return;
-    if (tryFallback()) { ui(); mediaMeta(key); return; }
+  armWatch();
+  const mine = au.src;
+  const started = au.play().then(() => null, e => e);
+  // 2) Tampilan (pindah halaman mushaf, sorot ayat) menyusul
+  await ensureVisible(key, my);
+  if (my !== P.tk || !P.active) return;
+  markPlaying(key);
+  if (S.settings.autoReveal) revealVerse(key);
+  const err = await started;
+  if (my !== P.tk) return;
+  if (err) {
+    if (err.name === "AbortError") return;
+    if (err.name === "NotAllowedError") { needTap(); return; }
+    if (tryFallback("ditolak: " + (err.name || "?"), mine)) { ui(); mediaMeta(key); return; }
     giveUp();
     return;
   }
-  if (my !== P.tk) return;
   ui(); mediaMeta(key); prefetchNext();
 }
 
@@ -1052,6 +1092,7 @@ au.addEventListener("ended", () => {
   } else advance();
 });
 
+au.addEventListener("playing", clearWatch);
 au.addEventListener("play", ui);
 au.addEventListener("pause", ui);
 au.addEventListener("timeupdate", () => {
@@ -1059,7 +1100,7 @@ au.addEventListener("timeupdate", () => {
 });
 au.addEventListener("error", () => {
   if (!P.active || isSilent()) return;
-  if (!tryFallback()) giveUp();
+  if (!tryFallback("galat media " + (au.error ? au.error.code : "?"))) giveUp();
 });
 
 function finish() { hardStop(true); toast("Pemutaran selesai"); }
@@ -1233,6 +1274,7 @@ async function copyDiag() {
     fontKata: k ? getComputedStyle(k).fontFamily : null, lebarKataPertama: k ? Math.round(k.getBoundingClientRect().width * 100) / 100 : null,
     font: [...document.fonts].map(f => `${f.family}:${f.status}`),
     serviceWorker: !!(navigator.serviceWorker && navigator.serviceWorker.controller),
+    audio: { src: (au.src || "").slice(0, 90), tier: P.tier, readyState: au.readyState, networkState: au.networkState, galat: au.error ? au.error.code : null, jeda: au.paused, aktif: P.active },
     catatan: LOGBUF
   };
   const text = JSON.stringify(info, null, 2);
