@@ -81,6 +81,8 @@ const sel = (k, o, v) => `<select data-k="${k}">${o.map(([a, b]) => `<option val
 const num = (k, v, mx) => `<input type="number" inputmode="numeric" min="1" max="${mx}" value="${v}" data-k="${k}">`;
 const ckb = (k, t, v) => `<label class="thck"><input type="checkbox" data-k="${k}"${v ? " checked" : ""}><span>${t}</span></label>`;
 const chip = (d, t, x = "") => `<button type="button" class="thchip" data-do="${d}" ${x}>${lbl(t)}</button>`;
+/* Baris tombol reset di atas tab Ziyadah / Murojaah */
+const rsRow = (d, t) => `<div class="thrs">${B(d, "@trash " + t, "sec kecil")}</div>`;
 const SO = SU.map((x, i) => [i + 1, (i + 1) + ". " + x[0]]);
 
 /* ---------- Wizard Rencana (4 langkah) ---------- */
@@ -198,7 +200,8 @@ const ZS = [["Talqin", "Dengarkan ayat target 3× sambil melihat teks dan mushaf
   ["Tikrar", "Ulangi tiap ayat 10× dalam 2 putaran lewat audio sampai lancar tanpa melihat. Kualitas lebih penting dari kecepatan.", "@repeat Putar tikrar"],
   ["Uji", "Teks ditutup. Lantunkan dari ingatan lewat mode giliran-Anda, ketuk teks untuk mengecek.", "@mic Latih giliran saya"],
   ["Sambung", "Lantunkan ayat sebelumnya + ayat target berurutan tanpa melihat. Jika lancar, tandai hafal — murojaah pertama besok.", "@check Tandai hafal"]];
-function vZ() {
+function vZ() { return (TD().plan ? rsRow("zreset", "Reset target ziyadah") : "") + vZ0(); }
+function vZ0() {
   const P = TD().plan;
   if (!P) return C(`<h3 class="thh">Susun rencana dulu</h3><p class="thp">Ziyadah dipandu dari target hariannya. Isi 4 langkah singkat di tab Beranda.</p>${B("gog", "Buka Beranda")}`);
   const ks = targetKeys(); zMin = Math.round(P.mins * .6);
@@ -255,7 +258,7 @@ function vImp() {
     <p class="thp kecil">${n} ayat dipilih · putaran pertama ±${Math.ceil(n / IM.pace)} hari</p>
     <div class="throw">${B("imp", "@check Masukkan ke jadwal", "lebar")}${B("unimp", "@trash Keluarkan dari jadwal", "sec")}</div></details>`);
 }
-function vM() { return vM0() + vImp(); }
+function vM() { return (mine().length ? rsRow("mreset", "Reset target murojaah") : "") + vM0() + vImp(); }
 
 /* ---------- Tes sambung ayat ---------- */
 function vT() {
@@ -310,6 +313,34 @@ const A = {
     if (!(await ask({ title: `Keluarkan ${keys.length} ayat?`, message: "Ayat akan dikeluarkan dari jadwal murojaah dan riwayat ulangannya ikut dihapus.", okText: "Keluarkan", icon: "alert" }))) return;
     const u = Date.now(); keys.forEach(key => { TD().items[key] = { ...TD().items[key], x: 1, u }; });
     IM.o = false; save(); render(); badge(); M.toast(`${keys.length} ayat dikeluarkan dari jadwal`);
+  },
+  /* Reset target ziyadah: batalkan ayat yang ditandai hafal HARI INI + ulangi sesi dari awal. Bisa diurungkan. */
+  zreset: async () => {
+    const t = today(), ents = Object.entries(TD().items).filter(([, i]) => !i.x && i.c == t);
+    if (!ents.length && zs < 0) return M.toast("Belum ada progres ziyadah hari ini untuk di-reset");
+    const ok = await ask({ title: "Reset target ziyadah hari ini?", message: ents.length
+      ? `${ents.length} ayat yang kamu tandai hafal hari ini akan dikeluarkan dari jadwal murojaah, dan sesi ziyadah kembali ke langkah awal. Ayat hafalan lain tidak berubah.`
+      : "Sesi ziyadah yang sedang berjalan akan kembali ke langkah awal.", okText: "Reset", cancelText: "Batal", icon: "alert" });
+    if (!ok) return;
+    const before = Object.fromEntries(ents.map(([k, i]) => [k, i])), u = Date.now();
+    ents.forEach(([k, i]) => { TD().items[k] = { ...i, x: 1, u }; });
+    M.hardStop && M.hardStop(true); zs = -1; zStart = 0; zBonus = false; save(); render(); badge();
+    M.toast(ents.length ? `Target ziyadah di-reset · ${ents.length} ayat dikeluarkan` : "Sesi ziyadah di-reset", ents.length ? { ms: 9000, action: { label: "Urungkan", fn: () => {
+      const u2 = Date.now(); for (const k in before) { const { x, ...rest } = before[k]; TD().items[k] = { ...rest, u: u2 }; } save(); render(); badge();
+    } } } : undefined);
+  },
+  /* Reset target murojaah: kosongkan seluruh jadwal murojaah (semua ayat dikeluarkan). Bisa diurungkan. */
+  mreset: async () => {
+    const ents = Object.entries(TD().items).filter(([, i]) => !i.x);
+    if (!ents.length) return M.toast("Jadwal murojaah sudah kosong");
+    const ok = await ask({ title: `Reset target murojaah (${ents.length} ayat)?`, message: "Semua ayat dikeluarkan dari jadwal murojaah dan riwayat ulangannya ikut dihapus. Rencana di Beranda tidak berubah. Kamu masih bisa mengurungkan lewat tombol di notifikasi setelah ini.", okText: "Reset murojaah", cancelText: "Batal", icon: "trash" });
+    if (!ok) return;
+    const before = Object.fromEntries(ents.map(([k, i]) => [k, i])), u = Date.now();
+    ents.forEach(([k, i]) => { TD().items[k] = { ...i, x: 1, u }; });
+    delete TD().md[today()]; rev = false; save(); render(); badge();
+    M.toast(`Target murojaah di-reset · ${ents.length} ayat dikeluarkan`, { ms: 9000, action: { label: "Urungkan", fn: () => {
+      const u2 = Date.now(); for (const k in before) { const { x, ...rest } = before[k]; TD().items[k] = { ...rest, u: u2 }; } save(); render(); badge();
+    } } });
   },
   rv: () => { rev = true; render(); },
   ply: d => M.startPlayback([d.k], { repeatAyah: 1, repeatRange: 1, gap: 0 }),

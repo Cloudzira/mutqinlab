@@ -1,5 +1,11 @@
 # MutqinLab — catatan perubahan
 
+## Reset target & Mutqin AI untuk tamu (v26)
+- **Tombol Reset target ziyadah** (kanan atas tab Ziyadah): membatalkan ayat yang ditandai hafal *hari ini* dan mengembalikan sesi ke langkah awal. Konfirmasi + tombol **Urungkan**.
+- **Tombol Reset target murojaah** (kanan atas tab Murojaah): mengeluarkan semua ayat dari jadwal murojaah (rencana tidak berubah). Konfirmasi + tombol **Urungkan**. Memakai tombstone `x`/`u` sehingga aman untuk sinkronisasi antar perangkat.
+- **Mutqin AI tanpa login Google, dibatasi 3 pertanyaan** per perangkat (total). Server (`functions/api/ai.js`) mengenali tamu lewat header `X-Guest-Id` (acak, dibuat di browser) dan menambah batas harian per IP sebagai pengaman. Variabel baru (opsional): `AI_GUEST_LIMIT` (default 3), `AI_GUEST_IP_DAILY` (default 30). Disarankan memasang KV `AI_KV` agar hitungan tamu andal. Setelah jatah habis, jendela AI mengajak masuk dengan Google.
+- Panduan dan Kebijakan Privasi diperbarui. Service worker v26.
+
 ## Perbaikan audio di HP (v25)
 - **Putar dimulai langsung saat ditekan.** Sebelumnya suara baru dimulai setelah beberapa proses menunggu (mis. memuat halaman mushaf), padahal aturan autoplay peramban HP hanya mengizinkan `play()` yang dipicu langsung oleh sentuhan. Kini sumber audio dimuat dan diputar seketika; tampilan halaman menyusul.
 - **Penjaga macet 7 detik.** Di jaringan seluler, sambungan ke server audio kadang menggantung tanpa galat (tampak "memutar" tetapi senyap). Kini bila 7 dtk belum ada suara, aplikasi otomatis pindah ke sumber cadangan berikutnya.

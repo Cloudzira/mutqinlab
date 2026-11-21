@@ -1,8 +1,10 @@
 /* ============================================================
    Mutqin AI — Cloudflare Pages Function  (POST /api/ai)
    - API key Google AI Studio disimpan sebagai SECRET di Cloudflare (tidak pernah sampai ke browser).
-   - Hanya pengguna yang sudah masuk (Firebase ID token terverifikasi) yang boleh memakai.
-   - Batas harian per pengguna (KV bila tersedia) + batas panjang pesan.
+   - Pengguna yang masuk (Firebase ID token terverifikasi): batas harian per akun.
+   - TAMU (tanpa login): hanya AI_GUEST_LIMIT pertanyaan (default 3) per perangkat, seumur hidup; plus batas harian per IP
+     sebagai pengaman bila ID perangkat diakali. Perangkat dikenali lewat header X-Guest-Id (acak, dibuat di browser).
+   - Batas panjang pesan.
    - Respons di-stream ke klien sebagai SSE sederhana: data: {"t":"..."} … data: {"done":true}
    Variabel lingkungan:
      GEMINI_API_KEY        (wajib, Secret)
@@ -10,6 +12,8 @@
      GEMINI_FALLBACK_MODEL (opsional, default gemini-3.5-flash-lite) — dicoba bila model utama gagal
      FIREBASE_API_KEY      (opsional, default = apiKey publik proyek Firebase MutqinLab)
      AI_DAILY_LIMIT        (opsional, default 30 pertanyaan/pengguna/hari)
+     AI_GUEST_LIMIT        (opsional, default 3 pertanyaan per perangkat tamu, total — bukan per hari)
+     AI_GUEST_IP_DAILY     (opsional, default 30 pertanyaan tamu/IP/hari; longgar karena banyak HP seluler berbagi satu IP)
      ALLOWED_ORIGINS       (opsional, daftar origin tambahan dipisah koma)
      AI_THINKING           (opsional, default "low". Tingkat "berpikir" model Gemini 3.x: minimal | low | medium | high.
                             Makin rendah makin cepat. Isi "off" untuk tidak mengirim pengaturan ini.)
@@ -76,6 +80,36 @@ async function refundQuota(uid, env) {
       const used = mem.get(key) || 0;
       if (used > 0) mem.set(key, used - 1);
     }
+  } catch { /* abaikan */ }
+}
+
+/* ---------- kuota TAMU (tanpa login) ---------- */
+const GUEST_ID_RE = /^[A-Za-z0-9_-]{16,64}$/;
+const GUEST_TTL = 400 * 86400;   // ~13 bulan
+const kvN = async (key, env) => parseInt((env.AI_KV ? await env.AI_KV.get(key) : mem.get(key)) || "0", 10) || 0;
+async function kvSet(key, n, ttl, env) {
+  if (env.AI_KV) await env.AI_KV.put(key, String(Math.max(0, n)), { expirationTtl: ttl });
+  else { mem.set(key, Math.max(0, n)); if (mem.size > 5000) mem.clear(); }
+}
+function guestKeys(gid, ip) {
+  const day = new Date(Date.now() + 7 * 3600e3).toISOString().slice(0, 10);
+  return { dev: `aig:${gid}`, ip: `aigip:${day}:${ip || "?"}` };
+}
+async function takeGuestQuota(gid, ip, env) {
+  const limit = Math.max(1, parseInt(env.AI_GUEST_LIMIT || "3", 10) || 3);
+  const ipLimit = Math.max(limit, parseInt(env.AI_GUEST_IP_DAILY || "30", 10) || 30);
+  const k = guestKeys(gid, ip);
+  const [d, i] = [await kvN(k.dev, env), await kvN(k.ip, env)];
+  if (d >= limit || i >= ipLimit) return { ok: false, limit, left: 0 };
+  await kvSet(k.dev, d + 1, GUEST_TTL, env);
+  await kvSet(k.ip, i + 1, 172800, env);
+  return { ok: true, limit, left: limit - d - 1 };
+}
+async function refundGuestQuota(gid, ip, env) {
+  try {
+    const k = guestKeys(gid, ip);
+    await kvSet(k.dev, (await kvN(k.dev, env)) - 1, GUEST_TTL, env);
+    await kvSet(k.ip, (await kvN(k.ip, env)) - 1, 172800, env);
   } catch { /* abaikan */ }
 }
 
@@ -171,11 +205,17 @@ export async function onRequestPost({ request, env }) {
     if (origin !== self && !extra.includes(origin)) return json({ error: "forbidden" }, 403);
   }
 
-  // login wajib
+  // identitas: akun Google (token) ATAU tamu (X-Guest-Id)
   const token = (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "").trim();
-  if (!token) return json({ error: "login_required" }, 401);
-  const uid = await verifyUser(token, env, new URL(request.url).origin);
-  if (!uid) return json({ error: "login_required" }, 401);
+  const ip = request.headers.get("CF-Connecting-IP") || "";
+  let uid = null, gid = null;
+  if (token) {
+    uid = await verifyUser(token, env, new URL(request.url).origin);
+    if (!uid) return json({ error: "login_required" }, 401);
+  } else {
+    gid = (request.headers.get("X-Guest-Id") || "").trim();
+    if (!GUEST_ID_RE.test(gid)) return json({ error: "login_required" }, 401);
+  }
 
   // body
   const len = parseInt(request.headers.get("Content-Length") || "0", 10);
@@ -185,10 +225,10 @@ export async function onRequestPost({ request, env }) {
   if (!msgs) return json({ error: "bad_request" }, 400);
 
   // kuota (dihitung setelah masukan valid)
-  const q = await takeQuota(uid, env);
-  if (!q.ok) return json({ error: "quota", limit: q.limit }, 429);
+  const q = uid ? await takeQuota(uid, env) : await takeGuestQuota(gid, ip, env);
+  if (!q.ok) return json({ error: uid ? "quota" : "guest_quota", limit: q.limit }, 429);
 
-  const system = buildSystem(data.ctx);
+  const system = buildSystem(uid ? data.ctx : { ...(data.ctx || {}), masuk: false });
   const primary = (env.GEMINI_MODEL || DEFAULT_MODEL).trim();
   const fallback = (env.GEMINI_FALLBACK_MODEL || DEFAULT_FALLBACK).trim();
 
@@ -211,7 +251,7 @@ export async function onRequestPost({ request, env }) {
 
   // gagal: kembalikan kuota, catat di log Cloudflare, dan (bila AI_DEBUG=1) sertakan alasan
   const fail = async (error, status, details) => {
-    await refundQuota(uid, env);
+    if (uid) await refundQuota(uid, env); else await refundGuestQuota(gid, ip, env);
     console.error("Mutqin AI gagal:", error, JSON.stringify(details));
     return json(debug ? { error, detail: details } : { error }, status);
   };
@@ -232,7 +272,7 @@ export async function onRequestPost({ request, env }) {
 
   return new Response(transformStream(res.body, q.left), {
     status: 200,
-    headers: { "Content-Type": "text/event-stream; charset=utf-8", "Cache-Control": "no-store, no-transform", "X-Accel-Buffering": "no", "X-AI-Remaining": String(q.left), "X-AI-Model": used, "Server-Timing": `gemini;dur=${ttfb}` }
+    headers: { "Content-Type": "text/event-stream; charset=utf-8", "Cache-Control": "no-store, no-transform", "X-Accel-Buffering": "no", "X-AI-Remaining": String(q.left), "X-AI-Guest": uid ? "0" : "1", "X-AI-Model": used, "Server-Timing": `gemini;dur=${ttfb}` }
   });
 }
 

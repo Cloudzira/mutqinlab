@@ -59,12 +59,12 @@
   <p>Setelah masuk, progres hafalanmu disimpan di <b>Cloud Firestore</b> pada satu dokumen milikmu sendiri. Aturan keamanan database hanya mengizinkan pemilik akun membaca dan menulis dokumen tersebut. Pengembang tidak menggunakan data ini untuk iklan, profil, atau dibagikan ke pihak lain.</p>
 
   <h2>3. Mutqin AI</h2>
-  <p>Mutqin AI adalah asisten berbasis AI yang hanya dapat dipakai setelah masuk dengan Google. Saat kamu mengirim pertanyaan:</p>
+  <p>Mutqin AI adalah asisten berbasis AI yang dapat dicoba <b>tanpa masuk</b> (maksimal 3 pertanyaan per perangkat) dan dipakai lebih leluasa setelah masuk dengan Google. Saat kamu mengirim pertanyaan:</p>
   <ul>
     <li><b>Yang dikirim:</b> pertanyaanmu, beberapa pesan sebelumnya dalam percakapan, dan <b>ringkasan angka</b> dari rencana hafalanmu (mis. target surat, sisa ayat, jumlah antrean murojaah). Nama, alamat email, dan foto profilmu <b>tidak</b> dikirim.</li>
     <li><b>Siapa yang memprosesnya:</b> permintaan melewati server MutqinLab (Cloudflare) lalu diteruskan ke <b>Gemini API (Google AI Studio)</b>. Kunci API tersimpan di server, tidak di browser.</li>
     <li><b>Penggunaan oleh Google:</b> pada tingkat gratis Gemini API, Google dapat memakai masukan dan keluaran untuk meningkatkan produknya sesuai ketentuan layanannya. Karena itu <b>jangan menuliskan data pribadi atau rahasia</b> di percakapan.</li>
-    <li><b>Yang kami simpan:</b> hanya penghitung jumlah pertanyaan harian per akun (untuk batas pemakaian) yang otomatis kedaluwarsa dalam beberapa hari. Isi percakapan tidak disimpan di server kami.</li>
+    <li><b>Yang kami simpan:</b> hanya penghitung jumlah pertanyaan untuk batas pemakaian: per akun per hari (pengguna yang masuk), serta per perangkat dan per alamat IP (tamu). Perangkat tamu dikenali lewat kode acak yang dibuat di browsermu, bukan identitas pribadi. Penghitung harian kedaluwarsa dalam beberapa hari; penghitung perangkat tamu disimpan lebih lama agar batas 3 pertanyaan berlaku. Isi percakapan tidak disimpan di server kami.</li>
     <li><b>Batas jawaban:</b> AI dapat keliru dan bukan pengganti guru bersanad. Untuk bacaan, tajwid, dan hukum, rujuklah guru.</li>
   </ul>
 

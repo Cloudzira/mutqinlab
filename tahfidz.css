@@ -590,3 +590,7 @@ html[data-theme="dark"] { --g1: #0d8570; --on-aksen: #04130f; }
 html[data-theme="sepia"] { --emas-teks: #7a5a2e; --redup: rgba(89, 83, 67, .95); --putar-teks: #7d4a35; --ok: #37603f; --bahaya: #9a3d38; }
 html[data-theme="goldwhite"] { --g1: #926810; --emas-teks: #8f6a17; --redup: rgba(90, 77, 51, .9); }
 .set-body select.sel-full { width: 100%; }
+
+/* Baris tombol reset (Ziyadah / Murojaah) */
+.thrs { display: flex; justify-content: flex-end; margin-bottom: -4px; }
+.thrs .thbtn { opacity: .85; } .thrs .thbtn:hover { opacity: 1; }

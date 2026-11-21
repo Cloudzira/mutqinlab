@@ -109,6 +109,8 @@ const TABS = [
       "Bila target ziyadah hari ini sudah tercapai, muncul kartu <b>selesai</b>. Disarankan lanjut ke Murojaah; tombol <b>Tambah ayat lagi</b> hanya bila tenaga dan waktumu memang cukup.",
       "Jika semua ayat target sudah masuk jadwal, fokuskan waktu pada Murojaah dan Tes."
     ]) +
+    h("trash", "Salah tandai? Reset target ziyadah") +
+    p("Tombol <b>Reset target ziyadah</b> di kanan atas tab ini membatalkan ayat yang kamu tandai hafal <b>hari ini</b> dan mengembalikan sesi ke langkah awal. Hafalan hari-hari sebelumnya tidak berubah. Setelah reset, tekan <b>Urungkan</b> di notifikasi bila ingin membatalkannya.") +
     h("bulb", "Tips teknis agar cepat kuat") +
     ul([
       "Hafalkan <b>per ayat</b>, lalu sambungkan dengan ayat sebelumnya. Ayat panjang: pecah menjadi 2–3 penggalan.",
@@ -137,6 +139,7 @@ const TABS = [
       ["<b>Lupa</b> (tombol 1)", "Interval kembali ke awal dan ayat <b>diulang lagi di sesi yang sama</b>.", "Baca ayatnya, ulang <b>3×</b> sambil melihat, lalu nilai lagi."]
     ]) +
     p("Pintasan keyboard: <b>Spasi</b> atau <b>Enter</b> = tampilkan jawaban · <b>1 / 2 / 3</b> = Lupa / Ragu / Mutqin.") +
+    p("Ingin mengosongkan jadwal? Tombol <b>Reset target murojaah</b> di kanan atas tab ini mengeluarkan <b>semua ayat</b> dari jadwal murojaah (rencana di Beranda tidak berubah). Ada konfirmasi dan tombol <b>Urungkan</b> setelahnya.") +
     h("flag", "Mengatur beban antrean") +
     ul([
       "Titik angka di tab Murojaah = jumlah ayat yang jatuh tempo hari ini.",
@@ -177,7 +180,7 @@ const TABS = [
   { id: "ai", label: "Mutqin AI", icon: "spark", title: "Mutqin AI — asisten hafalanmu", html: () =>
     p("Mutqin AI menjawab pertanyaan seputar <b>cara memakai MutqinLab</b>, <b>membaca rencana dan kemajuanmu</b>, serta <b>teknik menghafal dan murojaah</b>. Buka lewat tombol <b>Mutqin AI</b> di pojok kanan bawah.") +
     h("user", "Syarat & batas") +
-    ul(["Perlu <b>masuk dengan Google</b> agar kuota gratis adil untuk semua pengguna.", "Ada <b>batas pertanyaan per hari</b>; sisanya tampil di bawah kolom ketik. Bila habis, lanjutkan besok.", "Satu pesan maksimal 1.200 karakter. Riwayat percakapan tersimpan di perangkatmu; tombol tempat sampah memulai percakapan baru."]) +
+    ul(["<b>Tanpa masuk</b> kamu bisa mencoba <b>3 pertanyaan</b> (per perangkat). Setelah itu, <b>masuk dengan Google</b> agar kuota gratis tetap adil untuk semua pengguna.", "Setelah masuk ada <b>batas pertanyaan per hari</b>; sisanya tampil di bawah kolom ketik. Bila habis, lanjutkan besok.", "Satu pesan maksimal 1.200 karakter. Riwayat percakapan tersimpan di perangkatmu; tombol tempat sampah memulai percakapan baru."]) +
     h("bulb", "Contoh pertanyaan") +
     ul(["<b>Fitur:</b> “Bagaimana cara memasukkan hafalan lamaku ke jadwal?”, “Apa arti titik merah di tab Murojaah?”", "<b>Rencana:</b> “Jelaskan target harianku”, “Kenapa rencanaku dibilang tidak realistis?”, “Aku tertinggal, apa yang sebaiknya kulakukan?”", "<b>Teknik:</b> “Hafalanku cepat lupa”, “Cara membedakan ayat yang mirip”, “Bagaimana mengatur waktu saat sibuk?”"]) +
     h("info", "Cara membaca jawabannya") +

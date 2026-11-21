@@ -9,6 +9,20 @@
 const M = window.MP; if (!M) return;
 const $ = id => document.getElementById(id);
 const STORE = "mp_ai_chat", MAXLEN = 1200, KEEP = 24;
+/* Tamu (tanpa login): GUEST_MAX pertanyaan per perangkat, total. Server yang menegakkan; hitungan lokal hanya untuk tampilan. */
+const GUEST_MAX = 3, GID = "mp_ai_gid", GUSED = "mp_ai_gused";
+const guestId = () => {
+  try {
+    let g = localStorage.getItem(GID);
+    if (!g || !/^[A-Za-z0-9_-]{16,64}$/.test(g)) {
+      g = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : Array.from({ length: 4 }, () => Math.random().toString(36).slice(2, 10)).join("");
+      localStorage.setItem(GID, g);
+    }
+    return g;
+  } catch (e) { return ""; }
+};
+const gUsed = () => { try { return Math.min(GUEST_MAX, Math.max(0, parseInt(localStorage.getItem(GUSED) || "0", 10) || 0)); } catch (e) { return 0; } };
+const setGUsed = n => { try { localStorage.setItem(GUSED, String(Math.min(GUEST_MAX, Math.max(0, n)))); } catch (e) {} };
 const ic = n => `<svg class="ik" aria-hidden="true"><use href="#i-${n}"/></svg>`;
 const ask = o => window.mpConfirm ? window.mpConfirm(o) : Promise.resolve(confirm(o.message || o.title));
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -23,6 +37,7 @@ const CHIPS = [
 ];
 const ERR = {
   login_required: "Masuk dengan Google dulu untuk memakai Mutqin AI.",
+  guest_quota: "Jatah 3 pertanyaan tanpa masuk sudah habis. Masuk dengan Google (gratis) untuk melanjutkan bertanya.",
   quota: "Batas pertanyaan hari ini sudah habis. Silakan lanjutkan besok, insya Allah.",
   busy: "Layanan AI sedang ramai. Coba lagi sebentar lagi.",
   not_configured: "Mutqin AI belum diaktifkan oleh pengelola aplikasi.",
@@ -204,7 +219,7 @@ function build() {
   ta.addEventListener("focus", () => { setTimeout(() => { fit(); scroll(); }, 300); });
   ta.addEventListener("blur", () => setTimeout(queueFit, 150));
   d.addEventListener("close", () => { if (busy) stop(); reset(); });
-  document.addEventListener("mp-auth", () => { if (d.open) render(); });
+  document.addEventListener("mp-auth", () => { left = null; if (d.open) render(); });
 }
 function go(tab) {
   $("dlgAI").close();
@@ -217,17 +232,20 @@ function bubble(r, html, cls = "") { return `<div class="ai-msg ${r === "u" ? "m
 function welcome() {
   return bubble("a", `<p><b>Assalamu'alaikum!</b> Saya Mutqin AI, pendamping hafalanmu di MutqinLab.</p><p>Saya bisa membantu menjelaskan fitur aplikasi, membaca rencana dan kemajuanmu, serta memberi saran menghafal dan murojaah berdasarkan dalil dan praktik para guru tahfidz. Untuk bacaan dan tajwid, tetap setor ke guru bersanad.</p>`);
 }
+function gLeft() { return Math.max(0, GUEST_MAX - gUsed()); }
 function render() {
-  const log = $("aiLog"), li = signedIn();
+  const log = $("aiLog"), li = signedIn(), gl = gLeft(), can = li || gl > 0;
   let h = welcome();
-  if (!li) h += bubble("a", `<p>Untuk menjaga kuota gratis agar adil bagi semua pengguna, Mutqin AI hanya bisa dipakai setelah <b>masuk dengan Google</b>. Progres hafalanmu tetap milikmu.</p><button type="button" class="ai-login" data-login>${ic("user")}Masuk dengan Google</button>`);
+  if (!li) h += bubble("a", gl > 0
+    ? `<p>Kamu bisa mencoba Mutqin AI <b>tanpa masuk</b>: jatahnya <b>${GUEST_MAX} pertanyaan</b> (sisa ${gl}). Untuk pertanyaan harian yang lebih banyak, <b>masuk dengan Google</b>. Progres hafalanmu tetap milikmu.</p><button type="button" class="ai-login" data-login>${ic("user")}Masuk dengan Google</button>`
+    : `<p>Jatah ${GUEST_MAX} pertanyaan tanpa masuk sudah habis. Untuk melanjutkan dan menjaga kuota gratis tetap adil bagi semua, silakan <b>masuk dengan Google</b>. Progres hafalanmu tetap milikmu.</p><button type="button" class="ai-login" data-login>${ic("user")}Masuk dengan Google</button>`);
   h += msgs.map(m => bubble(m.r, m.r === "u" ? `<p>${esc(m.t).replace(/\n/g, "<br>")}</p>` : fmt(m.t) || "<p>…</p>", m.err ? "err" : "")).join("");
   log.innerHTML = h;
-  $("aiChips").hidden = !li || msgs.length > 0 || busy;
+  $("aiChips").hidden = !can || msgs.length > 0 || busy;
   $("aiChips").innerHTML = CHIPS.map(q => `<button type="button" data-q="${esc(q)}">${esc(q)}</button>`).join("");
-  $("aiIn").disabled = !li; $("aiSend").disabled = !li;
-  $("aiIn").placeholder = li ? "Tanyakan apa saja di sini.." : "Masuk dulu untuk bertanya";
-  $("aiLeft").textContent = li && left != null ? `Sisa pertanyaan hari ini: ${left}` : "";
+  $("aiIn").disabled = !can; $("aiSend").disabled = !can && !busy;
+  $("aiIn").placeholder = can ? "Tanyakan apa saja di sini.." : "Masuk dulu untuk bertanya";
+  $("aiLeft").textContent = li ? (left != null ? `Sisa pertanyaan hari ini: ${left}` : "") : `Sisa percobaan tanpa masuk: ${gl} dari ${GUEST_MAX}`;
   scroll();
 }
 function scroll() { const l = $("aiLog"); l.scrollTop = l.scrollHeight; }
@@ -249,7 +267,8 @@ async function send(text) {
   if (busy) return;
   const ta = $("aiIn"); const q = (text != null ? text : ta.value).trim().slice(0, MAXLEN);
   if (!q) return;
-  if (!signedIn()) { render(); return; }
+  const li0 = signedIn();
+  if (!li0 && gLeft() <= 0) { render(); return; }
   if (!navigator.onLine) { M.toast(ERR.net); return; }
   msgs.push({ r: "u", t: q }); msgs.push({ r: "a", t: "" }); ta.value = ""; grow(); $("aiCnt").textContent = `0/${MAXLEN}`;
   save(); render(); setBusy(true);
@@ -268,10 +287,18 @@ async function send(text) {
   let paint = 0; const repaint = () => { paint = 0; const el = $("aiLog").lastElementChild; if (el) { el.querySelector(".ai-b").innerHTML = fmt(bot.t) + (busy ? '<span class="ai-dots"><i></i><i></i><i></i></span>' : ""); scroll(); } };
   const fail = k => { bot.t = ERR[k] || ERR.upstream; bot.err = true; };
   try {
-    const token = await M.idToken();
-    if (!token) { fail("login_required"); throw 0; }
-    const res = await fetch("/api/ai", { method: "POST", signal: ctrl.signal, headers: { "Content-Type": "application/json", Authorization: "Bearer " + token }, body: JSON.stringify({ messages: history, ctx }) });
-    if (!res.ok) { let k = "upstream"; try { k = (await res.json()).error || k; } catch (e) {} fail(k); if (k === "quota") left = 0; throw 0; }
+    const headers = { "Content-Type": "application/json" };
+    if (li0) {
+      const token = await M.idToken();
+      if (!token) { fail("login_required"); throw 0; }
+      headers.Authorization = "Bearer " + token;
+    } else {
+      const g = guestId();
+      if (!g) { fail("login_required"); throw 0; }
+      headers["X-Guest-Id"] = g;
+    }
+    const res = await fetch("/api/ai", { method: "POST", signal: ctrl.signal, headers, body: JSON.stringify({ messages: history, ctx }) });
+    if (!res.ok) { let k = "upstream"; try { k = (await res.json()).error || k; } catch (e) {} fail(k); if (k === "quota") left = 0; if (k === "guest_quota") setGUsed(GUEST_MAX); throw 0; }
     const rd = res.body.getReader(), dec = new TextDecoder(); let buf = "", gotErr = null;
     for (;;) {
       const { value, done } = await rd.read(); if (done) break;
@@ -281,7 +308,7 @@ async function send(text) {
         if (!line.startsWith("data:")) continue;
         let j; try { j = JSON.parse(line.slice(5)); } catch (e) { continue; }
         if (j.t) { bot.t += j.t; if (!paint) paint = requestAnimationFrame(repaint); }
-        else if (j.meta && j.meta.left != null) left = j.meta.left;
+        else if (j.meta && j.meta.left != null) { if (li0) left = j.meta.left; else setGUsed(GUEST_MAX - j.meta.left); }
         else if (j.error) gotErr = j.error;
       }
     }
